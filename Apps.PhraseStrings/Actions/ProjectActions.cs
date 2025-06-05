@@ -69,10 +69,11 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
         if (input.SharesTranslationMemory.HasValue)
             body["shares_translation_memory"] = input.SharesTranslationMemory.Value;
 
-        string base64 = Convert.ToBase64String(projectImageBytes);
         if (projectImageBytes != null && projectImageBytes.Length > 0)
-
+        {
+            string base64 = Convert.ToBase64String(projectImageBytes);
             body["project_image"] = base64;
+        }
 
         if (input.RemoveProjectImage.HasValue)
             body["remove_project_image"] = input.RemoveProjectImage.Value;

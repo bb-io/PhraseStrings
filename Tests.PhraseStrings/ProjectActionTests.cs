@@ -45,8 +45,8 @@ public class ProjectActionTests : TestBase
     public async Task CreateProject_IsSucssess()
     {
         var actions = new ProjectActions(InvocationContext, FileManager);
-        var result = await actions.CreateProject(new CreateProjectRequest { Name = "My New Project", },
-            new FileRequest { });
+        var result = await actions.CreateProject(new CreateProjectRequest { Name = "My New Project2", },
+            new FileRequest { File=null });
 
         var json = JsonConvert.SerializeObject(result, Formatting.Indented);
         Console.WriteLine(json);
