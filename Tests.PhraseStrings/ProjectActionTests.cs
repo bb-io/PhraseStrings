@@ -36,7 +36,7 @@ public class ProjectActionTests : TestBase
     public async Task DeleteProject_IsSucssess()
     {
         var actions = new ProjectActions(InvocationContext, FileManager);
-        await actions.DeleteProject(new ProjectRequest { ProjectId = "2e414eb566fef86dfa2c591a0c6f9a35" });
+        await actions.DeleteProject(new ProjectRequest { ProjectId = "d78549dad981cb310133ac81683d397d" });
 
         Assert.IsTrue(true);
     }

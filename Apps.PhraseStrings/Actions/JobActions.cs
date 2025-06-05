@@ -1,7 +1,9 @@
-﻿using Apps.PhraseStrings.Model.Job;
+﻿using Apps.PhraseStrings.DataHandlers;
+using Apps.PhraseStrings.Model.Job;
 using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using RestSharp;
@@ -17,6 +19,34 @@ namespace Apps.PhraseStrings.Actions
             [ActionParameter] ProjectRequest project)
         {
             var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs", Method.Get);
+
+            if (!string.IsNullOrEmpty(input.Branch))
+            {
+                request.AddQueryParameter("branch", input.Branch);
+            }
+
+            if (!string.IsNullOrEmpty(input.OwnedBy))
+            {
+                request.AddQueryParameter("owned_by", input.OwnedBy);
+            }
+
+            if (!string.IsNullOrEmpty(input.AssignedTo))
+            {
+                request.AddQueryParameter("assigned_to", input.AssignedTo);
+            }
+
+            if (!string.IsNullOrEmpty(input.State))
+            {
+                request.AddQueryParameter("state", input.State);
+            }
+
+            if (input.UpdatedSince.HasValue)
+            {
+                var updatedSinceValue = input.UpdatedSince.Value
+                    .ToUniversalTime()
+                    .ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                request.AddQueryParameter("updated_since", updatedSinceValue);
+            }
             var jobs = await Client.Paginate<JobResponse>(request);
             return new ListJobsResponse { Jobs = jobs };
 
@@ -45,7 +75,7 @@ namespace Apps.PhraseStrings.Actions
 
         [Action("Start job", Description = "Starts job and returns info")]
         public async Task<CreateJobResponse> StartJob([ActionParameter] JobRequest input,
-           [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")] string? branch)
+           [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")][DataSource(typeof(BranchDataHandler))] string? branch)
         {
             var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs/{input.JobId}/start", Method.Post);
             if (!string.IsNullOrEmpty(branch))
@@ -87,7 +117,7 @@ namespace Apps.PhraseStrings.Actions
 
         [Action("Complete a job", Description = "Completes job and returns info")]
         public async Task<CreateJobResponse> CompleteJob([ActionParameter] JobRequest input,
-           [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")] string? branch)
+           [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")][DataSource(typeof(BranchDataHandler))] string? branch)
         {
             var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs/{input.JobId}/complete", Method.Post);
             if (!string.IsNullOrEmpty(branch))
@@ -101,7 +131,7 @@ namespace Apps.PhraseStrings.Actions
 
         [Action("Reopen a job", Description = "Reopens job and returns info")]
         public async Task<CreateJobResponse> ReopenJob([ActionParameter] JobRequest input,
-          [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")] string? branch)
+          [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")][DataSource(typeof(BranchDataHandler))] string? branch)
         {
             var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs/{input.JobId}/reopen", Method.Post);
             if (!string.IsNullOrEmpty(branch))

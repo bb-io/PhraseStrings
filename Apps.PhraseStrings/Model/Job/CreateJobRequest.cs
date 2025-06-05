@@ -1,4 +1,6 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using Apps.PhraseStrings.DataHandlers;
+using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
 namespace Apps.PhraseStrings.Model.Job
@@ -9,6 +11,7 @@ namespace Apps.PhraseStrings.Model.Job
 
         [Display("Branch")]
         [JsonProperty("branch")]
+        [DataSource(typeof(BranchDataHandler))]
         public string? Branch { get; set; }
 
         [JsonProperty("source_locale_id")]

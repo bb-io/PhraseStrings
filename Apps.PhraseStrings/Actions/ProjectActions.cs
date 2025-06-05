@@ -15,6 +15,17 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
     public async Task<ListProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
     {
         var request = new RestRequest("/v2/projects", Method.Get);
+
+        if (!string.IsNullOrEmpty(input.AccountId))
+        {
+            request.AddQueryParameter("account_id", input.AccountId);
+        }
+
+        if (!string.IsNullOrEmpty(input.SortBy))
+        {
+            request.AddQueryParameter("sort_by", input.SortBy);
+        }
+
         var projects = await Client.Paginate<ProjectResponse>(request);
         return new ListProjectsResponse { Projects = projects };
     }

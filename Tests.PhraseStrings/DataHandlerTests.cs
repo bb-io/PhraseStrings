@@ -56,4 +56,20 @@ public class DataHandlerTests : TestBase
 
         Assert.IsTrue(result.Count() > 0);
     }
+
+    [TestMethod]
+    public async Task BranchHandler_IsSuccess()
+    {
+        var handler = new BranchDataHandler(InvocationContext, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+
+        var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
+
+        Console.WriteLine($"Total: {result.Count()}");
+        foreach (var item in result)
+        {
+            Console.WriteLine($"{item.Value}: {item.DisplayName}");
+        }
+
+        Assert.IsNotNull(result);
+    }
 }
