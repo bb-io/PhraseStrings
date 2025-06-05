@@ -72,4 +72,37 @@ public class DataHandlerTests : TestBase
 
         Assert.IsNotNull(result);
     }
+
+    [TestMethod]
+    public async Task OrderHandler_IsSuccess()
+    {
+        var handler = new OrderDataHandler(InvocationContext, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+
+        var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
+
+        Console.WriteLine($"Total: {result.Count()}");
+        foreach (var item in result)
+        {
+            Console.WriteLine($"{item.Value}: {item.DisplayName}");
+        }
+
+        Assert.IsNotNull(result);
+    }
+
+
+    [TestMethod]
+    public async Task FormatHandler_IsSuccess()
+    {
+        var handler = new FormatDataHandler(InvocationContext);
+
+        var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
+
+        Console.WriteLine($"Total: {result.Count()}");
+        foreach (var item in result)
+        {
+            Console.WriteLine($"{item.Value}: {item.DisplayName}");
+        }
+
+        Assert.IsNotNull(result);
+    }
 }
