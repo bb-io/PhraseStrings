@@ -173,7 +173,7 @@ namespace Apps.PhraseStrings.Actions
             };
         }
 
-        [Action("Uploads  file", Description = "Uploads  file")]
+        [Action("Upload  file", Description = "Uploads  file")]
         public async Task<ImportResponse> UploadFile([ActionParameter] ProjectRequest project,
             [ActionParameter] UploadFileRequest input)
         {
