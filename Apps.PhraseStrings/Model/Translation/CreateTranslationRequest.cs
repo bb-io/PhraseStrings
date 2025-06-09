@@ -1,4 +1,6 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using Apps.PhraseStrings.DataHandlers;
+using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
 namespace Apps.PhraseStrings.Model.Translation
@@ -10,10 +12,12 @@ namespace Apps.PhraseStrings.Model.Translation
 
         [JsonProperty("locale_id")]
         [Display("Locale ID")]
+        [DataSource(typeof(LocaleDataHandler))]
         public string? LocaleId { get; set; }
 
         [JsonProperty("key_id")]
         [Display("Key ID")]
+        [DataSource(typeof(KeyDataHandler))]
         public string? KeyId { get; set; }
 
         [JsonProperty("content")]

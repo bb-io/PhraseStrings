@@ -190,7 +190,7 @@ namespace Apps.PhraseStrings.Actions
             return await Client.ExecuteWithErrorHandling<ResordAffectedResponse>(request);
         }
 
-        [Action("Remove tags to keys", Description = "Removes tags to specified keys")]
+        [Action("Remove tags from key", Description = "Removes tags from specified key")]
         public async Task<ResordAffectedResponse> RemovetagsToKeys([ActionParameter] ProjectRequest project,
             [ActionParameter] AddTagsToKeysRequest tags)
         {

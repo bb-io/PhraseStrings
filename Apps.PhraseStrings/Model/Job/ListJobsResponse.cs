@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Blackbird.Applications.Sdk.Common;
+using Newtonsoft.Json;
 
 namespace Apps.PhraseStrings.Model.Job
 {
@@ -19,18 +20,22 @@ namespace Apps.PhraseStrings.Model.Job
         public string? Briefing { get; set; }
 
         [JsonProperty("due_date")]
+        [Display("Due date")]
         public DateTime? DueDate { get; set; }
 
         [JsonProperty("state")]
         public string? State { get; set; }
 
         [JsonProperty("ticket_url")]
+        [Display("Ticket URL")]
         public string? TicketUrl { get; set; }
 
         [JsonProperty("created_at")]
+        [Display("Created at")]
         public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
+        [Display("Updated at")]
         public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("project")]
@@ -46,12 +51,15 @@ namespace Apps.PhraseStrings.Model.Job
         public string? Name { get; set; }
 
         [JsonProperty("main_format")]
+        [Display("Main format")]
         public string? MainFormat { get; set; }
 
         [JsonProperty("created_at")]
+        [Display("Created at")]
         public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
+        [Display("Updated at")]
         public DateTime? UpdatedAt { get; set; }
     }
 }

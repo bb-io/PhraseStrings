@@ -94,7 +94,7 @@ namespace Apps.PhraseStrings.Actions
         }
 
 
-        [Action("Get order", Description = "Get orders")]
+        [Action("Get order", Description = "Gets order")]
         public async Task<OrderResponse> GetOrder([ActionParameter] OrdersRequest input,
            [ActionParameter] ProjectRequest project,
            [ActionParameter]  [Display("Branch")]
@@ -111,7 +111,7 @@ namespace Apps.PhraseStrings.Actions
 
         }
 
-        [Action("Confirm order", Description = "Confirms orders")]
+        [Action("Confirm order", Description = "Confirms order")]
         public async Task<OrderResponse> ConfirmOrder([ActionParameter] OrdersRequest order,
            [ActionParameter] ProjectRequest project)
         {

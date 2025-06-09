@@ -14,15 +14,18 @@ namespace Apps.PhraseStrings.Model.Comment
         public string Message { get; set; }
 
         [JsonProperty("has_replies")]
+        [Display("Has replies")]
         public bool HasReplies { get; set; }
 
         [JsonProperty("user")]
         public UserInfo User { get; set; }
 
         [JsonProperty("created_at")]
+        [Display("Created at")]
         public DateTime CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
+        [Display("Updated at")]
         public DateTime UpdatedAt { get; set; }
 
         [JsonProperty("locales")]

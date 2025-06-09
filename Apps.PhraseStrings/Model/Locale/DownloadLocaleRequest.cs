@@ -67,6 +67,7 @@ namespace Apps.PhraseStrings.Model.Locale
 
         [Display("Locale IDs")]
         [JsonProperty("locale_ids")]
+        [DataSource(typeof(LocaleDataHandler))]
         public List<string>? LocaleIds { get; set; }
     }
 }

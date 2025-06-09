@@ -13,6 +13,7 @@ namespace Apps.PhraseStrings.Model.Comment
         public string? Branch { get; set; }
 
         [Display("Locales")]
+        [DataSource(typeof(LocaleDataHandler))]
         public IEnumerable<string>? Locales { get; set; }
 
     }

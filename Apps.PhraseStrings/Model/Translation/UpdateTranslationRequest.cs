@@ -1,4 +1,6 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using Apps.PhraseStrings.DataHandlers;
+using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
 namespace Apps.PhraseStrings.Model.Translation
@@ -6,6 +8,7 @@ namespace Apps.PhraseStrings.Model.Translation
     public class UpdateTranslationRequest
     {
         [JsonProperty("branch")]
+        [DataSource(typeof(BranchDataHandler))]
         public string? Branch { get; set; }
 
         [JsonProperty("content")]

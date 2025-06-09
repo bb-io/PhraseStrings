@@ -6,7 +6,7 @@ namespace Apps.PhraseStrings.Model.Key
 {
     public class KeyRequest
     {
-        [Display("Key Id")]
+        [Display("Key ID")]
         [DataSource(typeof(KeyDataHandler))]
         public string KeyId { get; set; }
     }
