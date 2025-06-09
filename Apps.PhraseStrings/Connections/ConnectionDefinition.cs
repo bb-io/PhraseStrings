@@ -20,7 +20,8 @@ public class ConnectionDefinition : IConnectionDefinition
                 DataItems =
                     [
                         new("https://api.phrase.com", "EU data center"),
-                        new("https://api.us.app.phrase.com","US data center")
+                        new("https://api.us.app.phrase.com","US data center"),
+                        new("https://api.phrase-staging.com","EU staging data center")
                     ]}
             }
         }
