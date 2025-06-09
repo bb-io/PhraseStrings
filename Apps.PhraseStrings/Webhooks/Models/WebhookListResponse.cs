@@ -14,7 +14,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public string? Description { get; set; }
 
         [JsonProperty("events")]
-        public string? Events { get; set; }
+        public List<string>? Events { get; set; }
 
         [JsonProperty("active")]
         public bool? Active { get; set; }

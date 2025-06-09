@@ -1,6 +1,8 @@
 ﻿using Apps.PhraseStrings.Model.Project;
 using Apps.PhraseStrings.Webhooks.Handler;
 using Apps.PhraseStrings.Webhooks.Models;
+using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using Newtonsoft.Json;
 using System.Net;
@@ -8,7 +10,7 @@ using System.Net;
 namespace Apps.PhraseStrings.Webhooks
 {
     [WebhookList]
-    public class WebhookList
+    public class WebhookList(InvocationContext invocationContext) : BaseInvocable(invocationContext)
     {
         [Webhook("On job completed", typeof(JobCompletedHandler), Description = "Triggers when job completed")]
         public Task<WebhookResponse<JobCompleteWebhookResponse>> OnJobCompleted(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
