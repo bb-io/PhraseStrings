@@ -61,6 +61,22 @@ namespace Apps.PhraseStrings.Webhooks
             });
         }
 
+        [Webhook("On comment added to a key", typeof(CommentToKeyAddedHandler), Description = "Triggers when comment added to a key")]
+        public Task<WebhookResponse<KeysCreateWebhookResponse>> OnCommentAddedToKey(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
+        {
+            var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
+
+            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            {
+                return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
+            }
+
+            return Task.FromResult(new WebhookResponse<KeysCreateWebhookResponse>()
+            {
+                Result = root
+            });
+        }
+
 
         private WebhookResponse<T> GetPreflightResponse<T>() where T : class => new()
         {
