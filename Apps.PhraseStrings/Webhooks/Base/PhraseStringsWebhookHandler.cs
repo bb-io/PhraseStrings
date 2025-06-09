@@ -42,7 +42,7 @@ namespace Apps.PhraseStrings.Webhooks.Base
             var wrapper = await GetAllWebhooks();
             var payloadUrl = values["payloadUrl"];
 
-            var webhookToDelete = wrapper.Webhooks
+            var webhookToDelete = wrapper
                 .FirstOrDefault(w => w.CallbackUrl == payloadUrl);
 
             if (webhookToDelete == null)
@@ -54,13 +54,13 @@ namespace Apps.PhraseStrings.Webhooks.Base
             await Client.ExecuteWithErrorHandling(request);
         }
 
-        private async Task<WebhookListResponse> GetAllWebhooks()
+        private async Task<List<WebhookResponse>> GetAllWebhooks()
         {
             var request = new RestRequest($"v2/projects/{_input.ProjectId}/webhooks/", Method.Get)
                 .AddHeader("accept", "application/json");
 
             var response = await Client.ExecuteAsync(request);
-            return JsonConvert.DeserializeObject<WebhookListResponse>(response.Content) ?? new WebhookListResponse();
+            return JsonConvert.DeserializeObject<List<WebhookResponse>>(response.Content) ?? new List<WebhookResponse>();
         }
     }
 }

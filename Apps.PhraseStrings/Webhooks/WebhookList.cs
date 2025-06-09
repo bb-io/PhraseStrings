@@ -15,6 +15,11 @@ namespace Apps.PhraseStrings.Webhooks
         {
             var root = GetPayload<JobCompleteWebhookResponse>(webhookRequest);
 
+            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            {
+                return Task.FromResult(GetPreflightResponse<JobCompleteWebhookResponse>());
+            }
+
             return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>()
             {
                 Result = root

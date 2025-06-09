@@ -2,13 +2,7 @@
 
 namespace Apps.PhraseStrings.Webhooks.Models
 {
-    public class WebhookListResponse
-    {
-        [JsonProperty("webhooks")]
-        public List<WebhookResponseItem> Webhooks { get; set; }
-    }
-
-    public class WebhookResponseItem
+    public class WebhookResponse
     {
         [JsonProperty("id")]
         public string? Id { get; set; }
