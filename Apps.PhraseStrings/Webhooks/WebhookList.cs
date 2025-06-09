@@ -28,6 +28,22 @@ namespace Apps.PhraseStrings.Webhooks
             });
         }
 
+        [Webhook("On key created", typeof(JobCompletedHandler), Description = "Triggers when key created")]
+        public Task<WebhookResponse<KeysCreateWebhookResponse>> OnKeyCreated(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
+        {
+            var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
+
+            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            {
+                return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
+            }
+
+            return Task.FromResult(new WebhookResponse<KeysCreateWebhookResponse>()
+            {
+                Result = root
+            });
+        }
+
 
         private WebhookResponse<T> GetPreflightResponse<T>() where T : class => new()
         {

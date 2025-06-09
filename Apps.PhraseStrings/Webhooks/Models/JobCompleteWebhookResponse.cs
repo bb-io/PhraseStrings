@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Blackbird.Applications.Sdk.Common;
+using Newtonsoft.Json;
 
 namespace Apps.PhraseStrings.Webhooks.Models
 {
@@ -35,6 +36,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public string? Name { get; set; }
 
         [JsonProperty("gravatar_uid")]
+        [Display("Gravatar UID")]
         public string? GravatarUid { get; set; }
     }
 
@@ -50,18 +52,23 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public string? Slug { get; set; }
 
         [JsonProperty("main_format")]
+        [Display("Main format")]
         public string? MainFormat { get; set; }
 
         [JsonProperty("project_image_url")]
+        [Display("Project image URL")]
         public string? ProjectImageUrl { get; set; }
 
         [JsonProperty("created_at")]
+        [Display("Created at")]
         public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
+        [Display("Updated at")]
         public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("point_of_contact")]
+        [Display("Point of contact")]
         public string? PointOfContact { get; set; }
     }
 
@@ -83,18 +90,22 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public string? Briefing { get; set; }
 
         [JsonProperty("due_date")]
+        [Display("Due date")]
         public DateTime? DueDate { get; set; }
 
         [JsonProperty("state")]
         public string? State { get; set; }
 
         [JsonProperty("ticket_url")]
+        [Display("Ticket URL")]
         public string? TicketUrl { get; set; }
 
         [JsonProperty("created_at")]
+        [Display("Created at")]
         public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
+        [Display("Updated at")]
         public DateTime? UpdatedAt { get; set; }
     }
 }
