@@ -45,6 +45,23 @@ namespace Apps.PhraseStrings.Webhooks
         }
 
 
+        [Webhook("On key updated", typeof(KeysUpdatedHandler), Description = "Triggers when key updated")]
+        public Task<WebhookResponse<KeysCreateWebhookResponse>> OnKeyUpdated(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
+        {
+            var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
+
+            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            {
+                return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
+            }
+
+            return Task.FromResult(new WebhookResponse<KeysCreateWebhookResponse>()
+            {
+                Result = root
+            });
+        }
+
+
         private WebhookResponse<T> GetPreflightResponse<T>() where T : class => new()
         {
             HttpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK),
