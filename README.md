@@ -47,7 +47,7 @@ Before you can connect you need to make sure that:
 
 ### Key
 
--**Search keys** Searches keys according to the filters you specify.
+- **Search keys** Searches keys according to the filters you specify.
 - **Create a key** Creates a new key.
 - **Update a key** Updates an existing key.
 - **Add tags to a key** Adds tags to a key.
