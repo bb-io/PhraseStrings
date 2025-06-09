@@ -28,7 +28,7 @@ namespace Apps.PhraseStrings.Webhooks
             });
         }
 
-        [Webhook("On key created", typeof(JobCompletedHandler), Description = "Triggers when key created")]
+        [Webhook("On key created", typeof(KeyCreatedHandler), Description = "Triggers when key created")]
         public Task<WebhookResponse<KeysCreateWebhookResponse>> OnKeyCreated(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
         {
             var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
