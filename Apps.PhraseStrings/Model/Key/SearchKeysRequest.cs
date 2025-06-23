@@ -18,5 +18,8 @@ namespace Apps.PhraseStrings.Model.Key
 
         [Display("Locale ID")]
         public string? LocaleId { get; set; }
+
+        [Display("Tags")]
+        public IEnumerable<string>? Tags { get; set; }
     }
 }

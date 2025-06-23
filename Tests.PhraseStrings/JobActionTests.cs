@@ -30,8 +30,8 @@ namespace Tests.PhraseStrings
         {
             var action = new JobActions(InvocationContext, FileManager);
 
-            var response = await action.CreateJob(new CreateJobRequest {Name="Testing job 1" },
-                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+            var response = await action.CreateJob(new CreateJobRequest {Name="Testing job from locale callb", TranslationKeyIds= ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] },
+                new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);
@@ -69,8 +69,8 @@ namespace Tests.PhraseStrings
         {
             var action = new JobActions(InvocationContext, FileManager);
 
-            var response = await action.AddKeysToJob(new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
-                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },  new AddkeysToJobRequest { Keys = [ "c9de884de06dafd683e65d3c2f2fa38c", "ec8c96f96bd5325b5a7c19559c5b9d94" ] });
+            var response = await action.AddKeysToJob(new JobRequest { JobId = "cae41b76eb9cdd623518f4d5effb2554" },
+                new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" },  new AddkeysToJobRequest { Keys = ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);
