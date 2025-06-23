@@ -6,6 +6,7 @@ namespace Apps.PhraseStrings.Model.Job
     public class CreateJobResponse
     {
         [JsonProperty("id")]
+        [Display("Job ID")]
         public string Id { get; set; }
 
         [JsonProperty("name")]

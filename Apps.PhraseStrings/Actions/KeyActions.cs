@@ -37,8 +37,19 @@ namespace Apps.PhraseStrings.Actions
                 request.AddQueryParameter("locale_id", input.LocaleId);
             }
 
-            var jobs = await Client.Paginate<KeyResponse>(request);
-            return new ListKeysResponse { Keys = jobs };
+            if (input.Tags != null && input.Tags.Any())
+            {
+                var joinedTags = string.Join(",", input.Tags);
+                request.AddQueryParameter("q", $"tags:{joinedTags}");
+            }
+
+            var keys = await Client.Paginate<KeyResponse>(request);
+
+            return new ListKeysResponse
+            {
+                Keys = keys,
+                KeyIds = keys?.Select(k => k.Id).ToList()
+            };
         }
 
 

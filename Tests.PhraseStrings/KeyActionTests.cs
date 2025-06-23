@@ -13,8 +13,8 @@ namespace Tests.PhraseStrings
         public async Task SearchKeys_IsSuccess()
         {
             var action = new KeyActions(InvocationContext, FileManager);
-            var response = await action.SearchKeys(new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
-                new SearchKeysRequest { });
+            var response = await action.SearchKeys(new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" },
+                new SearchKeysRequest { Tags = ["test", "rogue"] });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);

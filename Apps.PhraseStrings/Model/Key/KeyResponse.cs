@@ -7,6 +7,9 @@ namespace Apps.PhraseStrings.Model.Key
     public class ListKeysResponse
     {
         public List<KeyResponse>? Keys { get; set; }
+
+        [Display("Key IDs array")]
+        public List<string>? KeyIds { get; set; }
     }
 
     public class KeyResponse

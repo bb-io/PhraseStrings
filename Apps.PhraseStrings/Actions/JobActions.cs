@@ -6,6 +6,7 @@ using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
@@ -56,11 +57,17 @@ namespace Apps.PhraseStrings.Actions
         public async Task<CreateJobResponse> CreateJob([ActionParameter] CreateJobRequest input,
             [ActionParameter] ProjectRequest project)
         {
-            var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs", Method.Post);
-            request.AddJsonBody(input);
-            var job=await Client.ExecuteWithErrorHandling<CreateJobResponse>(request);
+            var json = JsonConvert.SerializeObject(input, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
 
+            var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs", Method.Post);
+            request.AddStringBody(json, DataFormat.Json);
+
+            var job = await Client.ExecuteWithErrorHandling<CreateJobResponse>(request);
             return job;
+
         }
 
         [Action("Get job", Description ="Gets job info")]
