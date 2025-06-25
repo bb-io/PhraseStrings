@@ -45,6 +45,11 @@ Before you can connect you need to make sure that:
 - **Add comment to a key** Adds a comment to a key.
 - **Add comment to a job** Adds a comment to a job.
 
+### Screenshot
+
+- **Upload screenshot** Uploads a screenshot to a project.
+- **Create a screenshot marker** Creates a screenshot marker to specific key
+
 ### Key
 
 - **Search keys** Searches keys according to the filters you specify.
