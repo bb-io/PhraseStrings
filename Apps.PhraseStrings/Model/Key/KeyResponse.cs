@@ -19,16 +19,19 @@ namespace Apps.PhraseStrings.Model.Key
         public string Id { get; set; }
 
         [JsonProperty("name")]
+        [Display("Key name")]
         public string Name { get; set; }
 
         [JsonProperty("description")]
+        [Display("Key description")]
         public string? Description { get; set; }
 
         [JsonProperty("name_hash")]
-        [Display("Hash name")]
+        [Display("Hash of a key name")]
         public string? NameHash { get; set; }
 
         [JsonProperty("plural")]
+        [Display("Is key plural?")]
         public bool? Plural { get; set; }
 
         [JsonProperty("tags")]
@@ -47,7 +50,7 @@ namespace Apps.PhraseStrings.Model.Key
         public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("name_plural")]
-        [Display("Name hash")]
+        [Display("Key name in plural form")]
         public string? NamePlural { get; set; }
 
         [JsonProperty("comments_count")]
