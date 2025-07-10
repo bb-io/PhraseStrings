@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Apps.PhraseStrings.Model.User;
+using Newtonsoft.Json;
 
 namespace Apps.PhraseStrings.Model.Branch
 {
@@ -24,17 +25,5 @@ namespace Apps.PhraseStrings.Model.Branch
 
         [JsonProperty("state")]
         public string State { get; set; }
-    }
-
-    public class UserInfo
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("username")]
-        public string Username { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
     }
 }
