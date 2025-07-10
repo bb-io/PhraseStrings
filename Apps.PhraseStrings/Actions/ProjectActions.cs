@@ -1,3 +1,4 @@
+using Apps.PhraseStrings.Model.Locale;
 using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
@@ -248,5 +249,13 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
 
         var response = await Client.ExecuteWithErrorHandling<ProjectResponse>(request);
         return response;
+    }
+
+    [Action("Get project locales", Description = "Gets project locales")]
+    public async Task<ListLocaleResponse> GetProjectLocales([ActionParameter] ProjectRequest project)
+    {
+        var request = new RestRequest($"/v2/projects/{project.ProjectId}/locales", Method.Get);
+        var locales = await Client.Paginate<LocaleResponse>(request);
+        return new ListLocaleResponse { Locales = locales };
     }
 }
