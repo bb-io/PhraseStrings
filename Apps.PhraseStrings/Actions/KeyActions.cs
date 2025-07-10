@@ -2,6 +2,7 @@
 using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using RestSharp;
@@ -52,6 +53,28 @@ namespace Apps.PhraseStrings.Actions
             };
         }
 
+
+        [Action("Get key by name", Description = "Gets a detailed key information from a key name")]
+        public async Task<KeyResponse> GetKeyByName(
+            [ActionParameter] ProjectRequest project,
+            [ActionParameter] BranchRequest branch,
+            [ActionParameter] KeyNameRequest key)
+        {
+            var request = new RestRequest($"/v2/projects/{project.ProjectId}/keys", Method.Get);
+
+            if (!string.IsNullOrEmpty(branch.Branch))
+                request.AddQueryParameter("branch", branch.Branch);
+
+            if (!string.IsNullOrEmpty(key.KeyName))
+                request.AddQueryParameter("q", $"name:{key.KeyName}");
+            else
+                throw new PluginMisconfigurationException("Key name cannot be empty");
+
+            var searchResponse = await Client.ExecuteWithErrorHandling<List<KeyResponse>>(request);
+            var keyFound = searchResponse?.FirstOrDefault();
+
+            return keyFound ?? new KeyResponse();
+        }
 
         [Action("Create a key", Description = "Creates a  key")]
         public async Task<KeyResponse> CreateKey([ActionParameter] ProjectRequest project,
