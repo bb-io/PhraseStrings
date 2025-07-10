@@ -252,10 +252,18 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
     }
 
     [Action("Get project locales", Description = "Gets project locales")]
-    public async Task<ListLocaleResponse> GetProjectLocales([ActionParameter] ProjectRequest project)
+    public async Task<ListLocaleResponse> GetProjectLocales(
+        [ActionParameter] ProjectRequest project,
+        [ActionParameter] GetProjectLocalesRequest input)
     {
         var request = new RestRequest($"/v2/projects/{project.ProjectId}/locales", Method.Get);
         var locales = await Client.Paginate<LocaleResponse>(request);
+
+        if (input.ReturnTargetLocalesOnly)
+        {
+            locales = locales.Where(locale => locale.IsDefault == false).ToList();
+        }
+
         return new ListLocaleResponse { Locales = locales };
     }
 }
