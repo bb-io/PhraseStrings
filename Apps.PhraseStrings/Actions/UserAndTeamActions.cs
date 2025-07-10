@@ -1,5 +1,6 @@
 using Apps.PhraseStrings.Model.Locale;
 using Apps.PhraseStrings.Model.Project;
+using Apps.PhraseStrings.Model.Team;
 using Apps.PhraseStrings.Model.User;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
@@ -12,7 +13,7 @@ using RestSharp;
 namespace Apps.PhraseStrings.Actions;
 
 [ActionList]
-public class UserAndTeamActions(InvocationContext invocationContext,IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+public class UserAndTeamActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
     [Action("Get user by email", Description = "Returns user details")]
     public async Task<UserResponse> GetUserByEmail([ActionParameter] GetUserByEmailRequest input)
@@ -28,5 +29,23 @@ public class UserAndTeamActions(InvocationContext invocationContext,IFileManagem
             throw new PluginMisconfigurationException($"User with specified email was not found in selected account.");
 
         return userFound;
+    }
+
+    [Action("Get team by name", Description = "Returns team details")]
+    public async Task<TeamResponse> GetTeamByName([ActionParameter] GetTeamByNameRequest input)
+    {
+        var teamsRequest = new RestRequest($"/v2/accounts/{input.AccountId}/teams", Method.Get);
+        var teams = await Client.Paginate<TeamResponse>(teamsRequest);
+
+        var teamFound = teams
+            .Where(t => input.UseContains == true
+                ? t.Name.Contains(input.TeamName, StringComparison.OrdinalIgnoreCase)
+                : t.Name.Equals(input.TeamName, StringComparison.OrdinalIgnoreCase))
+            .FirstOrDefault();
+
+        if (teamFound == null)
+            throw new PluginMisconfigurationException($"Team with specified name was not found in selected account.");
+
+        return teamFound;
     }
 }
