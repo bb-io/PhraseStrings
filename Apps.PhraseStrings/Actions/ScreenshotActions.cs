@@ -12,6 +12,7 @@ namespace Apps.PhraseStrings.Actions
     [ActionList]
     public class ScreenshotActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
+
         [Action("Upload screenshot", Description = "Uploads screenshot. Use a 'Mark screenshot' action to connect keys to the uploaded screenshot")]
         public async Task<ScreenshotResponse> UploadScreenshot([ActionParameter] ProjectRequest project,
             [ActionParameter] UploadScreenshotRequest screenShot)
