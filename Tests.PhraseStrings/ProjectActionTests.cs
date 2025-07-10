@@ -85,6 +85,7 @@ public class ProjectActionTests : TestBase
         var result = await actions.GetProjectLocaleFromCode(
             new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
             new GetProjectLocaleFromCodeRequest { LocaleCode = "nl-NL" });
+
         var json = JsonConvert.SerializeObject(result, Formatting.Indented);
         Console.WriteLine(json);
         Assert.IsNotNull(result);
