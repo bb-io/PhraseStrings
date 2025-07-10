@@ -1,9 +1,6 @@
 ﻿using Apps.PhraseStrings.Actions;
 using Apps.PhraseStrings.Model.Job;
 using Apps.PhraseStrings.Model.Project;
-using Apps.PhraseStrings.Webhooks;
-using Apps.PhraseStrings.Webhooks.Base;
-using Blackbird.Applications.Sdk.Common.Webhooks;
 using Newtonsoft.Json;
 using Tests.PhraseStrings.Base;
 
@@ -71,6 +68,20 @@ namespace Tests.PhraseStrings
 
             var response = await action.AddKeysToJob(new JobRequest { JobId = "cae41b76eb9cdd623518f4d5effb2554" },
                 new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" },  new AddkeysToJobRequest { Keys = ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] });
+
+            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
+            Console.WriteLine(json);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public async Task AddTargetLocaleToJob_IsSuccess()
+        {
+            var action = new JobActions(InvocationContext, FileManager);
+            var response = await action.AddTargetLocaleToJob(
+                new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
+                new JobRequest { JobId = "88bb8462fc7936b2b45a612c50866174" },
+                new AddTargetLocaleToJobRequest { LocaleId = "df5447505e3e7a0b688c25a79a6770a7" });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);

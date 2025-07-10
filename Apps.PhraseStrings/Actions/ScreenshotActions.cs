@@ -1,11 +1,10 @@
 ﻿using Apps.PhraseStrings.Model.Project;
 using Apps.PhraseStrings.Model.Screenshot;
-using Apps.PhraseStrings.Model.Translation;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
-using Newtonsoft.Json;
 using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
@@ -13,9 +12,10 @@ namespace Apps.PhraseStrings.Actions
     [ActionList]
     public class ScreenshotActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
-        [Action("Upload screenshot", Description = "Uploads screenshot")]
+
+        [Action("Upload screenshot", Description = "Uploads screenshot. Use a 'Mark screenshot' action to connect keys to the uploaded screenshot")]
         public async Task<ScreenshotResponse> UploadScreenshot([ActionParameter] ProjectRequest project,
-            [ActionParameter] UploadScreenshotRequest  screenShot)
+            [ActionParameter] UploadScreenshotRequest screenShot)
         {
             var request = new RestRequest($"/v2/projects/{project.ProjectId}/screenshots", Method.Post);
 
@@ -33,12 +33,12 @@ namespace Apps.PhraseStrings.Actions
             var fileBytes = ms.ToArray();
 
             var fileContents = await fileManagementClient.DownloadAsync(screenShot.File);
-            request.AddFile("filename",fileBytes,screenShot.File.Name,screenShot.File.ContentType);
+            request.AddFile("filename", fileBytes, screenShot.File.Name, screenShot.File.ContentType);
 
             return await Client.ExecuteWithErrorHandling<ScreenshotResponse>(request);
         }
 
-        [Action("Create a screenshot marker", Description = "Creates a screenshot marker")]
+        [Action("Mark screenshot (link to key)", Description = "Creates a connection between a key and a screenshot, so screenshot will be shown in the editor")]
         public async Task<ScreenshotResponse> CreateScreenshotMarker([ActionParameter] ProjectRequest project,
             [ActionParameter] CreateScreenshotMarkerRequest screenshot)
         {
@@ -53,6 +53,27 @@ namespace Apps.PhraseStrings.Actions
                 request.AddParameter("presentation", screenshot.Presentation);
 
             return await Client.ExecuteWithErrorHandling<ScreenshotResponse>(request);
+        }
+
+        [Action("Get uploaded screenshot", Description = "Gets a screenshot by its ID or name")]
+        public async Task<ScreenshotResponse> GetScreenshotByIdOrName([ActionParameter] ProjectRequest project,
+            [ActionParameter] GetScreenshotRequest screenshotInput)
+        {
+            if (string.IsNullOrEmpty(screenshotInput.ScreenshotID) && string.IsNullOrEmpty(screenshotInput.ScreenshotName))
+                throw new PluginMisconfigurationException("Either screenshot ID or name must be provided");
+
+            var listRequest = new RestRequest($"/v2/projects/{project.ProjectId}/screenshots", Method.Get);
+            var listResponse = await Client.Paginate<ScreenshotResponse>(listRequest);
+
+            ScreenshotResponse screenshotResponse = new();
+
+            if (!string.IsNullOrEmpty(screenshotInput.ScreenshotID))
+                screenshotResponse = listResponse.FirstOrDefault(s => s.Id == screenshotInput.ScreenshotID) ?? new ScreenshotResponse();
+
+            if (!string.IsNullOrEmpty(screenshotInput.ScreenshotName))
+                screenshotResponse = listResponse.FirstOrDefault(s => s.Name.Equals(screenshotInput.ScreenshotName, StringComparison.OrdinalIgnoreCase)) ?? new ScreenshotResponse();
+
+            return screenshotResponse;
         }
     }
 }

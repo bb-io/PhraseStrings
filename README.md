@@ -37,6 +37,7 @@ Before you can connect you need to make sure that:
 - ** Get Job** Retrieves a job by its ID.
 - **Start job** Starts a job.
 - ** Add keys to job** Adds keys to a job.
+- **Add target locales to a job** Adds target locales to a job and assigns translators or reviewers.
 - **Complete job** Completes a job.
 - **Reopen job** Reopens a job.
 
@@ -48,6 +49,7 @@ Before you can connect you need to make sure that:
 ### Screenshot
 
 - **Upload screenshot** Uploads a screenshot to a project.
+- **Get uploaded screenshot** Retrieves an uploaded screenshot by its ID or name (exact match).
 - **Create a screenshot marker** Creates a screenshot marker to specific key
 
 ### Key
@@ -73,6 +75,7 @@ Before you can connect you need to make sure that:
 - **Delete project** Deletes a project by its ID.
 - **Create project** Creates a new project.
 - **Update project** Updates an existing project.
+- **Get project locales** Retrieves all locales for a project, useful for obtaining locale IDs.
 
 ### Repository
 

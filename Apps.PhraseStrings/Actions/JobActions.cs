@@ -5,6 +5,7 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.Sdk.Utils.Extensions.Http;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
@@ -119,6 +120,18 @@ namespace Apps.PhraseStrings.Actions
             var job = await Client.ExecuteWithErrorHandling<CreateJobResponse>(request);
 
             return job;
+        }
+
+        [Action("Add target locales to a job", Description = "Adds target locales to a job. Use 'Get project locales' action to obtain locale ID from ISO codes.")]
+        public async Task<AddTargetLocaleToJobResponse> AddTargetLocaleToJob(
+            [ActionParameter] ProjectRequest project,
+            [ActionParameter] JobRequest job,
+            [ActionParameter] AddTargetLocaleToJobRequest input)
+        {
+            var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs/{job.JobId}/locales", Method.Post)
+                .WithJsonBody(input, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore});
+
+            return await Client.ExecuteWithErrorHandling<AddTargetLocaleToJobResponse>(request);
         }
 
 

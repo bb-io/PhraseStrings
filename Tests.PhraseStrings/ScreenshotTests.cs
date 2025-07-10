@@ -13,7 +13,7 @@ using Tests.PhraseStrings.Base;
 namespace Tests.PhraseStrings
 {
     [TestClass]
-    public class ScreenshotTests :TestBase
+    public class ScreenshotTests : TestBase
     {
         [TestMethod]
         public async Task UploadScreenshot_IsSuccess()
@@ -51,10 +51,27 @@ namespace Tests.PhraseStrings
                 },
                 new CreateScreenshotMarkerRequest
                 {
-                    KeyId= "514c14ab2c93aa334a566f354cd8b22a",
-                    ScreenshotId= "bbc00b201531ef098b5b968cb7ef2bc2"
+                    KeyId = "514c14ab2c93aa334a566f354cd8b22a",
+                    ScreenshotId = "bbc00b201531ef098b5b968cb7ef2bc2"
                 });
 
+            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
+            Console.WriteLine(json);
+        }
+
+        [TestMethod]
+        public async Task GetScreenshot_IsSuccess()
+        {
+            var action = new ScreenshotActions(InvocationContext, FileManager);
+            var response = await action.GetScreenshotByIdOrName(
+                new ProjectRequest
+                {
+                    ProjectId = "d562a2ad202e4ab626b0764576660917"
+                },
+                new GetScreenshotRequest
+                {
+                    ScreenshotName = "sample_screenshot (from Lark request #recuQx6pkRmD87)"
+                });
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);
         }

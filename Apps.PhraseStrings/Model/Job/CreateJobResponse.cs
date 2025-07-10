@@ -74,12 +74,15 @@ namespace Apps.PhraseStrings.Model.Job
 
     public class LocaleInfo
     {
+        [Display("Locale ID")]
         [JsonProperty("id")]
         public string? Id { get; set; }
 
+        [Display("Locale name")]
         [JsonProperty("name")]
         public string? Name { get; set; }
 
+        [Display("Locale ISO code")]
         [JsonProperty("code")]
         public string? Code { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿using Apps.PhraseStrings.Model.Branch;
+using Apps.PhraseStrings.Model.User;
 using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
 

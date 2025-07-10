@@ -65,4 +65,14 @@ public class ProjectActionTests : TestBase
         Console.WriteLine(json);
         Assert.IsNotNull(result);
     }
+
+    [TestMethod]
+    public async Task GetProjectLocales_IsSucssess()
+    {
+        var actions = new ProjectActions(InvocationContext, FileManager);
+        var result = await actions.GetProjectLocales(new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" });
+        var json = JsonConvert.SerializeObject(result, Formatting.Indented);
+        Console.WriteLine(json);
+        Assert.IsNotNull(result);
+    }
 }
