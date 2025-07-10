@@ -255,7 +255,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
     [Action("Get project locales", Description = "Gets project locales")]
     public async Task<ListLocaleResponse> GetProjectLocales(
         [ActionParameter] ProjectRequest project,
-        [ActionParameter] GetProjectLocalesRequest input)
+        [ActionParameter] GetProjectLocalesRequest input )
     {
         var request = new RestRequest($"/v2/projects/{project.ProjectId}/locales", Method.Get);
         var locales = await Client.Paginate<LocaleResponse>(request);
