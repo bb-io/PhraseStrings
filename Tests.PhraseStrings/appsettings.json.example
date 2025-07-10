@@ -1,7 +1,7 @@
 {
   "ConnectionDefinition": {
     "token": "",
-    "url": ""
+    "url": "https://api.phrase-staging.com"
   },
   "TestFolder": "TestFiles"
 }

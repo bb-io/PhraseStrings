@@ -48,6 +48,7 @@ Before you can connect you need to make sure that:
 ### Key
 
 - **Search keys** Searches keys according to the filters you specify.
+- **Get key by name** Retrieves a key by its name. Useful for retrieving a key ID or key tags.
 - **Create a key** Creates a new key.
 - **Update a key** Updates an existing key.
 - **Add tags to a key** Adds tags to a key.

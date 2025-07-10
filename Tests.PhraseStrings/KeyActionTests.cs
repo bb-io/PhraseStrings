@@ -22,6 +22,20 @@ namespace Tests.PhraseStrings
         }
 
         [TestMethod]
+        public async Task GetKeyByName_IsSuccess()
+        {
+            var action = new KeyActions(InvocationContext, FileManager);
+            var response = await action.GetKeyByName(
+                new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
+                new BranchRequest { },
+                new KeyNameRequest { KeyName = "dashboard_welcome_message" });
+
+            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
+            Console.WriteLine(json);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
         public async Task CreatehKey_IsSuccess()
         {
             var action = new KeyActions(InvocationContext, FileManager);
