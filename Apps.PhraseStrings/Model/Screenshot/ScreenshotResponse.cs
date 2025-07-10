@@ -10,9 +10,11 @@ namespace Apps.PhraseStrings.Model.Screenshot
         public string Id { get; set; }
 
         [JsonProperty("name")]
+        [Display("Screenshot name")]
         public string Name { get; set; }
 
         [JsonProperty("description")]
+        [Display("Screenshot description")]
         public string Description { get; set; }
 
         [JsonProperty("screenshot_url")]
