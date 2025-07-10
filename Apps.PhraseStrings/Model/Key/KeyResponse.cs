@@ -15,6 +15,7 @@ namespace Apps.PhraseStrings.Model.Key
     public class KeyResponse
     {
         [JsonProperty("id")]
+        [Display("Key ID")]
         public string Id { get; set; }
 
         [JsonProperty("name")]
