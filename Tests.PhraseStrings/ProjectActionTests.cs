@@ -67,10 +67,25 @@ public class ProjectActionTests : TestBase
     }
 
     [TestMethod]
-    public async Task GetProjectLocales_IsSucssess()
+    public async Task GetProjectLocales_IsSuccess()
     {
         var actions = new ProjectActions(InvocationContext, FileManager);
-        var result = await actions.GetProjectLocales(new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" });
+        var result = await actions.GetProjectLocales(
+            new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
+            new GetProjectLocalesRequest { ReturnTargetLocalesOnly = true });
+        var json = JsonConvert.SerializeObject(result, Formatting.Indented);
+        Console.WriteLine(json);
+        Assert.IsNotNull(result);
+    }
+
+    [TestMethod]
+    public async Task GetProjectLocaleFromCode_IsSuccess()
+    {
+        var actions = new ProjectActions(InvocationContext, FileManager);
+        var result = await actions.GetProjectLocaleFromCode(
+            new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
+            new GetProjectLocaleFromCodeRequest { LocaleCode = "nl-NL" });
+
         var json = JsonConvert.SerializeObject(result, Formatting.Indented);
         Console.WriteLine(json);
         Assert.IsNotNull(result);

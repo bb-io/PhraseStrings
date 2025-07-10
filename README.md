@@ -76,6 +76,7 @@ Before you can connect you need to make sure that:
 - **Create project** Creates a new project.
 - **Update project** Updates an existing project.
 - **Get project locales** Retrieves all locales for a project, useful for obtaining locale IDs.
+- **Get project locale from code** Retrieves a project locale by its ISO code, useful for obtaining locale IDs.
 
 ### Repository
 
@@ -90,6 +91,11 @@ Before you can connect you need to make sure that:
 - **Get translation for a locale** Retrieves a translation for a locale.
 - **Download locale** Downloads a locale file.
 - **Upload file** Uploads a file to the project.
+
+### Users and teams
+
+- **Get user by email** Retrieves a user by their email address, useful for obtaining user ID.
+- **Get team by name** Retrieves a team by its name, useful for obtaining team ID.
 
 ## Events
 

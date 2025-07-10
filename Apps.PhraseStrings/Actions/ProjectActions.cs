@@ -2,6 +2,7 @@ using Apps.PhraseStrings.Model.Locale;
 using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
@@ -252,10 +253,37 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
     }
 
     [Action("Get project locales", Description = "Gets project locales")]
-    public async Task<ListLocaleResponse> GetProjectLocales([ActionParameter] ProjectRequest project)
+    public async Task<ListLocaleResponse> GetProjectLocales(
+        [ActionParameter] ProjectRequest project,
+        [ActionParameter] GetProjectLocalesRequest input)
     {
         var request = new RestRequest($"/v2/projects/{project.ProjectId}/locales", Method.Get);
         var locales = await Client.Paginate<LocaleResponse>(request);
+
+        if (input.ReturnTargetLocalesOnly)
+        {
+            locales = locales.Where(locale => locale.IsDefault == false).ToList();
+        }
+
         return new ListLocaleResponse { Locales = locales };
+    }
+
+    [Action("Get project locale from code", Description = "Gets a project locale")]
+    public async Task<LocaleResponse> GetProjectLocaleFromCode(
+        [ActionParameter] ProjectRequest project,
+        [ActionParameter] GetProjectLocaleFromCodeRequest input)
+    {
+        var request = new RestRequest($"/v2/projects/{project.ProjectId}/locales", Method.Get);
+        var locales = await Client.Paginate<LocaleResponse>(request);
+
+        var locale = locales.FirstOrDefault(locale => locale.Code.Equals(input.LocaleCode, StringComparison.OrdinalIgnoreCase));
+
+        if (locale == null)
+        {
+            var availableCodes = string.Join(", ", locales.Select(l => l.Code));
+            throw new PluginMisconfigurationException($"Locale '{input.LocaleCode}' is not found in specified project. Available locales: {availableCodes}.");
+        }
+
+        return locale;
     }
 }
