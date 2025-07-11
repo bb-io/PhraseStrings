@@ -18,7 +18,7 @@ namespace Apps.PhraseStrings.Actions
     public class FigmaActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
 
-        [Action("Add Figma link to key")]
+        [Action("Add Figma link to key", Description = "Adds figma link to specified key")]
         public async Task<FigmaAttachmentResponse> AddFigmaLink([ActionParameter] ProjectRequest project,
             [ActionParameter] UploadFigmaLinkRequest figmaAttachment)
         {
@@ -32,12 +32,12 @@ namespace Apps.PhraseStrings.Actions
                 url = figmaAttachment.Url
             });
 
-            var createResponse = await Client.ExecuteWithErrorHandling<FigmaAttachmentResponse>(createRequest);         
+            var createResponse = await Client.ExecuteWithErrorHandling<FigmaAttachmentResponse>(createRequest);
 
             var attachRequest = new RestRequest($"/v2/projects/{project.ProjectId}/figma_attachments/{createResponse.Id}/keys", Method.Post);
 
-            if(!string.IsNullOrEmpty(figmaAttachment.Branch))
-            attachRequest.AddQueryParameter("branch", figmaAttachment.Branch);
+            if (!string.IsNullOrEmpty(figmaAttachment.Branch))
+                attachRequest.AddQueryParameter("branch", figmaAttachment.Branch);
 
             attachRequest.AddJsonBody(new
             {
@@ -50,6 +50,5 @@ namespace Apps.PhraseStrings.Actions
 
             return createResponse;
         }
-
     }
 }

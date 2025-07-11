@@ -5,6 +5,7 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using Blackbird.Applications.Sdk.Utils.RestSharp;
+using HtmlAgilityPack;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -24,6 +25,13 @@ public class PhraseStringsClient : BlackBirdRestClient
     protected override Exception ConfigureErrorException(RestResponse response)
     {
         var error = JsonConvert.DeserializeObject(response.Content);
+
+        if (response.ContentType?.Contains("text/html", StringComparison.OrdinalIgnoreCase) == true || response.Content.StartsWith("<"))
+        {
+            var errorMessage = ExtractHtmlErrorMessage(response.Content);
+            throw new PluginApplicationException(errorMessage);
+        }
+
         throw new PluginApplicationException(error.ToString());
     }
 
@@ -86,7 +94,20 @@ public class PhraseStringsClient : BlackBirdRestClient
         return allItems;
     }
 
+    private string ExtractHtmlErrorMessage(string html)
+    {
+        if (string.IsNullOrEmpty(html)) return "N/A";
 
+        var htmlDoc = new HtmlDocument();
+        htmlDoc.LoadHtml(html);
+
+        var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//title");
+        var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//body");
+
+        var title = titleNode?.InnerText.Trim() ?? "No Title";
+        var body = bodyNode?.InnerText.Trim() ?? "No Description";
+        return $"{title}: \nError Description: {body}";
+    }
 
     private static Uri GetUri(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders)
     {

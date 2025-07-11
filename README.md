@@ -52,6 +52,10 @@ Before you can connect you need to make sure that:
 - **Get uploaded screenshot** Retrieves an uploaded screenshot by its ID or name (exact match).
 - **Create a screenshot marker** Creates a screenshot marker to specific key
 
+### Figma
+
+- **Add Figma link to key** Adds a Figma link to a key.
+
 ### Key
 
 - **Search keys** Searches keys according to the filters you specify.
