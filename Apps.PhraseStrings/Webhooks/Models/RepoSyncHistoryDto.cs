@@ -46,8 +46,13 @@ namespace Apps.PhraseStrings.Webhooks.Models
         [Display("Repository name")]
         public string RepoName { get; set; }
 
+
+        public string ProjectId { get; set; }
+
         [Display("Project name")]
         public string ProjectName { get; set; }
+
+        public string Provider { get; set; }
 
         [Display("Event type")]
         public string EventType { get; set; }
@@ -56,5 +61,14 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public DateTime Timestamp { get; set; }
 
         public string Message { get; set; }
+
+        [Display("Last import at")]
+        public DateTime? LastImportAt { get; set; }
+
+        [Display("Last export at")]
+        public DateTime? LastExportAt { get; set; }
+
+        [Display("Event status")]
+        public string EventStatus { get; set; }
     }
 }

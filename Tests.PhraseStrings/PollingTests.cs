@@ -16,7 +16,7 @@ namespace Tests.PhraseStrings
 
             var request = new PollingEventRequest<DateMemory>
             {
-                Memory = new DateMemory { LastInteractionDate = DateTime.UtcNow.AddDays(-20) }
+                //Memory = new DateMemory { LastInteractionDate = DateTime.UtcNow.AddDays(-20) }
             };
             var input = new RepoSyncRequest
             {
