@@ -1,6 +1,7 @@
 ﻿using Apps.PhraseStrings.Webhooks.Models;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Polling;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -33,17 +34,17 @@ namespace Apps.PhraseStrings.Webhooks
             }
 
             var errorsFound = new List<RepoSyncError>();
-            DateTime lastChecked = request.Memory?.LastInteractionDate ?? DateTime.MinValue;
+
+            var lastChecked = request.Memory?.LastInteractionDate ?? DateTime.UtcNow;
 
             var repList = new RestRequest($"/v2/accounts/{input.AccountId}/repo_syncs", Method.Get);
-
             var allSyncs = await Client.ExecuteWithErrorHandling<List<RepoSyncDto>>(repList);
 
             foreach (var sync in allSyncs)
             {
                 var newestTimestamp = new[] { sync.LastImportAt, sync.LastExportAt }
-                    .Where(ts => ts != null)
-                    .Max();
+                    .Where(ts => ts.HasValue)
+                    .Max() ?? DateTime.MinValue;
 
                 if (newestTimestamp <= lastChecked)
                     continue;
@@ -52,16 +53,18 @@ namespace Apps.PhraseStrings.Webhooks
                 var history = await Client.ExecuteWithErrorHandling<List<RepoSyncHistoryDto>>(repHistory);
 
                 var newErrors = history
-                     .Where(e => e.Status == "failure" && e.CreatedAt > lastChecked)
-                     .SelectMany(e => e.Errors.Select(err => new RepoSyncError
-                     {
-                         SyncId = sync.Id,
-                         RepoName = sync.RepoName,
-                         ProjectName = sync.Project.Name,
-                         EventType = e.Type,
-                         Timestamp = e.CreatedAt,
-                         Message = err
-                     }));
+                    .Where(e => e.Status == "failure" && e.CreatedAt > lastChecked)
+                    .SelectMany(e => e.Errors.Select(errToken => new RepoSyncError
+                    {
+                        SyncId = sync.Id,
+                        RepoName = sync.RepoName,
+                        ProjectName = sync.Project.Name,
+                        EventType = e.Type,
+                        Timestamp = e.CreatedAt,
+                        Message = errToken.Type == JTokenType.String
+                            ? errToken.ToString()
+                            : errToken["message"]?.ToString() ?? errToken.ToString()
+                    }));
 
                 errorsFound.AddRange(newErrors);
             }

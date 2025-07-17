@@ -16,11 +16,11 @@ namespace Tests.PhraseStrings
 
             var request = new PollingEventRequest<DateMemory>
             {
-                //Memory = new DateMemory { LastInteractionDate = DateTime.UtcNow.AddDays(-50) }
+                Memory = new DateMemory { LastInteractionDate = DateTime.UtcNow.AddDays(-20) }
             };
             var input = new RepoSyncRequest
             {
-                AccountId = "851841f538f3e05cd437913851078076"
+                AccountId = "dd76e8ff50005091bd5c1757c2b6e893"
             };
             var response = await polling.OnRepoSyncFailure(request, input);
 

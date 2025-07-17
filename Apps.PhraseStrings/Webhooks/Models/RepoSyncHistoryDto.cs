@@ -1,5 +1,6 @@
 ﻿using Blackbird.Applications.Sdk.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public bool AutoImport { get; set; }
 
         [JsonProperty("errors")]
-        public List<string> Errors { get; set; }
+        public List<JToken> Errors { get; set; }
     }
 
     public class RepoSyncErrorBatch
