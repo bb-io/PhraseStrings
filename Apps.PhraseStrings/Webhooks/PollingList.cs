@@ -14,7 +14,7 @@ namespace Apps.PhraseStrings.Webhooks
     [PollingEventList]
     public class PollingList(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
-        [PollingEvent("On repoository sync failure", Description = "Triggers when a repo sync import or export fails")]
+        [PollingEvent("On repository sync failure", Description = "Triggers when a repo sync import or export fails")]
         public Task<PollingEventResponse<DateMemory, RepoSyncErrorBatch>> OnRepoSyncFailure(
             PollingEventRequest<DateMemory> request, [PollingEventParameter] RepoSyncRequest input)
             => HandleRepoSyncFailurePolling(request,input);
