@@ -115,6 +115,7 @@ Before you can connect you need to make sure that:
 
 - **On key created** Triggered when a key is created.
 - **On key updated** Triggered when a key is updated.
+- **On repoository sync failure** Triggered when a repository sync fails.
 
 ## Feedback
 
