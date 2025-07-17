@@ -57,9 +57,14 @@ namespace Apps.PhraseStrings.Webhooks
                     .SelectMany(e => e.Errors.Select(errToken => new RepoSyncError
                     {
                         SyncId = sync.Id,
-                        RepoName = sync.RepoName,
+                        ProjectId = sync.Project.Id,
                         ProjectName = sync.Project.Name,
+                        Provider = sync.Provider,
+                        RepoName = sync.RepoName,
+                        LastImportAt = sync.LastImportAt,
+                        LastExportAt = sync.LastExportAt,
                         EventType = e.Type,
+                        EventStatus = e.Status,
                         Timestamp = e.CreatedAt,
                         Message = errToken.Type == JTokenType.String
                             ? errToken.ToString()
