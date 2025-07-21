@@ -11,7 +11,7 @@ namespace Apps.PhraseStrings.DataHandlers
     {
         public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context, CancellationToken cancellationToken)
         {
-            var request = new RestRequest($"/v2/accounts/{account.AccoutnId}/repo_syncs", Method.Get);
+            var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs", Method.Get);
             var jobs = await Client.Paginate<OrderResponse>(request);
 
             return jobs.Select(x => new DataSourceItem(x.Id, x.Message));
