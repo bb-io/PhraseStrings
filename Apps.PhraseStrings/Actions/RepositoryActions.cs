@@ -11,11 +11,19 @@ namespace Apps.PhraseStrings.Actions
     [ActionList]
     public class RepositoryActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
+        [Action("Search repositories", Description = "Retrieves all repositories for the account")]
+        public async Task<List<RepositoryResponse>> SearchRepositories([ActionParameter] AccountRequest account)
+        {
+            var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs", Method.Get);
+            var t = await Client.ExecuteAsync(request);
+            return await Client.ExecuteWithErrorHandling<List<RepositoryResponse>>(request);
+        }
+
         [Action("Export to code repository", Description = "Exports to code repository")]
         public async Task<ImportResponse> ExportToCodeRepository([ActionParameter] AccountRequest account,
             [ActionParameter] RepositoryRequest repository)
         {
-            var request = new RestRequest($"/accounts/{account.AccoutnId}/repo_syncs/{repository.RepositoryId}/export", Method.Post);
+            var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs/{repository.RepositoryId}/export", Method.Post);
 
             return await Client.ExecuteWithErrorHandling<ImportResponse>(request);
         }
@@ -24,7 +32,7 @@ namespace Apps.PhraseStrings.Actions
         public async Task<ImportResponse> ImprotsFromCOdeRepository([ActionParameter] AccountRequest account,
             [ActionParameter] RepositoryRequest repository)
         {
-            var request = new RestRequest($"/accounts/{account.AccoutnId}/repo_syncs/{repository.RepositoryId}/import", Method.Post);
+            var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs/{repository.RepositoryId}/import", Method.Post);
 
             return await Client.ExecuteWithErrorHandling<ImportResponse>(request);
         }

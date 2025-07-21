@@ -45,9 +45,11 @@ namespace Apps.PhraseStrings.Model.Job
     public class ProjectInfo
     {
         [JsonProperty("id")]
+        [Display("Project ID")]
         public string? Id { get; set; }
 
         [JsonProperty("name")]
+        [Display("Project name")]
         public string? Name { get; set; }
 
         [JsonProperty("main_format")]

@@ -158,7 +158,7 @@ public class DataHandlerTests : TestBase
     [TestMethod]
     public async Task RepositoryHandler_IsSuccess()
     {
-        var handler = new RepositoryDataHandler(InvocationContext, new AccountRequest { AccoutnId = "851841f538f3e05cd437913851078076" });
+        var handler = new RepositoryDataHandler(InvocationContext, new AccountRequest { AccountId = "851841f538f3e05cd437913851078076" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 

@@ -8,6 +8,6 @@ namespace Apps.PhraseStrings.Model.Account
     {
         [Display("Account ID")]
         [DataSource(typeof(AccountDataHandler))]
-        public string AccoutnId { get; set; }
+        public string AccountId { get; set; } = string.Empty;
     }
 }
