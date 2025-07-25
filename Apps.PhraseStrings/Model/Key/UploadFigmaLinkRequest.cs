@@ -7,11 +7,11 @@ namespace Apps.PhraseStrings.Model.Key
     public class UploadFigmaLinkRequest
     {
         [Display("URL")]
-        public string Url { get; set; }
+        public string Url { get; set; } = string.Empty;
 
         [Display("Key ID")]
         [DataSource(typeof(KeyDataHandler))]
-        public string KeyId { get; set; }
+        public string KeyId { get; set; } = string.Empty;
 
         [Display("Branch")]
         [DataSource(typeof(BranchDataHandler))]

@@ -8,6 +8,6 @@ namespace Apps.PhraseStrings.Model.Order
     {
         [Display("Order ID")]
         [DataSource(typeof(OrderDataHandler))]
-        public string OrderId { get; set; }
+        public string OrderId { get; set; } = string.Empty;
     }
 }

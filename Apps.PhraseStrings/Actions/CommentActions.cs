@@ -11,7 +11,7 @@ using RestSharp;
 namespace Apps.PhraseStrings.Actions
 {
     [ActionList("Comments")]
-    public class CommentActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+    public class CommentActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Add comment to a key", Description = "Adds comment to a key")]
         public async Task<AddCommentToKeyResponse> AddCommentToKey([ActionParameter] ProjectRequest project,

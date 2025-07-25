@@ -1,22 +1,17 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Apps.PhraseStrings.Webhooks.Models
 {
     public class RepoSyncDto
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("project")]
-        public ProjectDto Project { get; set; }
+        public ProjectDto Project { get; set; } = new ProjectDto();
 
         [JsonProperty("provider")]
-        public string Provider { get; set; }
+        public string Provider { get; set; } = string.Empty;
 
         [JsonProperty("enabled")]
         public bool Enabled { get; set; }
@@ -25,7 +20,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public bool AutoImport { get; set; }
 
         [JsonProperty("repo_name")]
-        public string RepoName { get; set; }
+        public string RepoName { get; set; } = string.Empty;
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
@@ -40,13 +35,13 @@ namespace Apps.PhraseStrings.Webhooks.Models
     public class ProjectDto
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("main_format")]
-        public string MainFormat { get; set; }
+        public string MainFormat { get; set; } = string.Empty;
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }

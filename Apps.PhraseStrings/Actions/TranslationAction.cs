@@ -141,9 +141,9 @@ namespace Apps.PhraseStrings.Actions
 
             var fileData = responseDownload.RawBytes;
 
-            string fileName = null;
-            var contentDisposition = responseDownload.ContentHeaders
-                .FirstOrDefault(h => h.Name.Equals("Content-Disposition", StringComparison.OrdinalIgnoreCase))?
+            string fileName = string.Empty;
+            var contentDisposition = responseDownload.ContentHeaders?
+                .FirstOrDefault(h => h.Name?.Equals("Content-Disposition", StringComparison.OrdinalIgnoreCase) == true)?
                 .Value?.ToString();
             if (!string.IsNullOrEmpty(contentDisposition) && contentDisposition.Contains("filename"))
             {
@@ -161,8 +161,8 @@ namespace Apps.PhraseStrings.Actions
                 fileName = $"{locale.LocaleId}.{ext}";
             }
 
-            using var stream = new MemoryStream(fileData);
-            var fileRef = await fileManagementClient.UploadAsync(stream, responseDownload.ContentType, fileName);
+            using var stream = new MemoryStream(fileData ?? []);
+            var fileRef = await fileManagementClient.UploadAsync(stream, responseDownload.ContentType ?? string.Empty, fileName);
 
             return new FileResponse
             {

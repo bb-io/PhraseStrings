@@ -21,8 +21,8 @@ namespace Tests.PhraseStrings
                 new KeyRequest { KeyId = "c7c044f03e826935d29004af975f9bd3" },
                 new GetTranslationsForKeyRequest());
 
-            Console.WriteLine($"Total: {result.Translations.Count()}");
-            foreach (var item in result.Translations)
+            Console.WriteLine($"Total: {result?.Translations?.Count}");
+            foreach (var item in result?.Translations ?? [])
             {
                 Console.WriteLine($"{item.Id}: {item.Content}");
             }
@@ -38,12 +38,12 @@ namespace Tests.PhraseStrings
                 new LocaleRequest { LocaleId = "cde71862c52d7f9d814d116258a1c4ee" },
                 new GetTranslationsForLocaleRequest());
 
-            Console.WriteLine($"Total: {result.Translations.Count()}");
-            foreach (var item in result.Translations)
+            Console.WriteLine($"Total: {result?.Translations?.Count}");
+            foreach (var item in result?.Translations ?? [])
             {
                 Console.WriteLine($"{item.Id}: {item.Content}");
             }
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(result?.Translations);
         }
 
         [TestMethod]

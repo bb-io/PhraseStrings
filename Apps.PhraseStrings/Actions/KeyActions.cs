@@ -10,7 +10,7 @@ using RestSharp;
 namespace Apps.PhraseStrings.Actions
 {
     [ActionList("Keys")]
-    public class KeyActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+    public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Search keys", Description = "Searches keys")]
         public async Task<ListKeysResponse> SearchKeys([ActionParameter] ProjectRequest project,
@@ -224,7 +224,7 @@ namespace Apps.PhraseStrings.Actions
             return await Client.ExecuteWithErrorHandling<ResordAffectedResponse>(request);
         }
 
-        [Action("Remove tags from keys", Description = "Removes tags from specified key")]
+        [Action("Remove tags from keys", Description = "Removes tags from keys")]
         public async Task<ResordAffectedResponse> RemovetagsToKeys([ActionParameter] ProjectRequest project,
             [ActionParameter] AddTagsToKeysRequest tags)
         {

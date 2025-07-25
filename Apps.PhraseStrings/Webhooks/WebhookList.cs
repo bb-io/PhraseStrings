@@ -17,7 +17,7 @@ namespace Apps.PhraseStrings.Webhooks
         {
             var root = GetPayload<JobCompleteWebhookResponse>(webhookRequest);
 
-            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
             {
                 return Task.FromResult(GetPreflightResponse<JobCompleteWebhookResponse>());
             }
@@ -33,7 +33,7 @@ namespace Apps.PhraseStrings.Webhooks
         {
             var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
 
-            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
             {
                 return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
             }
@@ -50,7 +50,7 @@ namespace Apps.PhraseStrings.Webhooks
         {
             var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
 
-            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
             {
                 return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
             }
@@ -66,7 +66,7 @@ namespace Apps.PhraseStrings.Webhooks
         {
             var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
 
-            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
             {
                 return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
             }

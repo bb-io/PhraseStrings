@@ -17,11 +17,11 @@ namespace Apps.PhraseStrings.Model.Key
     {
         [JsonProperty("id")]
         [Display("Key ID")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
         [Display("Key name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("description")]
         [Display("Key description")]

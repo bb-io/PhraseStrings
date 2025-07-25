@@ -5,16 +5,16 @@ namespace Apps.PhraseStrings.Model.Screenshot
     public class ScreenshotDtoResponse
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [JsonProperty("screenshot_url")]
-        public Uri ScreenshotUrl { get; set; }
+        public Uri? ScreenshotUrl { get; set; }
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }

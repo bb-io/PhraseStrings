@@ -4,6 +4,6 @@ namespace Apps.PhraseStrings.Model
 {
     public class FileResponse
     {
-        public FileReference File { get; set; }
+        public FileReference File { get; set; } = new();
     }
 }

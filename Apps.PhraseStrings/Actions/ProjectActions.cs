@@ -58,7 +58,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
 
         var request = new RestRequest("/v2/projects", Method.Post);
 
-        byte[] projectImageBytes = null;
+        byte[] projectImageBytes = [];
         if (file?.File != null)
         {
             using (var memoryStream = new MemoryStream())
@@ -160,7 +160,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
 
         var request = new RestRequest($"/v2/projects/{project.ProjectId}", Method.Patch);
 
-        byte[] projectImageBytes = null;
+        byte[] projectImageBytes = [];
         if (file?.File != null)
         {
             using (var memoryStream = new MemoryStream())

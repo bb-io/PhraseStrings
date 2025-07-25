@@ -11,7 +11,7 @@ using RestSharp;
 namespace Apps.PhraseStrings.Actions
 {
     [ActionList("Orders")]
-    public class OrdersActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+    public class OrdersActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Search orders", Description = "Searches orders")]
         public async Task<ListOrdersResponse> SearchOrders([ActionParameter] SearchOrdersRequest input,

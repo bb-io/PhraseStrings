@@ -24,25 +24,23 @@ public class PhraseStringsClient : BlackBirdRestClient
 
     protected override Exception ConfigureErrorException(RestResponse response)
     {
-        var error = JsonConvert.DeserializeObject(response.Content);
+        var error = JsonConvert.DeserializeObject(response.Content ?? string.Empty);
 
-        if (response.ContentType?.Contains("text/html", StringComparison.OrdinalIgnoreCase) == true || response.Content.StartsWith("<"))
+        if (response.ContentType?.Contains("text/html", StringComparison.OrdinalIgnoreCase) == true || response.Content?.StartsWith('<') == true)
         {
-            var errorMessage = ExtractHtmlErrorMessage(response.Content);
+            var errorMessage = ExtractHtmlErrorMessage(response.Content ?? string.Empty);
             throw new PluginApplicationException(errorMessage);
         }
 
-        throw new PluginApplicationException(error.ToString());
+        throw new PluginApplicationException(error?.ToString() ?? "Error when running a request");
     }
 
     public override async Task<T> ExecuteWithErrorHandling<T>(RestRequest request)
     {
-        string content = (await ExecuteWithErrorHandling(request)).Content;
-        T val = JsonConvert.DeserializeObject<T>(content, JsonSettings);
-        if (val == null)
-        {
-            throw new Exception($"Could not parse {content} to {typeof(T)}");
-        }
+        string content = (await ExecuteWithErrorHandling(request)).Content ?? string.Empty;
+
+        T val = JsonConvert.DeserializeObject<T>(content, JsonSettings ?? new())
+            ?? throw new Exception($"Could not parse {content} to {typeof(T)}");
 
         return val;
     }
@@ -71,6 +69,9 @@ public class PhraseStringsClient : BlackBirdRestClient
 
             foreach (var param in originalRequest.Parameters.Where(x => x.Type == ParameterType.QueryString))
             {
+                if (string.IsNullOrEmpty(param.Name))
+                    continue;
+
                 pageRequest.AddQueryParameter(param.Name, param.Value?.ToString());
             }
 

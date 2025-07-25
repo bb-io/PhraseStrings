@@ -12,7 +12,7 @@ namespace Apps.PhraseStrings.Model.Order
     public class OrderResponse
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("lsp")]
         public string? Lsp { get; set; }
@@ -50,7 +50,7 @@ namespace Apps.PhraseStrings.Model.Order
         public string? Tag { get; set; }
 
         [JsonProperty("styleguide")]
-        public StyleguideInfo Styleguide { get; set; }
+        public StyleguideInfo Styleguide { get; set; } = new();
 
         [JsonProperty("unverify_translations_upon_delivery")]
         [Display("Unverify translations upon delivery")]
@@ -73,10 +73,10 @@ namespace Apps.PhraseStrings.Model.Order
     public class StyleguideInfo
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
     }
 
 }

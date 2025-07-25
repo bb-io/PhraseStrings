@@ -10,7 +10,7 @@ using RestSharp;
 namespace Apps.PhraseStrings.Actions
 {
     [ActionList("Figma")]
-    public class FigmaActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+    public class FigmaActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
 
         [Action("Add Figma link to key", Description = "Adds figma link to specified key")]

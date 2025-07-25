@@ -8,6 +8,6 @@ namespace Apps.PhraseStrings.Webhooks.Models
     {
         [Display("Account ID")]
         [DataSource(typeof(AccountDataHandler))]
-        public string AccountId { get; set; }
+        public string AccountId { get; set; } = string.Empty;
     }
 }

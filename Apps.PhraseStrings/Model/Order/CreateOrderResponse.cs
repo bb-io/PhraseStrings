@@ -41,7 +41,7 @@ namespace Apps.PhraseStrings.Model.Order
         public bool? IncludeUnverifiedTranslations { get; set; }
 
         [JsonProperty("category")]
-        public string Category { get; set; }
+        public string Category { get; set; } = string.Empty;
 
         [JsonProperty("quality")]
         public bool? Quality { get; set; }

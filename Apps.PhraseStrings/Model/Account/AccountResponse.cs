@@ -5,16 +5,16 @@ namespace Apps.PhraseStrings.Model.Account
     public class AccountResponse
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("slug")]
-        public string Slug { get; set; }
+        public string Slug { get; set; } = string.Empty;
 
         [JsonProperty("company")]
-        public string Company { get; set; }
+        public string Company { get; set; } = string.Empty;
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
@@ -23,6 +23,6 @@ namespace Apps.PhraseStrings.Model.Account
         public DateTime UpdatedAt { get; set; }
 
         [JsonProperty("company_logo_url")]
-        public string CompanyLogoUrl { get; set; }
+        public string CompanyLogoUrl { get; set; } = string.Empty;
     }
 }

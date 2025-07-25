@@ -60,7 +60,7 @@ namespace Apps.PhraseStrings.Webhooks.Base
                 .AddHeader("accept", "application/json");
 
             var response = await Client.ExecuteAsync(request);
-            return JsonConvert.DeserializeObject<List<WebhookResponse>>(response.Content) ?? new List<WebhookResponse>();
+            return JsonConvert.DeserializeObject<List<WebhookResponse>>(response.Content ?? string.Empty) ?? [];
         }
     }
 }

@@ -8,10 +8,10 @@ namespace Apps.PhraseStrings.Model.Order
         public string? Branch { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("lsp")]
-        public string Lsp { get; set; }
+        public string Lsp { get; set; } = string.Empty;
 
         [JsonProperty("source_locale_id")]
         public string? SourceLocaleId { get; set; }
@@ -41,7 +41,7 @@ namespace Apps.PhraseStrings.Model.Order
         public bool? IncludeUnverifiedTranslations { get; set; }
 
         [JsonProperty("category")]
-        public string Category { get; set; }
+        public string Category { get; set; } = string.Empty;
 
         [JsonProperty("quality")]
         public bool? Quality { get; set; }

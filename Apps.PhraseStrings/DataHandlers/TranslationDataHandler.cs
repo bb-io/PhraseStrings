@@ -14,7 +14,7 @@ namespace Apps.PhraseStrings.DataHandlers
             var request = new RestRequest($"/v2/projects/{project.ProjectId}/translations", Method.Get);
             var jobs = await Client.Paginate<TranslationResponse>(request);
 
-            return jobs.Select(x => new DataSourceItem(x.Id, x.Content));
+            return jobs.Select(x => new DataSourceItem(x.Id, x.Content ?? string.Empty));
         }
     }
 }
