@@ -7,7 +7,7 @@ namespace Apps.PhraseStrings.Model
 {
     public class UploadFileRequest
     {
-        public FileReference File { get; set; }
+        public FileReference File { get; set; } = new();
 
         [JsonProperty("branch")]
         [DataSource(typeof(BranchDataHandler))]

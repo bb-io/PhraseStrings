@@ -8,6 +8,6 @@ namespace Apps.PhraseStrings.Model.Locale
     {
         [Display("Locale ID")]
         [DataSource(typeof(LocaleDataHandler))]
-        public string LocaleId { get; set; }
+        public string LocaleId { get; set; } = string.Empty;
     }
 }
