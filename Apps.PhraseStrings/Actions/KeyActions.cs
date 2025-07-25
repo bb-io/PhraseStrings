@@ -54,7 +54,7 @@ namespace Apps.PhraseStrings.Actions
         }
 
 
-        [Action("Get key by name", Description = "Gets a detailed key information from a key name")]
+        [Action("Get key by name", Description = "Gets detailed key information from a key name")]
         public async Task<KeyResponse> GetKeyByName(
             [ActionParameter] ProjectRequest project,
             [ActionParameter] BranchRequest branch,

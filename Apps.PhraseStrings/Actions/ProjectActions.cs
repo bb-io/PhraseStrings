@@ -13,7 +13,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Projects")]
 public class ProjectActions(InvocationContext invocationContext,IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Search projects", Description = "Returnes list of projects")]
+    [Action("Search projects", Description = "Returns list of projects")]
     public async Task<ListProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
     {
         var request = new RestRequest("/v2/projects", Method.Get);

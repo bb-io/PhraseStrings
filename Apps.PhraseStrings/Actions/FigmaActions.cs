@@ -13,7 +13,7 @@ namespace Apps.PhraseStrings.Actions
     public class FigmaActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
 
-        [Action("Add Figma link to key", Description = "Adds figma link to specified key")]
+        [Action("Add Figma link to key", Description = "Adds Figma link to a specified key")]
         public async Task<FigmaAttachmentResponse> AddFigmaLink([ActionParameter] ProjectRequest project,
             [ActionParameter] UploadFigmaLinkRequest figmaAttachment)
         {
