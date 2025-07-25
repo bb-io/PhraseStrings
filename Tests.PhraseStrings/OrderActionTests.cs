@@ -14,15 +14,14 @@ namespace Tests.PhraseStrings
     [TestClass]
     public class OrderActionTests : TestBase
     {
+        private OrdersActions _actions => new(InvocationContext);
         [TestMethod]
         public async Task SearchOrders_IssSuccess()
         {
-            var action = new OrdersActions(InvocationContext, FileManager);
-            var response = await action.SearchOrders(
-                new SearchOrdersRequest
-                {
-                },
+            var response = await _actions.SearchOrders(
+                new SearchOrdersRequest { },
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+
             Console.WriteLine($"Total: {response.Orders.Count}");
             foreach (var order in response.Orders)
             {
@@ -34,8 +33,7 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task CreateOrder_IssSuccess()
         {
-            var action = new OrdersActions(InvocationContext, FileManager);
-            var response = await action.CreateOrder(
+            var response = await _actions.CreateOrder(
                 new CreateOrderRequest
                 {
                     Name = "Test Order from locale",

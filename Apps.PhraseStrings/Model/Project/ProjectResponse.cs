@@ -5,37 +5,37 @@ namespace Apps.PhraseStrings.Model.Project
 {
     public class ListProjectsResponse
     {
-        public List<ProjectResponse> Projects { get; set; }
+        public List<ProjectResponse> Projects { get; set; } = [];
     }
 
     public class ProjectResponse
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("slug")]
-        public string Slug { get; set; }
+        public string Slug { get; set; } = string.Empty;
 
         [JsonProperty("main_format")]
         [Display("Main format")]
-        public string MainFormat { get; set; }
+        public string MainFormat { get; set; } = string.Empty;
 
         [JsonProperty("project_image_url")]
         [Display("Project image URL")]
-        public string ProjectImageUrl { get; set; }
+        public string ProjectImageUrl { get; set; } = string.Empty;
 
         [JsonProperty("account")]
-        public Account Account { get; set; }
+        public Account Account { get; set; } = new();
 
         [JsonProperty("space")]
-        public object Space { get; set; }
+        public object Space { get; set; } = new();
 
         [JsonProperty("point_of_contact")]
         [Display("Point of contact")]
-        public object PointOfContact { get; set; }
+        public object PointOfContact { get; set; } = new();
 
         [JsonProperty("created_at")]
         [Display("Created at")]
@@ -49,16 +49,16 @@ namespace Apps.PhraseStrings.Model.Project
     public class Account
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("slug")]
-        public string Slug { get; set; }
+        public string Slug { get; set; } = string.Empty;
 
         [JsonProperty("company")]
-        public string Company { get; set; }
+        public string Company { get; set; } = string.Empty;
 
         [JsonProperty("created_at")]
         [Display("Created at")]
@@ -70,6 +70,6 @@ namespace Apps.PhraseStrings.Model.Project
 
         [JsonProperty("company_logo_url")]
         [Display("Company logo URL")]
-        public string CompanyLogoUrl { get; set; }
+        public string CompanyLogoUrl { get; set; } = string.Empty;
     }
 }

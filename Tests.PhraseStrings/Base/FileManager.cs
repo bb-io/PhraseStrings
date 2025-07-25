@@ -8,15 +8,10 @@ public class FileManager : IFileManagementClient
     private readonly string inputFolder;
     private readonly string outputFolder;
 
-    public FileManager()
+    public FileManager(string folderLocation)
     {
-        var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        var projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.FullName;
-
-
-        var testFilesPath = Path.Combine(projectDirectory, "TestFiles");
-        inputFolder = Path.Combine(testFilesPath, "Input");
-        outputFolder = Path.Combine(testFilesPath, "Output");
+        inputFolder = Path.Combine(folderLocation, "Input");
+        outputFolder = Path.Combine(folderLocation, "Output");
 
         Directory.CreateDirectory(inputFolder);
         Directory.CreateDirectory(outputFolder);
@@ -36,7 +31,7 @@ public class FileManager : IFileManagementClient
     public Task<FileReference> UploadAsync(Stream stream, string contentType, string fileName)
     {
         var path = Path.Combine(outputFolder, fileName);
-        new FileInfo(path).Directory.Create();
+        new FileInfo(path)?.Directory?.Create();
         using (var fileStream = File.Create(path))
         {
             stream.CopyTo(fileStream);

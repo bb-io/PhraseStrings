@@ -8,7 +8,7 @@ namespace Apps.PhraseStrings.Model.Job
     {
         [Display("Job ID")]
         [DataSource(typeof(JobDataHandler))]
-        public string JobId { get; set; }
+        public string JobId { get; set; } = string.Empty;
 
     }
 }

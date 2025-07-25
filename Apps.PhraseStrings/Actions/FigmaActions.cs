@@ -6,19 +6,14 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
-    public class FigmaActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+    [ActionList("Figma")]
+    public class FigmaActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
 
-        [Action("Add Figma link to key", Description = "Adds figma link to specified key")]
+        [Action("Add Figma link to key", Description = "Adds Figma link to a specified key")]
         public async Task<FigmaAttachmentResponse> AddFigmaLink([ActionParameter] ProjectRequest project,
             [ActionParameter] UploadFigmaLinkRequest figmaAttachment)
         {

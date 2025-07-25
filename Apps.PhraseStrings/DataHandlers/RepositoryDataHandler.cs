@@ -1,5 +1,5 @@
 ﻿using Apps.PhraseStrings.Model.Account;
-using Apps.PhraseStrings.Model.Order;
+using Apps.PhraseStrings.Model.Repository;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Blackbird.Applications.Sdk.Common.Invocation;
@@ -12,9 +12,9 @@ namespace Apps.PhraseStrings.DataHandlers
         public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context, CancellationToken cancellationToken)
         {
             var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs", Method.Get);
-            var jobs = await Client.Paginate<OrderResponse>(request);
+            var jobs = await Client.Paginate<RepositoryResponse>(request);
 
-            return jobs.Select(x => new DataSourceItem(x.Id, x.Message));
+            return jobs.Select(x => new DataSourceItem(x.RepoId, x.RepoName));
         }
     }
 }

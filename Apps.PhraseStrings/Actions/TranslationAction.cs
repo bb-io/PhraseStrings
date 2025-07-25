@@ -1,7 +1,6 @@
 ﻿using Apps.PhraseStrings.Model;
 using Apps.PhraseStrings.Model.Key;
 using Apps.PhraseStrings.Model.Locale;
-using Apps.PhraseStrings.Model.Order;
 using Apps.PhraseStrings.Model.Project;
 using Apps.PhraseStrings.Model.Translation;
 using Blackbird.Applications.Sdk.Common;
@@ -9,14 +8,12 @@ using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Transactions;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
+    [ActionList("Translations")]
     public class TranslationAction(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Create translation", Description = "Creates translation")]
@@ -51,7 +48,7 @@ namespace Apps.PhraseStrings.Actions
         }
 
 
-        [Action("Get translations for key", Description = "Gets translations for key")]
+        [Action("Get translations for key", Description = "Gets translations for a key")]
         public async Task<ListTranslationsResponse> GetTranslationForKey([ActionParameter] ProjectRequest project,
             [ActionParameter] KeyRequest key, [ActionParameter] GetTranslationsForKeyRequest options)
         {
@@ -68,7 +65,7 @@ namespace Apps.PhraseStrings.Actions
             return new ListTranslationsResponse { Translations = response };
         }
 
-        [Action("Get translations for locale", Description = "Gets translations for locale")]
+        [Action("Get translations for locale", Description = "Gets translations for a locale")]
         public async Task<ListTranslationsResponse> GetTranslationForLocale([ActionParameter] ProjectRequest project,
             [ActionParameter] LocaleRequest locale, [ActionParameter] GetTranslationsForLocaleRequest option)
         {
@@ -144,9 +141,9 @@ namespace Apps.PhraseStrings.Actions
 
             var fileData = responseDownload.RawBytes;
 
-            string fileName = null;
-            var contentDisposition = responseDownload.ContentHeaders
-                .FirstOrDefault(h => h.Name.Equals("Content-Disposition", StringComparison.OrdinalIgnoreCase))?
+            string fileName = string.Empty;
+            var contentDisposition = responseDownload.ContentHeaders?
+                .FirstOrDefault(h => h.Name?.Equals("Content-Disposition", StringComparison.OrdinalIgnoreCase) == true)?
                 .Value?.ToString();
             if (!string.IsNullOrEmpty(contentDisposition) && contentDisposition.Contains("filename"))
             {
@@ -164,8 +161,8 @@ namespace Apps.PhraseStrings.Actions
                 fileName = $"{locale.LocaleId}.{ext}";
             }
 
-            using var stream = new MemoryStream(fileData);
-            var fileRef = await fileManagementClient.UploadAsync(stream, responseDownload.ContentType, fileName);
+            using var stream = new MemoryStream(fileData ?? []);
+            var fileRef = await fileManagementClient.UploadAsync(stream, responseDownload.ContentType ?? string.Empty, fileName);
 
             return new FileResponse
             {
@@ -173,7 +170,7 @@ namespace Apps.PhraseStrings.Actions
             };
         }
 
-        [Action("Upload  file", Description = "Uploads  file")]
+        [Action("Upload  file", Description = "Uploads a file into specified project")]
         public async Task<ImportResponse> UploadFile([ActionParameter] ProjectRequest project,
             [ActionParameter] UploadFileRequest input)
         {

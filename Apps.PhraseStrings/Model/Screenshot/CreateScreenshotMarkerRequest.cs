@@ -10,12 +10,12 @@ namespace Apps.PhraseStrings.Model.Screenshot
         [Display("Key ID")]
         [DataSource(typeof(KeyDataHandler))]
         [JsonProperty("key_id")]
-        public string KeyId { get; set; }
+        public string KeyId { get; set; } = string.Empty;
 
         [Display("Screenshot ID")]
         [JsonProperty("screenshot_id")]
         [DataSource(typeof(ScreenshotDataHandler))]
-        public string ScreenshotId { get; set; }
+        public string ScreenshotId { get; set; } = string.Empty;
 
         [Display("Branch")]
         [DataSource(typeof(BranchDataHandler))]

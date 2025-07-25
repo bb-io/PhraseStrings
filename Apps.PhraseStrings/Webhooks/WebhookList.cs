@@ -12,12 +12,12 @@ namespace Apps.PhraseStrings.Webhooks
     [WebhookList]
     public class WebhookList(InvocationContext invocationContext) : BaseInvocable(invocationContext)
     {
-        [Webhook("On job completed", typeof(JobCompletedHandler), Description = "Triggers when job completed")]
+        [Webhook("On job completed", typeof(JobCompletedHandler), Description = "Triggers when a job is completed")]
         public Task<WebhookResponse<JobCompleteWebhookResponse>> OnJobCompleted(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
         {
             var root = GetPayload<JobCompleteWebhookResponse>(webhookRequest);
 
-            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
             {
                 return Task.FromResult(GetPreflightResponse<JobCompleteWebhookResponse>());
             }
@@ -28,12 +28,12 @@ namespace Apps.PhraseStrings.Webhooks
             });
         }
 
-        [Webhook("On key created", typeof(KeyCreatedHandler), Description = "Triggers when key created")]
+        [Webhook("On key created", typeof(KeyCreatedHandler), Description = "Triggers when a key is created")]
         public Task<WebhookResponse<KeysCreateWebhookResponse>> OnKeyCreated(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
         {
             var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
 
-            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
             {
                 return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
             }
@@ -45,12 +45,12 @@ namespace Apps.PhraseStrings.Webhooks
         }
 
 
-        [Webhook("On key updated", typeof(KeysUpdatedHandler), Description = "Triggers when key updated")]
+        [Webhook("On key updated", typeof(KeysUpdatedHandler), Description = "Triggers when a key is updated")]
         public Task<WebhookResponse<KeysCreateWebhookResponse>> OnKeyUpdated(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
         {
             var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
 
-            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
             {
                 return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
             }
@@ -61,12 +61,12 @@ namespace Apps.PhraseStrings.Webhooks
             });
         }
 
-        [Webhook("On comment added to a key", typeof(CommentToKeyAddedHandler), Description = "Triggers when comment added to a key")]
+        [Webhook("On comment added to a key", typeof(CommentToKeyAddedHandler), Description = "Triggers when a comment is added to a key")]
         public Task<WebhookResponse<KeysCreateWebhookResponse>> OnCommentAddedToKey(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
         {
             var root = GetPayload<KeysCreateWebhookResponse>(webhookRequest);
 
-            if (project.ProjectId != null && root.Project.Id != project.ProjectId)
+            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
             {
                 return Task.FromResult(GetPreflightResponse<KeysCreateWebhookResponse>());
             }

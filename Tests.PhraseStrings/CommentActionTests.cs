@@ -11,17 +11,14 @@ namespace Tests.PhraseStrings
     [TestClass]
     public class CommentActionTests : TestBase
     {
-        [TestMethod]
-        public async Task AddCommentToKey_IsSuccerss()
-        {
-            var action = new CommentActions(InvocationContext, FileManager);
+        private CommentActions _actions => new(InvocationContext);
 
-            var response = await action.AddCommentToKey(
+        [TestMethod]
+        public async Task AddCommentToKey_IsSuccess()
+        {
+            var response = await _actions.AddCommentToKey(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
-                new CreateCommentRequest
-                {
-                    Message = "Test comment to the key"
-                },
+                new CreateCommentRequest { Message = "Test comment to the key" },
                 new KeyRequest { KeyId = "c9de884de06dafd683e65d3c2f2fa38c" });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
@@ -32,14 +29,9 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task AddCommentToJob_IsSuccerss()
         {
-            var action = new CommentActions(InvocationContext, FileManager);
-
-            var response = await action.AddCommentToJob(
+            var response = await _actions.AddCommentToJob(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
-                new CreateCommentRequest
-                {
-                    Message = "Test comment to the key(one more)"
-                },
+                new CreateCommentRequest { Message = "Test comment to the key(one more)" },
                 new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);

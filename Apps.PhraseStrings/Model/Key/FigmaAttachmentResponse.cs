@@ -7,11 +7,11 @@ namespace Apps.PhraseStrings.Model.Key
     {
         [JsonProperty("id")]
         [Display("Attachment ID")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("url")]
         [Display("Figma URL")]
-        public string Url { get; set; }
+        public string Url { get; set; } = string.Empty;
 
         [JsonProperty("created_at")]
         [Display("Created at")]

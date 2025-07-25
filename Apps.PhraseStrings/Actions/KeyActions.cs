@@ -9,8 +9,8 @@ using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
-    public class KeyActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+    [ActionList("Keys")]
+    public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Search keys", Description = "Searches keys")]
         public async Task<ListKeysResponse> SearchKeys([ActionParameter] ProjectRequest project,
@@ -54,7 +54,7 @@ namespace Apps.PhraseStrings.Actions
         }
 
 
-        [Action("Get key by name", Description = "Gets a detailed key information from a key name")]
+        [Action("Get key by name", Description = "Gets detailed key information from a key name")]
         public async Task<KeyResponse> GetKeyByName(
             [ActionParameter] ProjectRequest project,
             [ActionParameter] BranchRequest branch,
@@ -76,7 +76,7 @@ namespace Apps.PhraseStrings.Actions
             return keyFound ?? new KeyResponse();
         }
 
-        [Action("Create a key", Description = "Creates a  key")]
+        [Action("Create a key", Description = "Creates a key")]
         public async Task<KeyResponse> CreateKey([ActionParameter] ProjectRequest project,
             [ActionParameter] CreateKeyRequest input)
         {
@@ -199,7 +199,7 @@ namespace Apps.PhraseStrings.Actions
         }
 
 
-        [Action("Add tags to keys", Description ="Addes tags to specified keys")]
+        [Action("Add tags to keys", Description ="Adds tags to specified keys")]
         public async Task<ResordAffectedResponse> AddtagsToKeys([ActionParameter] ProjectRequest project,
             [ActionParameter] AddTagsToKeysRequest tags)
         {
@@ -224,7 +224,7 @@ namespace Apps.PhraseStrings.Actions
             return await Client.ExecuteWithErrorHandling<ResordAffectedResponse>(request);
         }
 
-        [Action("Remove tags from key", Description = "Removes tags from specified key")]
+        [Action("Remove tags from keys", Description = "Removes tags from keys")]
         public async Task<ResordAffectedResponse> RemovetagsToKeys([ActionParameter] ProjectRequest project,
             [ActionParameter] AddTagsToKeysRequest tags)
         {

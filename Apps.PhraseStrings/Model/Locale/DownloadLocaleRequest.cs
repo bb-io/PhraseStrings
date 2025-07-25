@@ -15,13 +15,13 @@ namespace Apps.PhraseStrings.Model.Locale
         [Display("File format")]
         [JsonProperty("file_format")]
         [DataSource(typeof(FormatDataHandler))]
-        public string FileFormat { get; set; }
+        public string FileFormat { get; set; } = string.Empty;
 
         [Display("Tags")]
         [JsonProperty("tags")]
         public string? Tags { get; set; }
 
-        [Display("Include empty  translations")]
+        [Display("Include empty translations")]
         [JsonProperty("include_empty_translations")]
         public bool? IncludeEmptyTranslations { get; set; }
 
@@ -32,8 +32,8 @@ namespace Apps.PhraseStrings.Model.Locale
         [Display("Include translated keys")]
         [JsonProperty("include_translated_keys")]
         public bool? IncludeTranslatedKeys { get; set; }
-        //
-        [Display("Keep nontranslate tags")]
+
+        [Display("Keep 'notranslate' tags")]
         [JsonProperty("keep_notranslate_tags")]
         public bool? KeepNotranslateTags { get; set; }
 

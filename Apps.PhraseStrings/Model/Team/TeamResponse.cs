@@ -40,11 +40,11 @@ public class SpaceInfo
 {
     [JsonProperty("id")]
     [Display("Space ID")]
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     [JsonProperty("name")]
     [Display("Space name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [JsonProperty("created_at")]
     [Display("Created at")]

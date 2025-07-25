@@ -22,7 +22,7 @@ public class RepositoryResponse
     [JsonProperty("enabled")]
     public bool Enabled { get; set; }
 
-    [Display("Is auto-imporn enabled?")]
+    [Display("Is auto-import enabled?")]
     [JsonProperty("auto_import")]
     public bool AutoImport { get; set; }
 

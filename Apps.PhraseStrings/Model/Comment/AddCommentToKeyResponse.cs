@@ -8,17 +8,18 @@ namespace Apps.PhraseStrings.Model.Comment
     public class AddCommentToKeyResponse
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        [Display("Comment ID")]
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("message")]
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
         [JsonProperty("has_replies")]
         [Display("Has replies")]
         public bool HasReplies { get; set; }
 
         [JsonProperty("user")]
-        public UserInfo User { get; set; }
+        public UserInfo User { get; set; } = new();
 
         [JsonProperty("created_at")]
         [Display("Created at")]
@@ -29,7 +30,7 @@ namespace Apps.PhraseStrings.Model.Comment
         public DateTime UpdatedAt { get; set; }
 
         [JsonProperty("locales")]
-        public List<LocaleInfo> Locales { get; set; }
+        public List<LocaleInfo> Locales { get; set; } = [];
     }
 
 }

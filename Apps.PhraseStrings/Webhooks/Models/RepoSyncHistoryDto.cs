@@ -12,19 +12,19 @@ namespace Apps.PhraseStrings.Webhooks.Models
     public class RepoSyncHistoryDto
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
 
         [JsonProperty("status")]
-        public string Status { get; set; }
+        public string Status { get; set; } = string.Empty;
 
         [JsonProperty("auto_import")]
         public bool AutoImport { get; set; }
 
         [JsonProperty("errors")]
-        public List<JToken> Errors { get; set; }
+        public List<JToken> Errors { get; set; } = [];
     }
 
     public class RepoSyncErrorBatch
@@ -41,26 +41,26 @@ namespace Apps.PhraseStrings.Webhooks.Models
     public class RepoSyncError
     {
         [Display("Sync ID")]
-        public string SyncId { get; set; }
+        public string SyncId { get; set; } = string.Empty;
 
         [Display("Repository name")]
-        public string RepoName { get; set; }
+        public string RepoName { get; set; } = string.Empty;
 
-
-        public string ProjectId { get; set; }
+        [Display("Project ID")]
+        public string ProjectId { get; set; } = string.Empty;
 
         [Display("Project name")]
-        public string ProjectName { get; set; }
+        public string ProjectName { get; set; } = string.Empty;
 
-        public string Provider { get; set; }
+        public string Provider { get; set; } = string.Empty;
 
         [Display("Event type")]
-        public string EventType { get; set; }
+        public string EventType { get; set; } = string.Empty;
 
         [Display("Date")]
-        public DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
         [Display("Last import at")]
         public DateTime? LastImportAt { get; set; }
@@ -69,6 +69,6 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public DateTime? LastExportAt { get; set; }
 
         [Display("Event status")]
-        public string EventStatus { get; set; }
+        public string EventStatus { get; set; } = string.Empty;
     }
 }

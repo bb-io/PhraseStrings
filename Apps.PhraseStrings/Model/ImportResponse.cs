@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json;
+using Blackbird.Applications.Sdk.Common;
 
 namespace Apps.PhraseStrings.Model
 {
     public class ImportResponse
     {
+        [Display("File ID")]
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("filename")]
         public string? Filename { get; set; }

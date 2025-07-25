@@ -8,6 +8,6 @@ namespace Apps.PhraseStrings.Model.Key
     {
         [Display("Key ID")]
         [DataSource(typeof(KeyDataHandler))]
-        public string KeyId { get; set; }
+        public string KeyId { get; set; } = string.Empty;
     }
 }

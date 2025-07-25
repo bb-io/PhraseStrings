@@ -21,7 +21,7 @@ public class UserDataHandler(InvocationContext invocationContext, [ActionParamet
         var users = await Client.Paginate<UserResponse>(usersRequest);
 
         users = users
-            .Where(u => u.Projects.Any(p => p.Id == project.ProjectId))
+            .Where(u => u.Projects?.Any(p => p.Id == project.ProjectId) == true)
             .ToList();
 
         if (!string.IsNullOrEmpty(context.SearchString))

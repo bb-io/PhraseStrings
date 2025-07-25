@@ -7,7 +7,7 @@ namespace Apps.PhraseStrings.Model
 {
     public class UploadFileRequest
     {
-        public FileReference File { get; set; }
+        public FileReference File { get; set; } = new();
 
         [JsonProperty("branch")]
         [DataSource(typeof(BranchDataHandler))]
@@ -15,10 +15,10 @@ namespace Apps.PhraseStrings.Model
 
         [JsonProperty("file_format")]
         [DataSource(typeof(FormatDataHandler))]
-        public string FileFormat { get; set; }
+        public string FileFormat { get; set; } = string.Empty;
 
         [JsonProperty("locale_id")]
-        public string LocaleId { get; set; }
+        public string LocaleId { get; set; } = string.Empty;
 
         [JsonProperty("tags")]
         public string? Tags { get; set; }

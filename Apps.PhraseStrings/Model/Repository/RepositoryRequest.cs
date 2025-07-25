@@ -8,6 +8,6 @@ namespace Apps.PhraseStrings.Model.Repository
     {
         [Display("Repository ID")]
         [DataSource(typeof(RepositoryDataHandler))]
-        public string RepositoryId { get; set; }
+        public string RepositoryId { get; set; } = string.Empty;
     }
 }

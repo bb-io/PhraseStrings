@@ -9,7 +9,7 @@ using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
+    [ActionList("Screenshots")]
     public class ScreenshotActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
 

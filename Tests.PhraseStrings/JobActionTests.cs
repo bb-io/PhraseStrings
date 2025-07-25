@@ -9,12 +9,12 @@ namespace Tests.PhraseStrings
     [TestClass]
     public class JobActionTests : TestBase
     {
+        private JobActions _actions => new(InvocationContext);
         [TestMethod]
         public async Task SearchJobs_IsSuccess()
         {
-            var action = new JobActions(InvocationContext, FileManager);
-
-            var response = await action.SearchJobs(new SearchJobsRequest { },
+            var response = await _actions.SearchJobs(
+                new SearchJobsRequest { },
                 new ProjectRequest {ProjectId= "52ea432ad1debbf8e09cdf344998167d" });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
@@ -25,9 +25,8 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task CreateJob_IsSuccess()
         {
-            var action = new JobActions(InvocationContext, FileManager);
-
-            var response = await action.CreateJob(new CreateJobRequest {Name="Testing job from locale callb", TranslationKeyIds= ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] },
+            var response = await _actions.CreateJob(
+                new CreateJobRequest { Name = "Testing job from locale callb", TranslationKeyIds = ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] },
                 new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
@@ -38,9 +37,8 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task GetJob_IsSuccess()
         {
-            var action = new JobActions(InvocationContext, FileManager);
-
-            var response = await action.GetJob(new JobRequest { JobId= "616f70f52101f2e219f0ef8192320871" },
+            var response = await _actions.GetJob(
+                new JobRequest { JobId= "616f70f52101f2e219f0ef8192320871" },
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
@@ -51,10 +49,10 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task StartJob_IsSuccess()
         {
-            var action = new JobActions(InvocationContext, FileManager);
-
-            var response = await action.StartJob(new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
-                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" }, null);
+            var response = await _actions.StartJob(
+                new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
+                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
+                null);
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);
@@ -64,10 +62,10 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task AddKeysToJob_IsSuccess()
         {
-            var action = new JobActions(InvocationContext, FileManager);
-
-            var response = await action.AddKeysToJob(new JobRequest { JobId = "cae41b76eb9cdd623518f4d5effb2554" },
-                new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" },  new AddkeysToJobRequest { Keys = ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] });
+            var response = await _actions.AddKeysToJob(
+                new JobRequest { JobId = "cae41b76eb9cdd623518f4d5effb2554" },
+                new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" },
+                new AddkeysToJobRequest { Keys = ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] });
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);
@@ -77,8 +75,7 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task AddTargetLocaleToJob_IsSuccess()
         {
-            var action = new JobActions(InvocationContext, FileManager);
-            var response = await action.AddTargetLocaleToJob(
+            var response = await _actions.AddTargetLocaleToJob(
                 new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
                 new JobRequest { JobId = "88bb8462fc7936b2b45a612c50866174" },
                 new AddTargetLocaleToJobRequest { LocaleId = "df5447505e3e7a0b688c25a79a6770a7" });
@@ -91,10 +88,10 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task CompleteJob_IsSuccess()
         {
-            var action = new JobActions(InvocationContext, FileManager);
-
-            var response = await action.CompleteJob(new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
-                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" }, null);
+            var response = await _actions.CompleteJob(
+                new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
+                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
+                null);
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);
@@ -104,10 +101,10 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task ReopenJob_IsSuccess()
         {
-            var action = new JobActions(InvocationContext, FileManager);
-
-            var response = await action.ReopenJob(new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
-                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" }, null);
+            var response = await _actions.ReopenJob(
+                new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
+                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
+                null);
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);
             Console.WriteLine(json);

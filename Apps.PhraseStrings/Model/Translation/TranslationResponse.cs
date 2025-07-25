@@ -12,10 +12,10 @@ namespace Apps.PhraseStrings.Model.Translation
     public class TranslationResponse
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("content")]
-        public string? Content { get; set; }
+        public string? Content { get; set; } = string.Empty;
 
         [JsonProperty("unverified")]
         public bool? Unverified { get; set; }
@@ -59,10 +59,10 @@ namespace Apps.PhraseStrings.Model.Translation
     public class TranslationKey
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("plural")]
         public bool Plural { get; set; }
@@ -71,24 +71,24 @@ namespace Apps.PhraseStrings.Model.Translation
     public class TranslationLocale
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("code")]
-        public string Code { get; set; }
+        public string Code { get; set; } = string.Empty;
     }
 
     public class TranslationUser
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("username")]
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

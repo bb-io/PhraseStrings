@@ -15,7 +15,7 @@ namespace Apps.PhraseStrings.Model.Screenshot
 
         [Display("Name")]
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Display("Description")]
         [JsonProperty("description")]
@@ -23,6 +23,6 @@ namespace Apps.PhraseStrings.Model.Screenshot
 
         [Display("Screenshot")]
         [JsonProperty("filename")]
-        public FileReference File { get; set; }
+        public FileReference File { get; set; } = new();
     }
 }

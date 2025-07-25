@@ -10,10 +10,10 @@ using RestSharp;
 
 namespace Apps.PhraseStrings.Actions;
 
-[ActionList]
+[ActionList("Projects")]
 public class ProjectActions(InvocationContext invocationContext,IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Search projects", Description = "Returnes list of projects")]
+    [Action("Search projects", Description = "Returns list of projects")]
     public async Task<ListProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
     {
         var request = new RestRequest("/v2/projects", Method.Get);
@@ -58,7 +58,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
 
         var request = new RestRequest("/v2/projects", Method.Post);
 
-        byte[] projectImageBytes = null;
+        byte[] projectImageBytes = [];
         if (file?.File != null)
         {
             using (var memoryStream = new MemoryStream())
@@ -160,7 +160,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
 
         var request = new RestRequest($"/v2/projects/{project.ProjectId}", Method.Patch);
 
-        byte[] projectImageBytes = null;
+        byte[] projectImageBytes = [];
         if (file?.File != null)
         {
             using (var memoryStream = new MemoryStream())

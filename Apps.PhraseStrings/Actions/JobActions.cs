@@ -6,14 +6,13 @@ using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Utils.Extensions.Http;
-using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
-    public class JobActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+    [ActionList("Jobs")]
+    public class JobActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
 
         [Action("Search jobs", Description ="Searches jobs")]
