@@ -1,5 +1,4 @@
 ﻿using Apps.PhraseStrings.DataHandlers;
-using Apps.PhraseStrings.Model.Job;
 using Apps.PhraseStrings.Model.Order;
 using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common;
@@ -8,15 +7,10 @@ using Blackbird.Applications.Sdk.Common.Dynamic;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
+    [ActionList("Orders")]
     public class OrdersActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Search orders", Description = "Searches orders")]

@@ -12,7 +12,7 @@ using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
+    [ActionList("Jobs")]
     public class JobActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
 

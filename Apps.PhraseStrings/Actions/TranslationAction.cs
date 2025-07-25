@@ -1,7 +1,6 @@
 ﻿using Apps.PhraseStrings.Model;
 using Apps.PhraseStrings.Model.Key;
 using Apps.PhraseStrings.Model.Locale;
-using Apps.PhraseStrings.Model.Order;
 using Apps.PhraseStrings.Model.Project;
 using Apps.PhraseStrings.Model.Translation;
 using Blackbird.Applications.Sdk.Common;
@@ -9,14 +8,12 @@ using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Transactions;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
+    [ActionList("Translations")]
     public class TranslationAction(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Create translation", Description = "Creates translation")]

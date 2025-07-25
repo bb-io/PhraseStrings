@@ -10,7 +10,7 @@ using RestSharp;
 
 namespace Apps.PhraseStrings.Actions;
 
-[ActionList]
+[ActionList("Projects")]
 public class ProjectActions(InvocationContext invocationContext,IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
 {
     [Action("Search projects", Description = "Returnes list of projects")]

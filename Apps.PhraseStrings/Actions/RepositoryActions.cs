@@ -8,14 +8,14 @@ using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
-    public class RepositoryActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+    [ActionList("Repositories")]
+    public class RepositoryActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Search repositories", Description = "Retrieves all repositories for the account")]
         public async Task<List<RepositoryResponse>> SearchRepositories([ActionParameter] AccountRequest account)
         {
             var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs", Method.Get);
-            var t = await Client.ExecuteAsync(request);
+
             return await Client.ExecuteWithErrorHandling<List<RepositoryResponse>>(request);
         }
 
@@ -29,7 +29,7 @@ namespace Apps.PhraseStrings.Actions
         }
 
         [Action("Import from code repository", Description = "Imports from code repository")]
-        public async Task<ImportResponse> ImprotsFromCOdeRepository([ActionParameter] AccountRequest account,
+        public async Task<ImportResponse> ImportFromCodeRepository([ActionParameter] AccountRequest account,
             [ActionParameter] RepositoryRequest repository)
         {
             var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs/{repository.RepositoryId}/import", Method.Post);

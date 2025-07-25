@@ -10,7 +10,7 @@ using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
 {
-    [ActionList]
+    [ActionList("Comments")]
     public class CommentActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
     {
         [Action("Add comment to a key", Description = "Adds comment to a key")]

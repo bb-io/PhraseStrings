@@ -370,3 +370,6 @@ FodyWeavers.xsd
 /Tests.Appname/appsettings.json
 /Tests.PhraseStrings/appsettings.json
 /Tests.PhraseStrings/TestFiles/Input/original.html
+
+/Tests.PhraseStrings/TestFiles/Output/*
+!/Tests.PhraseStrings/TestFiles/Output/.gitkeep
