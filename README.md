@@ -84,7 +84,7 @@ Before you can connect you need to make sure that:
 
 ### Repository
 
-- **Export to code repository** Exports a project to a code repository.
+- **Export to code repository** Exports a project to a code repository. Add a delay between exports if you're starting multiple exports in a row to avoid rate limiting issues.
 - **Import from code repository** Imports a project from a code repository.
 
 ### Translation
