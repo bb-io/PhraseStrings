@@ -36,7 +36,7 @@ namespace Tests.PhraseStrings
         }
 
         [TestMethod]
-        public async Task CreatehKey_IsSuccess()
+        public async Task CreateKey_IsSuccess()
         {
             var action = new KeyActions(InvocationContext, FileManager);
             var response = await action.CreateKey(new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
@@ -48,7 +48,7 @@ namespace Tests.PhraseStrings
         }
 
         [TestMethod]
-        public async Task UpdatehKey_IsSuccess()
+        public async Task UpdateKey_IsSuccess()
         {
             var action = new KeyActions(InvocationContext, FileManager);
             var response = await action.UpdateKey(new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },

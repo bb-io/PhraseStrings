@@ -12,7 +12,7 @@ namespace Tests.PhraseStrings
     public class CommentActionTests : TestBase
     {
         [TestMethod]
-        public async Task AddCommentToKey_IsSuccerss()
+        public async Task AddCommentToKey_IsSuccess()
         {
             var action = new CommentActions(InvocationContext, FileManager);
 

@@ -30,23 +30,23 @@ Before you can connect you need to make sure that:
 
 ## Actions
 
-### Job
+### Jobs
 
 - **Search jobs** Searches jobs according to the filters you specify.
 - **Create Job**  Creates a new job.
-- ** Get Job** Retrieves a job by its ID.
+- **Get Job** Retrieves a job by its ID.
 - **Start job** Starts a job.
-- ** Add keys to job** Adds keys to a job.
+- **Add keys to job** Adds keys to a job.
 - **Add target locales to a job** Adds target locales to a job and assigns translators or reviewers.
 - **Complete job** Completes a job.
 - **Reopen job** Reopens a job.
 
-### Comment
+### Comments
 
 - **Add comment to a key** Adds a comment to a key.
 - **Add comment to a job** Adds a comment to a job.
 
-### Screenshot
+### Screenshots
 
 - **Upload screenshot** Uploads a screenshot to a project.
 - **Get uploaded screenshot** Retrieves an uploaded screenshot by its ID or name (exact match).
@@ -56,7 +56,7 @@ Before you can connect you need to make sure that:
 
 - **Add Figma link to key** Adds a Figma link to a key.
 
-### Key
+### Keys
 
 - **Search keys** Searches keys according to the filters you specify.
 - **Get key by name** Retrieves a key by its name. Useful for retrieving a key ID or key tags.
@@ -65,14 +65,14 @@ Before you can connect you need to make sure that:
 - **Add tags to a key** Adds tags to a key.
 - **Remove tags from a key** Removes tags from a key
 
-### Order
+### Orders
 
 - **Seach orders** Searches orders according to the filters you specify.
 - **Create order** Creates a new order.
 - **Get order** Retrieves an order by its ID.
 - **Confirm order** Confirms an order.
 
-### Project
+### Projects
 
 - **Search projects** Searches projects according to the filters you specify.
 - **Get project** Retrieves a project by its ID.
@@ -82,12 +82,12 @@ Before you can connect you need to make sure that:
 - **Get project locales** Retrieves all locales for a project, useful for obtaining locale IDs.
 - **Get project locale from code** Retrieves a project locale by its ISO code, useful for obtaining locale IDs.
 
-### Repository
+### Repositories
 
 - **Export to code repository** Exports a project to a code repository. Add a delay between exports if you're starting multiple exports in a row to avoid rate limiting issues.
 - **Import from code repository** Imports a project from a code repository.
 
-### Translation
+### Translations
 
 - **Create translation** Creates a new translation.
 - **Update translation** Updates an existing translation.

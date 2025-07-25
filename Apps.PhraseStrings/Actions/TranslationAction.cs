@@ -48,7 +48,7 @@ namespace Apps.PhraseStrings.Actions
         }
 
 
-        [Action("Get translations for key", Description = "Gets translations for key")]
+        [Action("Get translations for key", Description = "Gets translations for a key")]
         public async Task<ListTranslationsResponse> GetTranslationForKey([ActionParameter] ProjectRequest project,
             [ActionParameter] KeyRequest key, [ActionParameter] GetTranslationsForKeyRequest options)
         {
@@ -65,7 +65,7 @@ namespace Apps.PhraseStrings.Actions
             return new ListTranslationsResponse { Translations = response };
         }
 
-        [Action("Get translations for locale", Description = "Gets translations for locale")]
+        [Action("Get translations for locale", Description = "Gets translations for a locale")]
         public async Task<ListTranslationsResponse> GetTranslationForLocale([ActionParameter] ProjectRequest project,
             [ActionParameter] LocaleRequest locale, [ActionParameter] GetTranslationsForLocaleRequest option)
         {
@@ -170,7 +170,7 @@ namespace Apps.PhraseStrings.Actions
             };
         }
 
-        [Action("Upload  file", Description = "Uploads  file")]
+        [Action("Upload  file", Description = "Uploads a file into specified project")]
         public async Task<ImportResponse> UploadFile([ActionParameter] ProjectRequest project,
             [ActionParameter] UploadFileRequest input)
         {
