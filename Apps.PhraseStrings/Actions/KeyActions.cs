@@ -143,13 +143,13 @@ namespace Apps.PhraseStrings.Actions
         {
             var request = new RestRequest($"/v2/projects/{project.ProjectId}/keys/{keyinput.KeyId}", Method.Patch);
 
-            var body = new Dictionary<string, object>
-            {
-                ["name"] = input.Name
-            };
+            var body = new Dictionary<string, object>{};
 
             if (!string.IsNullOrEmpty(input.Branch))
                 body["branch"] = input.Branch;
+
+            if (!string.IsNullOrEmpty(input.Name))
+                body["name"] = input.Name;
 
             if (!string.IsNullOrEmpty(input.Description))
                 body["description"] = input.Description;

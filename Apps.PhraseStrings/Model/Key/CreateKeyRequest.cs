@@ -10,7 +10,7 @@ namespace Apps.PhraseStrings.Model.Key
     {
         [Display("Name")]
         [JsonProperty("name")]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
         [Display("Branch")]
         [JsonProperty("branch")]
