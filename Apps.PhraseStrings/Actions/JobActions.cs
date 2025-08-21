@@ -4,8 +4,10 @@ using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Dynamic;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Utils.Extensions.Http;
+using Blackbird.Applications.Sdk.Utils.Extensions.System;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -92,6 +94,37 @@ namespace Apps.PhraseStrings.Actions
             var job = await Client.ExecuteWithErrorHandling<CreateJobResponse>(request);
 
             return job;
+        }
+
+        [Action("Update job", Description = "Updates job's information")]
+        public async Task<CreateJobResponse> UpdateJob(
+            [ActionParameter] ProjectRequest project,
+            [ActionParameter] JobRequest job,
+            [ActionParameter] UpdateJobRequest update)
+        {
+            static string? NullIfEmpty(string? v) => string.IsNullOrWhiteSpace(v) ? null : v;
+
+            var payload = new
+            {
+                branch = NullIfEmpty(update.Branch),
+                name = NullIfEmpty(update.Name),
+                briefing = NullIfEmpty(update.Briefing),
+                due_date = update.DueDate,
+                ticket_url = NullIfEmpty(update.TicketUrl)
+            };
+
+            var hasAnyValue = payload.AsDictionary().Values.Any(static v => v is not null);
+
+            if (!hasAnyValue)
+                throw new PluginMisconfigurationException("At least one optional input must be provided.");
+
+            var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs/{job.JobId}", Method.Patch)
+                .WithJsonBody(payload, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+
+            return await Client.ExecuteWithErrorHandling<CreateJobResponse>(request);
         }
 
         [Action("Add keys to job", Description = "Adds keys to job")]

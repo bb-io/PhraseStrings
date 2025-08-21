@@ -40,6 +40,23 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
         return project;
     }
 
+    [Action("Get project from link", Description = "Gets a project from a link")]
+    public async Task<ProjectResponse> GetProjectBySlug(
+        [ActionParameter, Display("Link")] string urlWithProject)
+    {
+        var linkParts = urlWithProject.Split('/');
+        var projectIndex = Array.IndexOf(linkParts, "projects");
+        var slug = linkParts[projectIndex + 1];
+
+        if (string.IsNullOrWhiteSpace(slug))
+            throw new PluginApplicationException("Can't find project slug in the provided link.");
+
+        var request = new RestRequest("/v2/projects", Method.Get);
+        var projects = await Client.Paginate<ProjectResponse>(request);
+
+
+        return projects.FirstOrDefault(p => p.Slug == slug) ?? new();
+    }
 
     [Action("Delete project", Description = "Deletes a project")]
     public async Task DeleteProject([ActionParameter] ProjectRequest input)

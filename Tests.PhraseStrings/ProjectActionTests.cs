@@ -33,6 +33,19 @@ public class ProjectActionTests : TestBase
     }
 
     [TestMethod]
+    public async Task GetProjectBySlug_IsSuccess()
+    {
+        var actions = new ProjectActions(InvocationContext, FileManager);
+
+        var response = await actions.GetProjectBySlug("demo-web-app");
+
+        var json = JsonConvert.SerializeObject(response, Formatting.Indented);
+
+        Console.WriteLine(json);
+        Assert.IsNotNull(response);
+    }
+
+    [TestMethod]
     public async Task DeleteProject_IsSucssess()
     {
         var actions = new ProjectActions(InvocationContext, FileManager);

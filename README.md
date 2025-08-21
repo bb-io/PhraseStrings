@@ -64,6 +64,7 @@ Before you can connect, you need to make sure that:
 - **Update a key** Updates an existing key.
 - **Add tags to a key** Adds tags to a key.
 - **Remove tags from a key** Removes tags from a key.
+- **Link keys to parent key** Links one or more child keys to a parent key and returns number of keys linked.
 
 ### Orders
 

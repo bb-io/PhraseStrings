@@ -10,12 +10,15 @@ namespace Apps.PhraseStrings.Model.Project
 
     public class ProjectResponse
     {
+        [Display("Project ID")]
         [JsonProperty("id")]
         public string Id { get; set; } = string.Empty;
 
+        [Display("Project name")]
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
 
+        [Display("Project slug")]
         [JsonProperty("slug")]
         public string Slug { get; set; } = string.Empty;
 
@@ -38,22 +41,25 @@ namespace Apps.PhraseStrings.Model.Project
         public object PointOfContact { get; set; } = new();
 
         [JsonProperty("created_at")]
-        [Display("Created at")]
+        [Display("Project created at")]
         public DateTime CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
-        [Display("Updated at")]
+        [Display("Project last updated at")]
         public DateTime UpdatedAt { get; set; }
     }
 
     public class Account
     {
+        [Display("Account ID")]
         [JsonProperty("id")]
         public string Id { get; set; } = string.Empty;
 
+        [Display("Account name")]
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
 
+        [Display("Account slug")]
         [JsonProperty("slug")]
         public string Slug { get; set; } = string.Empty;
 
@@ -61,11 +67,11 @@ namespace Apps.PhraseStrings.Model.Project
         public string Company { get; set; } = string.Empty;
 
         [JsonProperty("created_at")]
-        [Display("Created at")]
+        [Display("Account created at")]
         public DateTime CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
-        [Display("Updated at")]
+        [Display("Account last updated at")]
         public DateTime UpdatedAt { get; set; }
 
         [JsonProperty("company_logo_url")]

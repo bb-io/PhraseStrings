@@ -110,5 +110,27 @@ namespace Tests.PhraseStrings
             Console.WriteLine(json);
             Assert.IsNotNull(response);
         }
+
+        [TestMethod]
+        public async Task UpdateJob_IsSuccess()
+        {
+            var updatedJobName = $"Job name {Guid.NewGuid()}";
+
+            var response = await _actions.UpdateJob(
+                new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
+                new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
+                new UpdateJobRequest
+                {
+                    Name = updatedJobName,
+                    Briefing = "Automated test update",
+                    DueDate = DateTime.UtcNow.AddDays(7),
+                    TicketUrl = "https://example.atlassian.net/browse/TEST-123"
+                });
+
+            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
+         
+            Console.WriteLine(json);
+            Assert.IsTrue(response.Name.StartsWith(updatedJobName));
+        }
     }
 }
