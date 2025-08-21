@@ -4,7 +4,8 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
-using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace Apps.PhraseStrings.Actions
@@ -249,5 +250,41 @@ namespace Apps.PhraseStrings.Actions
             return await Client.ExecuteWithErrorHandling<ResordAffectedResponse>(request);
         }
 
+        [Action("Link keys to parent key", Description = "Links one or more child keys to a parent key and returns number of keys linked")]
+        public async Task<KeyIdsResponse> LinkChildKeys(
+            [ActionParameter] ProjectRequest project,
+            [ActionParameter] KeyRequest parentKey,
+            [ActionParameter] KeyArrayRequest childKeys)
+        {
+            var request = new RestRequest($"/v2/projects/{project.ProjectId}/keys/{parentKey.KeyId}/key_links", Method.Post);
+            request.AddHeader("Content-Type", "application/json");
+
+            request.AddJsonBody(new
+            {
+                child_key_ids = childKeys.KeyIds ?? []
+            });
+
+            var apiResponse = await Client.ExecuteWithErrorHandling(request);
+
+            try
+            {
+                var children = JToken.Parse(apiResponse.Content ?? "")?["children"];
+
+                var linkedIds = children?
+                    .Select(c => c?["id"]?.Value<string>())
+                    .Where(id => !string.IsNullOrWhiteSpace(id))
+                    .Select(id => id!) // Suppress nullability warning, safe due to previous Where
+                    ?? [];
+
+                return new KeyIdsResponse
+                {
+                    KeyIds = linkedIds
+                };
+            }
+            catch (JsonReaderException ex)
+            {
+                throw new PluginMisconfigurationException($"Invalid JSON in key link response: {ex.Message}");
+            }
+        }
     }
 }
