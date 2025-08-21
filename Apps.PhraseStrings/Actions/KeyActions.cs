@@ -264,27 +264,12 @@ namespace Apps.PhraseStrings.Actions
                 child_key_ids = childKeys.KeyIds ?? []
             });
 
-            var apiResponse = await Client.ExecuteWithErrorHandling(request);
+            var apiResponse = await Client.ExecuteWithErrorHandling<KeyLinkApiPartialDto>(request);
 
-            try
+            return new KeyIdsResponse
             {
-                var children = JToken.Parse(apiResponse.Content ?? "")?["children"];
-
-                var linkedIds = children?
-                    .Select(c => c?["id"]?.Value<string>())
-                    .Where(id => !string.IsNullOrWhiteSpace(id))
-                    .Select(id => id!) // Suppress nullability warning, safe due to previous Where
-                    ?? [];
-
-                return new KeyIdsResponse
-                {
-                    KeyIds = linkedIds
-                };
-            }
-            catch (JsonReaderException ex)
-            {
-                throw new PluginMisconfigurationException($"Invalid JSON in key link response: {ex.Message}");
-            }
+                KeyIds = apiResponse.Children?.Select(c => c.KeyId) ?? []
+            };
         }
     }
 }
