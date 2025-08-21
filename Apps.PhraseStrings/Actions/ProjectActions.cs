@@ -42,7 +42,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
 
     [Action("Get project from link", Description = "Gets a project from a link")]
     public async Task<ProjectResponse> GetProjectBySlug(
-        [ActionParameter] string urlWithProject)
+        [ActionParameter, Display("Link")] string urlWithProject)
     {
         var linkParts = urlWithProject.Split('/');
         var projectIndex = Array.IndexOf(linkParts, "projects");

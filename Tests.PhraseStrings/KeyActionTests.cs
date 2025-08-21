@@ -90,7 +90,7 @@ namespace Tests.PhraseStrings
             var response = await _actions.LinkChildKeys(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
                 new KeyRequest { KeyId = "514c14ab2c93aa334a566f354cd8b22a" },
-                new KeyArrayRequest { KeyIds = ["7e1fc73eb9c2c401b89d12579e4e4b13"] }
+                new ChildrenKeyIdsRequest { KeyIds = ["7e1fc73eb9c2c401b89d12579e4e4b13"] }
             );
 
             var json = JsonConvert.SerializeObject(response, Formatting.Indented);

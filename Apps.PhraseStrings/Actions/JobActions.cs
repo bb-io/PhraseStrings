@@ -98,8 +98,8 @@ namespace Apps.PhraseStrings.Actions
 
         [Action("Update job", Description = "Updates job's information")]
         public async Task<CreateJobResponse> UpdateJob(
-            [ActionParameter] JobRequest job,
             [ActionParameter] ProjectRequest project,
+            [ActionParameter] JobRequest job,
             [ActionParameter] UpdateJobRequest update)
         {
             static string? NullIfEmpty(string? v) => string.IsNullOrWhiteSpace(v) ? null : v;

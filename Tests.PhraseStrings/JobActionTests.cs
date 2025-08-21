@@ -117,8 +117,8 @@ namespace Tests.PhraseStrings
             var updatedJobName = $"Job name {Guid.NewGuid()}";
 
             var response = await _actions.UpdateJob(
-                new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
+                new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" },
                 new UpdateJobRequest
                 {
                     Name = updatedJobName,

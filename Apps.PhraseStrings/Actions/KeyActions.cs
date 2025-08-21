@@ -254,7 +254,7 @@ namespace Apps.PhraseStrings.Actions
         public async Task<KeyIdsResponse> LinkChildKeys(
             [ActionParameter] ProjectRequest project,
             [ActionParameter] KeyRequest parentKey,
-            [ActionParameter] KeyArrayRequest childKeys)
+            [ActionParameter] ChildrenKeyIdsRequest childKeys)
         {
             var request = new RestRequest($"/v2/projects/{project.ProjectId}/keys/{parentKey.KeyId}/key_links", Method.Post);
             request.AddHeader("Content-Type", "application/json");
