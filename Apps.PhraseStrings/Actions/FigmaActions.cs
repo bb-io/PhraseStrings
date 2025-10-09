@@ -6,43 +6,41 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using RestSharp;
 
-namespace Apps.PhraseStrings.Actions
+namespace Apps.PhraseStrings.Actions;
+
+[ActionList("Figma")]
+public class FigmaActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [ActionList("Figma")]
-    public class FigmaActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
+    [Action("Add Figma link to key", Description = "Adds Figma link to a specified key")]
+    public async Task<FigmaAttachmentResponse> AddFigmaLink([ActionParameter] ProjectRequest project,
+        [ActionParameter] UploadFigmaLinkRequest figmaAttachment)
     {
+        var createRequest = new RestRequest($"/v2/projects/{project.ProjectId}/figma_attachments", Method.Post);
 
-        [Action("Add Figma link to key", Description = "Adds Figma link to a specified key")]
-        public async Task<FigmaAttachmentResponse> AddFigmaLink([ActionParameter] ProjectRequest project,
-            [ActionParameter] UploadFigmaLinkRequest figmaAttachment)
+        if (!string.IsNullOrEmpty(figmaAttachment.Branch))
+            createRequest.AddQueryParameter("branch", figmaAttachment.Branch);
+
+        createRequest.AddJsonBody(new
         {
-            var createRequest = new RestRequest($"/v2/projects/{project.ProjectId}/figma_attachments", Method.Post);
+            url = figmaAttachment.Url
+        });
 
-            if (!string.IsNullOrEmpty(figmaAttachment.Branch))
-                createRequest.AddQueryParameter("branch", figmaAttachment.Branch);
+        var createResponse = await Client.ExecuteWithErrorHandling<FigmaAttachmentResponse>(createRequest);
 
-            createRequest.AddJsonBody(new
-            {
-                url = figmaAttachment.Url
-            });
+        var attachRequest = new RestRequest($"/v2/projects/{project.ProjectId}/figma_attachments/{createResponse.Id}/keys", Method.Post);
 
-            var createResponse = await Client.ExecuteWithErrorHandling<FigmaAttachmentResponse>(createRequest);
+        if (!string.IsNullOrEmpty(figmaAttachment.Branch))
+            attachRequest.AddQueryParameter("branch", figmaAttachment.Branch);
 
-            var attachRequest = new RestRequest($"/v2/projects/{project.ProjectId}/figma_attachments/{createResponse.Id}/keys", Method.Post);
+        attachRequest.AddJsonBody(new
+        {
+            id = figmaAttachment.KeyId
+        });
 
-            if (!string.IsNullOrEmpty(figmaAttachment.Branch))
-                attachRequest.AddQueryParameter("branch", figmaAttachment.Branch);
+        var attachResponse = await Client.ExecuteWithErrorHandling(attachRequest);
+        if (!attachResponse.IsSuccessful)
+            throw new PluginApplicationException($"Failed to attach Figma link to key: {attachResponse.Content}");
 
-            attachRequest.AddJsonBody(new
-            {
-                id = figmaAttachment.KeyId
-            });
-
-            var attachResponse = await Client.ExecuteWithErrorHandling(attachRequest);
-            if (!attachResponse.IsSuccessful)
-                throw new PluginApplicationException($"Failed to attach Figma link to key: {attachResponse.Content}");
-
-            return createResponse;
-        }
+        return createResponse;
     }
 }
