@@ -13,7 +13,7 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task SearchRepositories_IsSuccess()
         {
-            var result = await _actions.SearchRepositories(new AccountRequest { AccountId = "851841f538f3e05cd437913851078076" });
+            var result = await _actions.SearchRepositories(new AccountRequest { AccountId = "8134f0cd7ea179c246eb16e7be49b708" });
 
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(result, Newtonsoft.Json.Formatting.Indented);
             Console.WriteLine(json);
