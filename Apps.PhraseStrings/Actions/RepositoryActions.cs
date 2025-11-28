@@ -13,9 +13,32 @@ public class RepositoryActions(InvocationContext invocationContext) : PhraseStri
     [Action("Search repositories", Description = "Retrieves all repositories for the account")]
     public async Task<List<RepositoryResponse>> SearchRepositories([ActionParameter] AccountRequest account)
     {
-        var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs", Method.Get);
+        const int perPage = 100;
+        var allRepos = new List<RepositoryResponse>();
+        var page = 1;
 
-        return await Client.ExecuteWithErrorHandling<List<RepositoryResponse>>(request);
+        while (true)
+        {
+            var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs", Method.Get)
+                .AddQueryParameter("page", page.ToString())
+                .AddQueryParameter("per_page", perPage.ToString());
+
+            var pageResult =
+                await Client.ExecuteWithErrorHandling<List<RepositoryResponse>>(request)
+                ?? new List<RepositoryResponse>();
+
+            if (pageResult.Count == 0)
+                break;
+
+            allRepos.AddRange(pageResult);
+
+            if (pageResult.Count < perPage)
+                break;
+
+            page++;
+        }
+
+        return allRepos;
     }
 
     [Action("Export to code repository", Description = "Exports to code repository")]
