@@ -11,7 +11,9 @@ namespace Apps.PhraseStrings.Actions;
 public class RepositoryActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
     [Action("Search repositories", Description = "Retrieves all repositories for the account")]
-    public async Task<List<RepositoryResponse>> SearchRepositories([ActionParameter] AccountRequest account)
+    public async Task<List<RepositoryResponse>> SearchRepositories(
+        [ActionParameter] AccountRequest account,
+        [ActionParameter] SearchRepositoriesRequest input)
     {
         const int perPage = 100;
         var allRepos = new List<RepositoryResponse>();
@@ -29,6 +31,9 @@ public class RepositoryActions(InvocationContext invocationContext) : PhraseStri
 
             if (pageResult.Count == 0)
                 break;
+
+            if (input.IgnoreInactiveRepos == true)
+                pageResult.RemoveAll(x => x.Enabled == false);
 
             allRepos.AddRange(pageResult);
 

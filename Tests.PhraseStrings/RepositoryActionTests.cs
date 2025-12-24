@@ -1,4 +1,5 @@
-﻿using Apps.PhraseStrings.Actions;
+﻿using Newtonsoft.Json;
+using Apps.PhraseStrings.Actions;
 using Apps.PhraseStrings.Model.Account;
 using Apps.PhraseStrings.Model.Repository;
 using Tests.PhraseStrings.Base;
@@ -13,11 +14,15 @@ namespace Tests.PhraseStrings
         [TestMethod]
         public async Task SearchRepositories_IsSuccess()
         {
-            var result = await _actions.SearchRepositories(new AccountRequest { AccountId = "8134f0cd7ea179c246eb16e7be49b708" });
+            // Arrange
+            var input = new SearchRepositoriesRequest { IgnoreInactiveRepos = true };
+            var account = new AccountRequest { AccountId = "8134f0cd7ea179c246eb16e7be49b708" };
 
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(result, Newtonsoft.Json.Formatting.Indented);
-            Console.WriteLine(json);
+            // Act
+            var result = await _actions.SearchRepositories(account, input);
 
+            // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result, Formatting.Indented));
             Assert.IsNotNull(result);
         }
 
