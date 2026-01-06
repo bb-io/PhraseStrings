@@ -16,7 +16,7 @@ namespace Apps.PhraseStrings.Webhooks
         [Webhook("On job completed", typeof(JobCompletedHandler), Description = "Triggers when a job is completed")]
         public Task<WebhookResponse<JobCompleteWebhookResponse>> OnJobCompleted(WebhookRequest webhookRequest, 
             [WebhookParameter(true)] ProjectRequest project,
-            [WebhookParameter] JobRequest job)
+            [WebhookParameter] WebhookJobRequest job)
         {
             var root = GetPayload<JobCompleteWebhookResponse>(webhookRequest);
 
