@@ -8,6 +8,6 @@ namespace Apps.PhraseStrings.Webhooks.Models
     {
         [Display("Job ID")]
         [DataSource(typeof(JobDataHandler))]
-        public string? JobId { get; set; } = string.Empty;
+        public string? JobId { get; set; }
     }
 }
