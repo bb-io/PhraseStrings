@@ -1,8 +1,9 @@
-﻿using Apps.PhraseStrings.Model.Project;
+﻿using Apps.PhraseStrings.Model.Job;
+using Apps.PhraseStrings.Model.Project;
 using Apps.PhraseStrings.Webhooks.Handler;
 using Apps.PhraseStrings.Webhooks.Models;
-using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using Newtonsoft.Json;
 using System.Net;
@@ -13,11 +14,18 @@ namespace Apps.PhraseStrings.Webhooks
     public class WebhookList(InvocationContext invocationContext) : BaseInvocable(invocationContext)
     {
         [Webhook("On job completed", typeof(JobCompletedHandler), Description = "Triggers when a job is completed")]
-        public Task<WebhookResponse<JobCompleteWebhookResponse>> OnJobCompleted(WebhookRequest webhookRequest, [WebhookParameter(true)] ProjectRequest project)
+        public Task<WebhookResponse<JobCompleteWebhookResponse>> OnJobCompleted(WebhookRequest webhookRequest, 
+            [WebhookParameter(true)] ProjectRequest project,
+            [WebhookParameter] WebhookJobRequest job)
         {
             var root = GetPayload<JobCompleteWebhookResponse>(webhookRequest);
 
             if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
+            {
+                return Task.FromResult(GetPreflightResponse<JobCompleteWebhookResponse>());
+            }
+
+            if (!string.IsNullOrWhiteSpace(job.JobId) && root.Job?.Id != job.JobId)
             {
                 return Task.FromResult(GetPreflightResponse<JobCompleteWebhookResponse>());
             }
