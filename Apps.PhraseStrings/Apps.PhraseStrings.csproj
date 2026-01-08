@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <Product>Phrase Strings</Product>
         <Description>Translation management platform for software projects</Description>
-        <Version>1.0.21</Version>
+        <Version>1.0.22</Version>
         <AssemblyName>Apps.PhraseStrings</AssemblyName>
     </PropertyGroup>
 	<ItemGroup>
