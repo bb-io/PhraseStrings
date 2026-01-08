@@ -69,7 +69,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
 
         [JsonProperty("point_of_contact")]
         [Display("Point of contact")]
-        public string? PointOfContact { get; set; }
+        public WebhookUser? PointOfContact { get; set; }
     }
 
     public class WebhookBranch
