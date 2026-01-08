@@ -7,6 +7,8 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using Newtonsoft.Json;
 using System.Net;
+using System.Reflection;
+using System.Text;
 
 namespace Apps.PhraseStrings.Webhooks
 {
@@ -18,21 +20,65 @@ namespace Apps.PhraseStrings.Webhooks
             [WebhookParameter(true)] ProjectRequest project,
             [WebhookParameter] WebhookJobRequest job)
         {
-            var root = GetPayload<JobCompleteWebhookResponse>(webhookRequest);
+            InvocationContext.Logger?.LogError("[PhraseStringsJobCompleted] Invocation webhook", []);
 
-            if (project.ProjectId != null && root.Project?.Id != project.ProjectId)
+            var requestBody = webhookRequest.Body?.ToString();
+            if (string.IsNullOrWhiteSpace(requestBody))
             {
-                return Task.FromResult(GetPreflightResponse<JobCompleteWebhookResponse>());
+                InvocationContext.Logger?.LogError("[PhraseStringsJobCompleted] Webhook body is null or empty", []);
+                return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
+                {
+                    ReceivedWebhookRequestType = WebhookRequestType.Preflight
+                });
             }
 
-            if (!string.IsNullOrWhiteSpace(job.JobId) && root.Job?.Id != job.JobId)
+            InvocationContext.Logger?.LogError($"[PhraseStringsJobCompleted] Webhook body (FULL): {requestBody}", []);
+
+            JobCompleteWebhookResponse root;
+            try
             {
-                return Task.FromResult(GetPreflightResponse<JobCompleteWebhookResponse>());
+                root = GetPayload<JobCompleteWebhookResponse>(webhookRequest);
+            }
+            catch (Exception ex)
+            {
+                InvocationContext.Logger?.LogError(
+                    $"[PhraseStringsJobCompleted] GetPayload failed. Error: {ex}. Body(FULL): {requestBody}",
+                    []);
+
+                return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
+                {
+                    ReceivedWebhookRequestType = WebhookRequestType.Preflight
+                });
             }
 
-            return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>()
+            if (!string.IsNullOrWhiteSpace(project?.ProjectId) && root.Project?.Id != project.ProjectId)
             {
-                Result = root
+                InvocationContext.Logger?.LogError(
+                    $"[PhraseStringsJobCompleted] Project filter mismatch. Expected: {project.ProjectId}, Actual: {root.Project?.Id}. Body(FULL): {requestBody}",
+                    []);
+
+                return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
+                {
+                    ReceivedWebhookRequestType = WebhookRequestType.Preflight
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(job?.JobId) && root.Job?.Id != job.JobId)
+            {
+                InvocationContext.Logger?.LogError(
+                    $"[PhraseStringsJobCompleted] Job filter mismatch. Expected: {job.JobId}, Actual: {root.Job?.Id}. Body(FULL): {requestBody}",
+                    []);
+
+                return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
+                {
+                    ReceivedWebhookRequestType = WebhookRequestType.Preflight
+                });
+            }
+
+            return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
+            {
+                Result = root,
+                ReceivedWebhookRequestType = WebhookRequestType.Default
             });
         }
 
@@ -84,7 +130,6 @@ namespace Apps.PhraseStrings.Webhooks
                 Result = root
             });
         }
-
 
         private WebhookResponse<T> GetPreflightResponse<T>() where T : class => new()
         {
