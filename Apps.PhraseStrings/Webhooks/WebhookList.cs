@@ -34,15 +34,15 @@ namespace Apps.PhraseStrings.Webhooks
 
             InvocationContext.Logger?.LogError($"[PhraseStringsJobCompleted] Webhook body (FULL): {requestBody}", []);
 
-            JobCompleteWebhookResponse? data;
+            JobCompleteWebhookResponse root;
             try
             {
-                data = JsonConvert.DeserializeObject<JobCompleteWebhookResponse>(requestBody);
+                root = GetPayload<JobCompleteWebhookResponse>(webhookRequest);
             }
             catch (Exception ex)
             {
                 InvocationContext.Logger?.LogError(
-                    $"[PhraseStringsJobCompleted] Failed to deserialize webhook body. Error: {ex}. Body(FULL): {requestBody}",
+                    $"[PhraseStringsJobCompleted] GetPayload failed. Error: {ex}. Body(FULL): {requestBody}",
                     []);
 
                 return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
@@ -51,19 +51,10 @@ namespace Apps.PhraseStrings.Webhooks
                 });
             }
 
-            if (data is null)
-            {
-                InvocationContext.Logger?.LogError($"[PhraseStringsJobCompleted] Deserialized object is null. Body(FULL): {requestBody}", []);
-                return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
-                {
-                    ReceivedWebhookRequestType = WebhookRequestType.Preflight
-                });
-            }
-
-            if (!string.IsNullOrWhiteSpace(project?.ProjectId) && data.Project?.Id != project.ProjectId)
+            if (!string.IsNullOrWhiteSpace(project?.ProjectId) && root.Project?.Id != project.ProjectId)
             {
                 InvocationContext.Logger?.LogError(
-                    $"[PhraseStringsJobCompleted] Project filter mismatch. Expected: {project.ProjectId}, Actual: {data.Project?.Id}. Body(FULL): {requestBody}",
+                    $"[PhraseStringsJobCompleted] Project filter mismatch. Expected: {project.ProjectId}, Actual: {root.Project?.Id}. Body(FULL): {requestBody}",
                     []);
 
                 return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
@@ -72,10 +63,10 @@ namespace Apps.PhraseStrings.Webhooks
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(job?.JobId) && data.Job?.Id != job.JobId)
+            if (!string.IsNullOrWhiteSpace(job?.JobId) && root.Job?.Id != job.JobId)
             {
                 InvocationContext.Logger?.LogError(
-                    $"[PhraseStringsJobCompleted] Job filter mismatch. Expected: {job.JobId}, Actual: {data.Job?.Id}. Body(FULL): {requestBody}",
+                    $"[PhraseStringsJobCompleted] Job filter mismatch. Expected: {job.JobId}, Actual: {root.Job?.Id}. Body(FULL): {requestBody}",
                     []);
 
                 return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
@@ -86,7 +77,7 @@ namespace Apps.PhraseStrings.Webhooks
 
             return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
             {
-                Result = data,
+                Result = root,
                 ReceivedWebhookRequestType = WebhookRequestType.Default
             });
         }
