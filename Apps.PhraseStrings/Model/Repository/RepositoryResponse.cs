@@ -24,7 +24,7 @@ public class RepositoryResponse
 
     [Display("Is auto-import enabled?")]
     [JsonProperty("auto_import")]
-    public bool AutoImport { get; set; }
+    public string? AutoImport { get; set; }
 
     [Display("Sync created at")]
     [JsonProperty("created_at")]
