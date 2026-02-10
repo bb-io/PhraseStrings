@@ -16,7 +16,7 @@ namespace Tests.PhraseStrings
         {
             // Arrange
             var input = new SearchRepositoriesRequest { IgnoreInactiveRepos = true };
-            var account = new AccountRequest { AccountId = "8134f0cd7ea179c246eb16e7be49b708" };
+            var account = new AccountRequest { AccountId = "8134f0cd7ea179c246eb16e7be49b708",  };
 
             // Act
             var result = await _actions.SearchRepositories(account, input);
