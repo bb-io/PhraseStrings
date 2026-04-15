@@ -10,10 +10,13 @@ using RestSharp;
 namespace Apps.PhraseStrings.Actions;
 
 [ActionList("Screenshots")]
-public class ScreenshotActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
+public class ScreenshotActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) 
+    : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Upload screenshot", Description = "Uploads screenshot. Use a 'Mark screenshot' action to connect keys to the uploaded screenshot")]
-    public async Task<ScreenshotResponse> UploadScreenshot([ActionParameter] ProjectRequest project,
+    [Action("Upload screenshot", 
+        Description = "Uploads screenshot. Use a 'Mark screenshot' action to connect keys to the uploaded screenshot")]
+    public async Task<ScreenshotResponse> UploadScreenshot(
+        [ActionParameter] ProjectRequest project,
         [ActionParameter] UploadScreenshotRequest screenShot)
     {
         var request = new RestRequest($"/v2/projects/{project.ProjectId}/screenshots", Method.Post);
@@ -31,14 +34,16 @@ public class ScreenshotActions(InvocationContext invocationContext, IFileManagem
         await stream.CopyToAsync(ms);
         var fileBytes = ms.ToArray();
 
-        var fileContents = await fileManagementClient.DownloadAsync(screenShot.File);
         request.AddFile("filename", fileBytes, screenShot.File.Name, screenShot.File.ContentType);
 
-        return await Client.ExecuteWithErrorHandling<ScreenshotResponse>(request);
+        var response = await Client.ExecuteWithErrorHandling<ScreenshotDtoResponse>(request);
+        return new(response);
     }
 
-    [Action("Mark screenshot (link to key)", Description = "Creates a connection between a key and a screenshot, so screenshot will be shown in the editor")]
-    public async Task<ScreenshotResponse> CreateScreenshotMarker([ActionParameter] ProjectRequest project,
+    [Action("Mark screenshot (link to key)", 
+        Description = "Creates a connection between a key and a screenshot, so screenshot will be shown in the editor")]
+    public async Task<ScreenshotResponse> CreateScreenshotMarker(
+        [ActionParameter] ProjectRequest project,
         [ActionParameter] CreateScreenshotMarkerRequest screenshot)
     {
         var request = new RestRequest($"/v2/projects/{project.ProjectId}/screenshots/{screenshot.ScreenshotId}/markers", Method.Post);
@@ -51,27 +56,33 @@ public class ScreenshotActions(InvocationContext invocationContext, IFileManagem
         if (!string.IsNullOrEmpty(screenshot.Branch))
             request.AddParameter("presentation", screenshot.Presentation);
 
-        return await Client.ExecuteWithErrorHandling<ScreenshotResponse>(request);
+        var response = await Client.ExecuteWithErrorHandling<ScreenshotDtoResponse>(request);
+        return new(response);
     }
 
     [Action("Get uploaded screenshot", Description = "Gets a screenshot by its ID or name")]
-    public async Task<ScreenshotResponse> GetScreenshotByIdOrName([ActionParameter] ProjectRequest project,
+    public async Task<ScreenshotResponse> GetScreenshotByIdOrName(
+        [ActionParameter] ProjectRequest project,
         [ActionParameter] GetScreenshotRequest screenshotInput)
     {
         if (string.IsNullOrEmpty(screenshotInput.ScreenshotID) && string.IsNullOrEmpty(screenshotInput.ScreenshotName))
             throw new PluginMisconfigurationException("Either screenshot ID or name must be provided");
 
         var listRequest = new RestRequest($"/v2/projects/{project.ProjectId}/screenshots", Method.Get);
-        var listResponse = await Client.Paginate<ScreenshotResponse>(listRequest);
+        var listResponse = await Client.Paginate<ScreenshotDtoResponse>(listRequest);
 
-        ScreenshotResponse screenshotResponse = new();
+        var response = new ScreenshotDtoResponse();
 
         if (!string.IsNullOrEmpty(screenshotInput.ScreenshotID))
-            screenshotResponse = listResponse.FirstOrDefault(s => s.Id == screenshotInput.ScreenshotID) ?? new ScreenshotResponse();
+            response = listResponse.FirstOrDefault(s => s.Id == screenshotInput.ScreenshotID) ?? new ScreenshotDtoResponse();
 
         if (!string.IsNullOrEmpty(screenshotInput.ScreenshotName))
-            screenshotResponse = listResponse.FirstOrDefault(s => s.Name.Equals(screenshotInput.ScreenshotName, StringComparison.OrdinalIgnoreCase)) ?? new ScreenshotResponse();
+        {
+            response = listResponse
+                .FirstOrDefault(s => s.Name.Equals(screenshotInput.ScreenshotName, StringComparison.OrdinalIgnoreCase)) ?? 
+                new ScreenshotDtoResponse();
+        }
 
-        return screenshotResponse;
+        return new(new ScreenshotDtoResponse());
     }
 }

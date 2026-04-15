@@ -1,36 +1,27 @@
 ﻿using Blackbird.Applications.Sdk.Common;
-using Newtonsoft.Json;
 
-namespace Apps.PhraseStrings.Model.Screenshot
+namespace Apps.PhraseStrings.Model.Screenshot;
+
+public class ScreenshotResponse(ScreenshotDtoResponse dtoResponse)
 {
-    public class ScreenshotResponse
-    {
-        [JsonProperty("id")]
-        [Display("Screenshot ID")]
-        public string Id { get; set; } = string.Empty;
+    [Display("Screenshot ID")]
+    public string Id { get; set; } = dtoResponse.Id;
 
-        [JsonProperty("name")]
-        [Display("Screenshot name")]
-        public string Name { get; set; } = string.Empty;
+    [Display("Screenshot name")]
+    public string Name { get; set; } = dtoResponse.Name;
 
-        [JsonProperty("description")]
-        [Display("Screenshot description")]
-        public string Description { get; set; } = string.Empty;
+    [Display("Screenshot description")]
+    public string Description { get; set; } = dtoResponse.Description;
 
-        [JsonProperty("screenshot_url")]
-        [Display("Screenshot URL")]
-        public Uri? ScreenshotUrl { get; set; }
+    [Display("Screenshot URL")]
+    public string? ScreenshotUrl { get; set; } = dtoResponse.ScreenshotUrl?.AbsoluteUri;
 
-        [JsonProperty("created_at")]
-        [Display("Created at")]
-        public DateTime CreatedAt { get; set; }
+    [Display("Created at")]
+    public DateTime CreatedAt { get; set; } = dtoResponse.CreatedAt;
 
-        [JsonProperty("updated_at")]
-        [Display("Updated at")]
-        public DateTime UpdatedAt { get; set; }
+    [Display("Updated at")]
+    public DateTime UpdatedAt { get; set; } = dtoResponse.UpdatedAt;
 
-        [JsonProperty("markers_count")]
-        [Display("Markers count")]
-        public int MarkersCount { get; set; }
-    }
+    [Display("Markers count")]
+    public int MarkersCount { get; set; } = dtoResponse.MarkersCount;
 }
