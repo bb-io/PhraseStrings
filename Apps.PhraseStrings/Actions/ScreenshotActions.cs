@@ -83,6 +83,6 @@ public class ScreenshotActions(InvocationContext invocationContext, IFileManagem
                 new ScreenshotDtoResponse();
         }
 
-        return new(new ScreenshotDtoResponse());
+        return new(response);
     }
 }
