@@ -1,9 +1,8 @@
+using Apps.PhraseStrings.Authenticators;
 using Apps.PhraseStrings.Constants;
-using Apps.PhraseStrings.Model;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
-using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using Blackbird.Applications.Sdk.Utils.RestSharp;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
@@ -11,17 +10,13 @@ using RestSharp;
 
 namespace Apps.PhraseStrings.Api;
 
-public class PhraseStringsClient : BlackBirdRestClient
+public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> creds) : BlackBirdRestClient(new()
 {
-    public PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> creds) : base(new()
-    {
-        BaseUrl = GetUri(creds),
-        MaxTimeout = 180000,
-    })
-    {
-        this.AddDefaultHeader("Authorization", $"token {creds.Get(CredsNames.Token).Value}");
-    }
-
+    BaseUrl = new Uri(creds.Get(CredsNames.Url).Value),
+    MaxTimeout = 180000,
+    Authenticator = new ApiTokenAuthenticator(creds)
+})
+{
     protected override Exception ConfigureErrorException(RestResponse response)
     {
         var error = JsonConvert.DeserializeObject(response.Content ?? string.Empty);
@@ -95,7 +90,7 @@ public class PhraseStringsClient : BlackBirdRestClient
         return allItems;
     }
 
-    private string ExtractHtmlErrorMessage(string html)
+    private static string ExtractHtmlErrorMessage(string html)
     {
         if (string.IsNullOrEmpty(html)) return "N/A";
 
@@ -108,11 +103,5 @@ public class PhraseStringsClient : BlackBirdRestClient
         var title = titleNode?.InnerText.Trim() ?? "No Title";
         var body = bodyNode?.InnerText.Trim() ?? "No Description";
         return $"{title}: \nError Description: {body}";
-    }
-
-    private static Uri GetUri(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders)
-    {
-        var url = authenticationCredentialsProviders.First(p => p.KeyName == "url").Value;
-        return new(url);
     }
 }

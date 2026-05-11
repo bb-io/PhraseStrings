@@ -11,20 +11,24 @@ public class ConnectionDefinition : IConnectionDefinition
         new()
         {
             Name = "Access token",
+            DisplayName = "Access Token",
             AuthenticationType = ConnectionAuthenticationType.Undefined,
             ConnectionProperties = new List<ConnectionProperty>
             {
-                new(CredsNames.Token) { DisplayName = "Access token", Sensitive = true},
-                new(CredsNames.Url){ DisplayName = "Base URL",
-                Description = "Select the base URL according to your Phrase Strings data center",
-                DataItems =
+                new(CredsNames.Token) { DisplayName = "API Token", Sensitive = true },
+                new(CredsNames.Url)
+                { 
+                    DisplayName = "Base URL",
+                    Description = "Select the base URL according to your Phrase Strings data center",
+                    DataItems =
                     [
-                        new("https://api.phrase.com", "EU data center"),
-                        new("https://api.us.app.phrase.com","US data center"),
-                        new("https://api.phrase-staging.com","EU staging data center")
-                    ]}
+                        new(Urls.Eu, "EU data center"),
+                        new(Urls.Us, "US data center"),
+                        new(Urls.EuStaging, "EU staging data center")
+                    ]
+                }
             }
-        }
+        },
     };
 
     public IEnumerable<AuthenticationCredentialsProvider> CreateAuthorizationCredentialsProviders(
