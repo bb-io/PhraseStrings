@@ -14,11 +14,13 @@ Before you can connect, you need to make sure that:
 
 - You have a Phrase Strings account on the instance you want to connect to.
 - In Phrase Strings, go to Settings > Profile > Access tokens.
-- Push the _Generate token_ button.
-- Create a new access token with the scope: 'read', 'write', 'orders.create', 'team.manage'.
+- Click the _Generate token_ button.
+- Select _Phrase Strings_ and name your token for future reference.
 - Copy the generated access token to your clipboard. You will need it to connect to Phrase Strings from Blackbird.io.
 
 ## Connecting
+
+> **Note**: The 'Platform API token' connection type is recommended for all new connections.
 
 1. Navigate to apps and search for Phrase.
 2. Click _Add Connection_.
@@ -26,7 +28,6 @@ Before you can connect, you need to make sure that:
 4. Fill in the _Access token_ that you copied from Phrase Strings.
 5. Select the data center your Phrase instance is hosted on. You can select between the US and EU data centers.
 6. Click _Authorize connection_.
-
 
 ## Actions
 
