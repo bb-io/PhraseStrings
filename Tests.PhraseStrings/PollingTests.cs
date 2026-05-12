@@ -1,18 +1,18 @@
 ﻿using Apps.PhraseStrings.Webhooks;
 using Apps.PhraseStrings.Webhooks.Models;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Polling;
-using Newtonsoft.Json;
 using Tests.PhraseStrings.Base;
 
 namespace Tests.PhraseStrings
 {
     [TestClass]
-    public class PollingTests : TestBase
+    public class PollingTests : TestBaseMultipleConnections
     {
-        [TestMethod]
-        public async Task OnRepoSyncFailure_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task OnRepoSyncFailure_IsSuccess(InvocationContext context)
         {
-            var polling = new PollingList(InvocationContext);
+            var polling = new PollingList(context);
 
             var request = new PollingEventRequest<DateMemory>
             {
@@ -24,8 +24,7 @@ namespace Tests.PhraseStrings
             };
             var response = await polling.OnRepoSyncFailure(request, input);
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
     }
