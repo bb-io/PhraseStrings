@@ -1,7 +1,15 @@
 {
-  "ConnectionDefinition": {
-    "token": "",
-    "url": "https://api.phrase-staging.com"
-  },
+  "ConnectionDefinition": [
+      {
+        "connectionType": "Access token",
+        "token": "",
+        "url": "https://api.phrase-staging.com"
+      },
+      {
+        "connectionType": "API token",
+        "token": "",
+        "url": "https://api.phrase-staging.com"
+      }
+  ],
   "TestFolder": "TestFiles"
 }
