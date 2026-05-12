@@ -3,220 +3,167 @@ using Apps.PhraseStrings.Handlers;
 using Apps.PhraseStrings.Model.Account;
 using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common.Dynamic;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Tests.PhraseStrings.Base;
 
 namespace Tests.PhraseStrings;
 
 [TestClass]
-public class DataHandlerTests : TestBase
+public class DataHandlerTests : TestBaseMultipleConnections
 {
-    [TestMethod]
-    public async Task ProjectHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task ProjectHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new ProjectDataHandler(InvocationContext);
+        var handler = new ProjectDataHandler(context);
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
         Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task JobsHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task JobsHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new JobDataHandler(InvocationContext, new ProjectRequest { ProjectId= "52ea432ad1debbf8e09cdf344998167d" });
+        var handler = new JobDataHandler(context, new ProjectRequest { ProjectId= "52ea432ad1debbf8e09cdf344998167d" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
-
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
+        
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
         Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task KeyHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task KeyHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new KeyDataHandler(InvocationContext, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+        var handler = new KeyDataHandler(context, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
         Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task BranchHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task BranchHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new BranchDataHandler(InvocationContext, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+        var handler = new BranchDataHandler(context, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task OrderHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task OrderHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new OrderDataHandler(InvocationContext, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+        var handler = new OrderDataHandler(context, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-
-    [TestMethod]
-    public async Task FormatHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task FormatHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new FormatDataHandler(InvocationContext);
+        var handler = new FormatDataHandler(context);
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task TranslationHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task TranslationHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new TranslationDataHandler(InvocationContext, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+        var handler = new TranslationDataHandler(context, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task LocaleHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task LocaleHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new LocaleDataHandler(InvocationContext, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+        var handler = new LocaleDataHandler(context, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task AccountHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task AccountHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new AccountDataHandler(InvocationContext);
+        var handler = new AccountDataHandler(context);
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task RepositoryHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task RepositoryHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new RepositoryDataHandler(InvocationContext, new AccountRequest { AccountId = "851841f538f3e05cd437913851078076" });
+        var handler = new RepositoryDataHandler(context, new AccountRequest { AccountId = "851841f538f3e05cd437913851078076" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-
-    [TestMethod]
-    public async Task ScreenshotHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task ScreenshotHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new ScreenshotDataHandler(InvocationContext, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
+        var handler = new ScreenshotDataHandler(context, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task TeamDataHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task TeamDataHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new TeamDataHandler(InvocationContext, new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" });
+        var handler = new TeamDataHandler(context, new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 
-    [TestMethod]
-    public async Task UserDataHandler_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task UserDataHandler_IsSuccess(InvocationContext context)
     {
-        var handler = new UserDataHandler(InvocationContext, new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" });
+        var handler = new UserDataHandler(context, new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" });
 
         var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
 
-        Console.WriteLine($"Total: {result.Count()}");
-        foreach (var item in result)
-        {
-            Console.WriteLine($"{item.Value}: {item.DisplayName}");
-        }
-
-        Assert.IsNotNull(result);
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
     }
 }

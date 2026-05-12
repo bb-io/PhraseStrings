@@ -1,101 +1,99 @@
 ﻿using Apps.PhraseStrings.Actions;
 using Apps.PhraseStrings.Model.Key;
 using Apps.PhraseStrings.Model.Project;
-using Newtonsoft.Json;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Tests.PhraseStrings.Base;
 
 namespace Tests.PhraseStrings
 {
     [TestClass]
-    public class KeyActionTests : TestBase
+    public class KeyActionTests : TestBaseMultipleConnections
     {
-        private KeyActions _actions => new(InvocationContext);
-        [TestMethod]
-        public async Task SearchKeys_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task SearchKeys_IsSuccess(InvocationContext context)
         {
-            var response = await _actions.SearchKeys(
+            var actions = new KeyActions(context);
+            var response = await actions.SearchKeys(
                 new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" },
                 new SearchKeysRequest { Tags = ["test", "rogue"] });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public async Task GetKeyByName_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task GetKeyByName_IsSuccess(InvocationContext context)
         {
-            var response = await _actions.GetKeyByName(
+            var actions = new KeyActions(context);
+            var response = await actions.GetKeyByName(
                 new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
                 new BranchRequest { },
                 new KeyNameRequest { KeyName = "dashboard_welcome_message" });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public async Task CreateKey_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task CreateKey_IsSuccess(InvocationContext context)
         {
-            var response = await _actions.CreateKey(
+            var actions = new KeyActions(context);
+            var response = await actions.CreateKey(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
                 new CreateKeyRequest { Name="Key created localy"});
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public async Task UpdateKey_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task UpdateKey_IsSuccess(InvocationContext context)
         {
-            var response = await _actions.UpdateKey(
+            var actions = new KeyActions(context);
+            var response = await actions.UpdateKey(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
                 new CreateKeyRequest {Description="new description 2"},
                 new KeyRequest { KeyId= "514c14ab2c93aa334a566f354cd8b22a" });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public async Task AddTagsTokeys_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task AddTagsTokeys_IsSuccess(InvocationContext context)
         {
-            var response = await _actions.AddtagsToKeys(
+            var actions = new KeyActions(context);
+            var response = await actions.AddtagsToKeys(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" }, 
                 new AddTagsToKeysRequest { Query = "ids:7e1fc73eb9c2c401b89d12579e4e4b13", Tags = "Added tag, Hello" });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public async Task RemoveTagsTokeys_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task RemoveTagsTokeys_IsSuccess(InvocationContext context)
         {
-            var response = await _actions.RemovetagsToKeys(
+            var actions = new KeyActions(context);
+            var response = await actions.RemovetagsToKeys(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
                 new AddTagsToKeysRequest { Query = "ids:7e1fc73eb9c2c401b89d12579e4e4b13", Tags = "Hello" });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public async Task LinkChildKeys_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task LinkChildKeys_IsSuccess(InvocationContext context)
         {
-            var response = await _actions.LinkChildKeys(
+            var actions = new KeyActions(context);
+            var response = await actions.LinkChildKeys(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
                 new KeyRequest { KeyId = "514c14ab2c93aa334a566f354cd8b22a" },
                 new ChildrenKeyIdsRequest { KeyIds = ["7e1fc73eb9c2c401b89d12579e4e4b13"] }
             );
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotEmpty(response.KeyIds);
         }
     }

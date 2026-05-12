@@ -3,39 +3,37 @@ using Apps.PhraseStrings.Model.Comment;
 using Apps.PhraseStrings.Model.Job;
 using Apps.PhraseStrings.Model.Key;
 using Apps.PhraseStrings.Model.Project;
-using Newtonsoft.Json;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Tests.PhraseStrings.Base;
 
 namespace Tests.PhraseStrings
 {
     [TestClass]
-    public class CommentActionTests : TestBase
+    public class CommentActionTests : TestBaseMultipleConnections
     {
-        private CommentActions _actions => new(InvocationContext);
-
-        [TestMethod]
-        public async Task AddCommentToKey_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task AddCommentToKey_IsSuccess(InvocationContext context)
         {
-            var response = await _actions.AddCommentToKey(
+            var actions = new CommentActions(context);
+            var response = await actions.AddCommentToKey(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
                 new CreateCommentRequest { Message = "Test comment to the key" },
                 new KeyRequest { KeyId = "c9de884de06dafd683e65d3c2f2fa38c" });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public async Task AddCommentToJob_IsSuccerss()
+        [TestMethod, ContextDataSource]
+        public async Task AddCommentToJob_IsSuccerss(InvocationContext context)
         {
-            var response = await _actions.AddCommentToJob(
+            var actions = new CommentActions(context);
+            var response = await actions.AddCommentToJob(
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" },
                 new CreateCommentRequest { Message = "Test comment to the key(one more)" },
                 new JobRequest { JobId = "616f70f52101f2e219f0ef8192320871" });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
     }

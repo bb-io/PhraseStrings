@@ -2,23 +2,18 @@
 using Apps.PhraseStrings.Model.Project;
 using Apps.PhraseStrings.Model.Screenshot;
 using Blackbird.Applications.Sdk.Common.Files;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Tests.PhraseStrings.Base;
 
 namespace Tests.PhraseStrings
 {
     [TestClass]
-    public class ScreenshotTests : TestBase
+    public class ScreenshotTests : TestBaseMultipleConnections
     {
-        [TestMethod]
-        public async Task UploadScreenshot_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task UploadScreenshot_IsSuccess(InvocationContext context)
         {
-            var action = new ScreenshotActions(InvocationContext, FileManager);
+            var action = new ScreenshotActions(context, FileManager);
 
             var response = await action.UploadScreenshot(
                 new ProjectRequest
@@ -35,14 +30,13 @@ namespace Tests.PhraseStrings
                     }
                 });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
         }
 
-        [TestMethod]
-        public async Task CreateMarkerScreenshot_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task CreateMarkerScreenshot_IsSuccess(InvocationContext context)
         {
-            var action = new ScreenshotActions(InvocationContext, FileManager);
+            var action = new ScreenshotActions(context, FileManager);
 
             var response = await action.CreateScreenshotMarker(
                 new ProjectRequest
@@ -55,14 +49,13 @@ namespace Tests.PhraseStrings
                     ScreenshotId = "bbc00b201531ef098b5b968cb7ef2bc2"
                 });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
         }
 
-        [TestMethod]
-        public async Task GetScreenshot_IsSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task GetScreenshot_IsSuccess(InvocationContext context)
         {
-            var action = new ScreenshotActions(InvocationContext, FileManager);
+            var action = new ScreenshotActions(context, FileManager);
             var response = await action.GetScreenshotByIdOrName(
                 new ProjectRequest
                 {
@@ -72,8 +65,8 @@ namespace Tests.PhraseStrings
                 {
                     ScreenshotName = "sample_screenshot (from Lark request #recuQx6pkRmD87)"
                 });
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            
+            PrintResult(response);
         }
     }
 }

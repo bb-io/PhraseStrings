@@ -14,7 +14,7 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
 {
     BaseUrl = new Uri(creds.Get(CredsNames.Url).Value),
     MaxTimeout = 180000,
-    Authenticator = new ApiTokenAuthenticator(creds)
+    Authenticator = AuthenticatorFactory.Create(creds)
 })
 {
     protected override Exception ConfigureErrorException(RestResponse response)

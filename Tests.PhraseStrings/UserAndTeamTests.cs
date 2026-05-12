@@ -1,53 +1,54 @@
 ﻿using Apps.PhraseStrings.Actions;
 using Apps.PhraseStrings.Model.Team;
 using Apps.PhraseStrings.Model.User;
-using Newtonsoft.Json;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Tests.PhraseStrings.Base;
 
 namespace Tests.PhraseStrings;
 
 [TestClass]
-public class UserAndTeamTests : TestBase
+public class UserAndTeamTests : TestBaseMultipleConnections
 {
-    private UserAndTeamActions Actions => new(InvocationContext);
-
-    [TestMethod]
-    public async Task GetUserByEmail_IsSuccess()
+    [TestMethod, ContextDataSource]
+    public async Task GetUserByEmail_IsSuccess(InvocationContext context)
     {
-        var response = await Actions.GetUserByEmail(new GetUserByEmailRequest
+        var actions = new UserAndTeamActions(context);
+        var response = await actions.GetUserByEmail(new GetUserByEmailRequest
         {
             AccountId = "851841f538f3e05cd437913851078076",
             Email = "alex.terekhov@blackbird.io",
         });
 
-        Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+        PrintResult(response);
         Assert.IsNotNull(response);
     }
 
-    [TestMethod]
-    public async Task GetTeamByName_ExactMatchWorks()
+    [TestMethod, ContextDataSource]
+    public async Task GetTeamByName_ExactMatchWorks(InvocationContext context)
     {
-        var response = await Actions.GetTeamByName(new GetTeamByNameRequest
+        var actions = new UserAndTeamActions(context);
+        var response = await actions.GetTeamByName(new GetTeamByNameRequest
         {
             AccountId = "851841f538f3e05cd437913851078076",
             TeamName = "sample team",
         });
 
-        Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+        PrintResult(response);
         Assert.IsNotNull(response);
     }
 
-    [TestMethod]
-    public async Task GetTeamByName_ContainsWorks()
+    [TestMethod, ContextDataSource]
+    public async Task GetTeamByName_ContainsWorks(InvocationContext context)
     {
-        var response = await Actions.GetTeamByName(new GetTeamByNameRequest
+        var actions = new UserAndTeamActions(context);
+        var response = await actions.GetTeamByName(new GetTeamByNameRequest
         {
             AccountId = "851841f538f3e05cd437913851078076",
             TeamName = "sample",
             UseContains = true,
         });
 
-        Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+        PrintResult(response);
         Assert.IsNotNull(response);
     }
 }

@@ -1,39 +1,31 @@
 ﻿using Apps.PhraseStrings.Actions;
 using Apps.PhraseStrings.Model.Order;
 using Apps.PhraseStrings.Model.Project;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Tests.PhraseStrings.Base;
 
 namespace Tests.PhraseStrings
 {
     [TestClass]
-    public class OrderActionTests : TestBase
+    public class OrderActionTests : TestBaseMultipleConnections
     {
-        private OrdersActions _actions => new(InvocationContext);
-        [TestMethod]
-        public async Task SearchOrders_IssSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task SearchOrders_IssSuccess(InvocationContext context)
         {
-            var response = await _actions.SearchOrders(
+            var actions = new OrdersActions(context);
+            var response = await actions.SearchOrders(
                 new SearchOrdersRequest { },
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
-            Console.WriteLine($"Total: {response.Orders.Count}");
-            foreach (var order in response.Orders)
-            {
-                Console.WriteLine($"{order.Id}: {order.State}");
-            }
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public async Task CreateOrder_IssSuccess()
+        [TestMethod, ContextDataSource]
+        public async Task CreateOrder_IssSuccess(InvocationContext context)
         {
-            var response = await _actions.CreateOrder(
+            var actions = new OrdersActions(context);
+            var response = await actions.CreateOrder(
                 new CreateOrderRequest
                 {
                     Name = "Test Order from locale",
@@ -45,8 +37,7 @@ namespace Tests.PhraseStrings
                 },
                 new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
 
-            var json = JsonConvert.SerializeObject(response, Formatting.Indented);
-            Console.WriteLine(json);
+            PrintResult(response);
             Assert.IsNotNull(response);
         }
     }

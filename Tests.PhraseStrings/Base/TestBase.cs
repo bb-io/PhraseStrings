@@ -3,33 +3,60 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 using Microsoft.Extensions.Configuration;
 
 namespace Tests.PhraseStrings.Base;
+
 public class TestBase
 {
-    public IEnumerable<AuthenticationCredentialsProvider> Creds { get; set; }
+    public List<IEnumerable<AuthenticationCredentialsProvider>> CredentialGroups { get; private set; }
 
-    public InvocationContext InvocationContext { get; set; }
+    public List<InvocationContext> InvocationContexts { get; private set; }
 
     public FileManager FileManager { get; set; }
+    
+    public TestContext? TestContext { get; set; }
 
     public TestBase()
     {
+        InitializeCredentials();
+        InitializeInvocationContext();
+        InitializeFileManager();
+    }
+    
+    public InvocationContext GetInvocationContext(string connectionType)
+    {
+        var context = InvocationContexts.FirstOrDefault(x => x.AuthenticationCredentialsProviders.Any(y => y.Value == connectionType));
+        if (context == null)
+            throw new Exception($"Invocation context was not found for this connection type: {connectionType}");
+        return context;
+    }
+
+    private void InitializeCredentials()
+    {
         var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-        Creds = config.GetSection("ConnectionDefinition").GetChildren()
-            .Select(x => new AuthenticationCredentialsProvider(x.Key, x.Value ?? string.Empty));
+        CredentialGroups = config.GetSection("ConnectionDefinition")
+            .GetChildren()
+            .Select(section =>
+                section.GetChildren()
+                    .Select(child => new AuthenticationCredentialsProvider(child.Key, child.Value))
+            )
+            .ToList();
+    }
 
-        var relativePath = config.GetSection("TestFolder").Value
-            ?? throw new DirectoryNotFoundException("Test folder is not configured.");
-
-        var projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName
-            ?? throw new DirectoryNotFoundException("Project directory not found.");
-
-        var folderLocation = Path.Combine(projectDirectory, relativePath);
-
-        InvocationContext = new InvocationContext
+    private void InitializeInvocationContext()
+    {
+        InvocationContexts = new List<InvocationContext>();
+        foreach (var credentialGroup in CredentialGroups)
         {
-            AuthenticationCredentialsProviders = Creds,
-        };
+            InvocationContexts.Add(new InvocationContext
+            {
+                AuthenticationCredentialsProviders = credentialGroup
+            });
+        }
+    }
 
-        FileManager = new FileManager(folderLocation);
+    private void InitializeFileManager()
+    {
+        var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var folderLocation = config.GetSection("TestFolder").Value;
+        FileManager = new FileManager(folderLocation!);
     }
 }
