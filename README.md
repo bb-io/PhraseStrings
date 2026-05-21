@@ -34,10 +34,10 @@ Before you can connect, you need to make sure that:
 ### Jobs
 
 - **Search jobs** Searches jobs according to the filters you specify.
-- **Create job** Creates a new job.
+- **Create job** Creates a new job. Target locales can be provided as locale IDs or locale codes.
 - **Get job** Retrieves a job by its ID.
 - **Start job** Starts a job.
-- **Add keys to job** Adds keys to a job.
+- **Add keys to job** Adds keys to a job. Keys can be provided as key IDs or key names.
 - **Add target locales to a job** Adds target locales to a job and assigns translators or reviewers.
 - **Complete job** Completes a job.
 - **Reopen job** Reopens a job.
@@ -76,7 +76,7 @@ Before you can connect, you need to make sure that:
 
 ### Projects
 
-- **Search projects** Searches projects according to the filters you specify.
+- **Search projects** Searches projects according to the filters you specify, including case-insensitive project name matching.
 - **Get project** Retrieves a project by its ID.
 - **Delete project** Deletes a project by its ID.
 - **Create project** Creates a new project.
@@ -86,6 +86,7 @@ Before you can connect, you need to make sure that:
 
 ### Repositories
 
+- **Find repository** Finds the first repository sync by project ID or repository name.
 - **Export to code repository** Exports a project to a code repository. Add a delay between exports if you're starting multiple exports in a row to avoid rate limiting issues.
 - **Import from code repository** Imports a project from a code repository.
 

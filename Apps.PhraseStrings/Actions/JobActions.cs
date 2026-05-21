@@ -1,5 +1,7 @@
-﻿using Apps.PhraseStrings.DataHandlers;
+using Apps.PhraseStrings.DataHandlers;
 using Apps.PhraseStrings.Model.Job;
+using Apps.PhraseStrings.Model.Key;
+using Apps.PhraseStrings.Model.Locale;
 using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
@@ -58,13 +60,42 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
     public async Task<CreateJobResponse> CreateJob([ActionParameter] CreateJobRequest input,
         [ActionParameter] ProjectRequest project)
     {
-        var json = JsonConvert.SerializeObject(input, new JsonSerializerSettings
+        var targetLocaleIds = await ResolveTargetLocaleIds(project.ProjectId, input.TargetLocaleIds, input.TargetLocaleCodes);
+
+        var body = new Dictionary<string, object>
         {
-            NullValueHandling = NullValueHandling.Ignore
-        });
+            ["name"] = input.Name
+        };
+
+        if (!string.IsNullOrWhiteSpace(input.Branch))
+            body["branch"] = input.Branch;
+
+        if (!string.IsNullOrWhiteSpace(input.SourceLocaleId))
+            body["source_locale_id"] = input.SourceLocaleId;
+
+        if (!string.IsNullOrWhiteSpace(input.Briefing))
+            body["briefing"] = input.Briefing;
+
+        if (input.DueDate.HasValue)
+            body["due_date"] = input.DueDate.Value;
+
+        if (!string.IsNullOrWhiteSpace(input.TicketUrl))
+            body["ticket_url"] = input.TicketUrl;
+
+        if (input.Tags?.Any() == true)
+            body["tags"] = input.Tags;
+
+        if (input.TranslationKeyIds?.Any() == true)
+            body["translation_key_ids"] = input.TranslationKeyIds;
+
+        if (targetLocaleIds.Count > 0)
+            body["target_locale_ids"] = targetLocaleIds;
+
+        if (input.JobTemplateId?.Any() == true)
+            body["job_template_id"] = input.JobTemplateId;
 
         var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs", Method.Post);
-        request.AddStringBody(json, DataFormat.Json);
+        request.AddJsonBody(body);
 
         var job = await Client.ExecuteWithErrorHandling<CreateJobResponse>(request);
         return job;
@@ -132,15 +163,16 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
     {
         var request = new RestRequest($"/v2/projects/{project.ProjectId}/jobs/{input.JobId}/keys", Method.Post);
         var body = new Dictionary<string, object>();
+        var translationKeyIds = await ResolveKeyIds(project.ProjectId, keys.Branch, keys.Keys, keys.KeyNames);
 
         if (!string.IsNullOrEmpty(keys.Branch))
         {
             body["branch"] = keys.Branch;
         }
 
-        if (keys.Keys != null && keys.Keys.Count > 0)
+        if (translationKeyIds.Count > 0)
         {
-            body["translation_key_ids"] = keys.Keys;
+            body["translation_key_ids"] = translationKeyIds;
         }
 
         if (body.Count > 0)
@@ -193,6 +225,74 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
 
         return job;
     }
+
+    private async Task<List<string>> ResolveKeyIds(string projectId, string? branch, IEnumerable<string>? keyIds, IEnumerable<string>? keyNames)
+    {
+        var resolvedKeyIds = new HashSet<string>(keyIds?.Where(id => !string.IsNullOrWhiteSpace(id)) ?? [], StringComparer.Ordinal);
+        var requestedKeyNames = keyNames?
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .Distinct(StringComparer.Ordinal)
+            .ToList() ?? [];
+
+        if (requestedKeyNames.Count == 0)
+            return resolvedKeyIds.ToList();
+
+        var request = new RestRequest($"/v2/projects/{projectId}/keys", Method.Get);
+
+        if (!string.IsNullOrWhiteSpace(branch))
+            request.AddQueryParameter("branch", branch);
+
+        var projectKeys = await Client.Paginate<KeyResponse>(request);
+        var keyLookup = projectKeys
+            .Where(key => !string.IsNullOrWhiteSpace(key.Name))
+            .GroupBy(key => key.Name, StringComparer.Ordinal)
+            .ToDictionary(group => group.Key, group => group.First().Id, StringComparer.Ordinal);
+
+        var unresolvedKeyNames = requestedKeyNames
+            .Where(name => !keyLookup.ContainsKey(name))
+            .ToList();
+
+        if (unresolvedKeyNames.Count > 0)
+            throw new PluginMisconfigurationException($"Key names not found in the selected branch: {string.Join(", ", unresolvedKeyNames)}.");
+
+        foreach (var keyName in requestedKeyNames)
+        {
+            resolvedKeyIds.Add(keyLookup[keyName]);
+        }
+
+        return resolvedKeyIds.ToList();
+    }
+
+    private async Task<List<string>> ResolveTargetLocaleIds(string projectId, IEnumerable<string>? localeIds, IEnumerable<string>? localeCodes)
+    {
+        var resolvedLocaleIds = new HashSet<string>(localeIds?.Where(id => !string.IsNullOrWhiteSpace(id)) ?? [], StringComparer.Ordinal);
+        var requestedLocaleCodes = localeCodes?
+            .Where(code => !string.IsNullOrWhiteSpace(code))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList() ?? [];
+
+        if (requestedLocaleCodes.Count == 0)
+            return resolvedLocaleIds.ToList();
+
+        var request = new RestRequest($"/v2/projects/{projectId}/locales", Method.Get);
+        var projectLocales = await Client.Paginate<LocaleResponse>(request);
+        var localeLookup = projectLocales
+            .Where(locale => !string.IsNullOrWhiteSpace(locale.Code))
+            .GroupBy(locale => locale.Code, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.First().Id, StringComparer.OrdinalIgnoreCase);
+
+        var unresolvedLocaleCodes = requestedLocaleCodes
+            .Where(code => !localeLookup.ContainsKey(code))
+            .ToList();
+
+        if (unresolvedLocaleCodes.Count > 0)
+            throw new PluginMisconfigurationException($"Locale codes not found in the specified project: {string.Join(", ", unresolvedLocaleCodes)}.");
+
+        foreach (var localeCode in requestedLocaleCodes)
+        {
+            resolvedLocaleIds.Add(localeLookup[localeCode]);
+        }
+
+        return resolvedLocaleIds.ToList();
+    }
 }
-
-

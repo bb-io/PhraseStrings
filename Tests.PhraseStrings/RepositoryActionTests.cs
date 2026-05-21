@@ -26,6 +26,23 @@ namespace Tests.PhraseStrings
         }
 
         [TestMethod, ContextDataSource]
+        public async Task FindRepository_IsSuccess(InvocationContext context)
+        {
+            var actions = new RepositoryActions(context);
+            var account = new AccountRequest { AccountId = "8134f0cd7ea179c246eb16e7be49b708" };
+            var repositories = await actions.SearchRepositories(account, new SearchRepositoriesRequest());
+            var sourceRepository = repositories.First(x => !string.IsNullOrWhiteSpace(x.RepoName));
+
+            var result = await actions.FindRepository(account, new FindRepositoryRequest
+            {
+                RepositoryName = sourceRepository.RepoName
+            });
+
+            PrintResult(result);
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod, ContextDataSource]
         public async Task ImportRepository_IsSuccess(InvocationContext context)
         {
             var actions = new RepositoryActions(context);

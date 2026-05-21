@@ -9,6 +9,9 @@ namespace Apps.PhraseStrings.Model.Project
         [Display("Account ID")]
         public string? AccountId { get; set; }
 
+        [Display("Project name contains")]
+        public string? ProjectNameContains { get; set; }
+
         [Display("Sort")]
         [StaticDataSource(typeof(SortByDataHandler))]
         public string? SortBy { get; set; }

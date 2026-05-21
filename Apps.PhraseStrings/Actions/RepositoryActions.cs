@@ -1,7 +1,8 @@
-﻿using Apps.PhraseStrings.Model.Account;
+using Apps.PhraseStrings.Model.Account;
 using Apps.PhraseStrings.Model.Repository;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using RestSharp;
 
@@ -15,35 +16,26 @@ public class RepositoryActions(InvocationContext invocationContext) : PhraseStri
         [ActionParameter] AccountRequest account,
         [ActionParameter] SearchRepositoriesRequest input)
     {
-        const int perPage = 100;
-        var allRepos = new List<RepositoryResponse>();
-        var page = 1;
+        return await GetRepositories(account.AccountId, input.IgnoreInactiveRepos == true);
+    }
 
-        while (true)
-        {
-            var request = new RestRequest($"/v2/accounts/{account.AccountId}/repo_syncs", Method.Get)
-                .AddQueryParameter("page", page.ToString())
-                .AddQueryParameter("per_page", perPage.ToString());
+    [Action("Find repository", Description = "Finds the first repository sync by project ID or repository name")]
+    public async Task<RepositoryResponse> FindRepository(
+        [ActionParameter] AccountRequest account,
+        [ActionParameter] FindRepositoryRequest input)
+    {
+        if (string.IsNullOrWhiteSpace(input.ProjectId) && string.IsNullOrWhiteSpace(input.RepositoryName))
+            throw new PluginMisconfigurationException("Either Project ID or Repository name must be provided.");
 
-            var pageResult =
-                await Client.ExecuteWithErrorHandling<List<RepositoryResponse>>(request)
-                ?? new List<RepositoryResponse>();
+        var repositories = await GetRepositories(account.AccountId, false);
+        var repository = repositories.FirstOrDefault(repository =>
+            (string.IsNullOrWhiteSpace(input.ProjectId) || repository.Project?.Id == input.ProjectId) &&
+            (string.IsNullOrWhiteSpace(input.RepositoryName) || repository.RepoName.Contains(input.RepositoryName, StringComparison.OrdinalIgnoreCase)));
 
-            if (pageResult.Count == 0)
-                break;
+        if (repository == null)
+            throw new PluginMisconfigurationException("No repository sync matched the provided search criteria.");
 
-            if (input.IgnoreInactiveRepos == true)
-                pageResult.RemoveAll(x => x.Enabled == false);
-
-            allRepos.AddRange(pageResult);
-
-            if (pageResult.Count < perPage)
-                break;
-
-            page++;
-        }
-
-        return allRepos;
+        return repository;
     }
 
     [Action("Export to code repository", Description = "Exports to code repository")]
@@ -64,4 +56,36 @@ public class RepositoryActions(InvocationContext invocationContext) : PhraseStri
         return await Client.ExecuteWithErrorHandling<ImportResponse>(request);
     }
 
+    private async Task<List<RepositoryResponse>> GetRepositories(string accountId, bool ignoreInactiveRepos)
+    {
+        const int perPage = 100;
+        var allRepos = new List<RepositoryResponse>();
+        var page = 1;
+
+        while (true)
+        {
+            var request = new RestRequest($"/v2/accounts/{accountId}/repo_syncs", Method.Get)
+                .AddQueryParameter("page", page.ToString())
+                .AddQueryParameter("per_page", perPage.ToString());
+
+            var pageResult =
+                await Client.ExecuteWithErrorHandling<List<RepositoryResponse>>(request)
+                ?? [];
+
+            if (pageResult.Count == 0)
+                break;
+
+            if (ignoreInactiveRepos)
+                pageResult.RemoveAll(x => x.Enabled == false);
+
+            allRepos.AddRange(pageResult);
+
+            if (pageResult.Count < perPage)
+                break;
+
+            page++;
+        }
+
+        return allRepos;
+    }
 }

@@ -39,6 +39,14 @@ namespace Apps.PhraseStrings.Model.Job
         [JsonProperty("translation_key_ids")]
         public IEnumerable<string>? TranslationKeyIds { get; set; }
 
+        [Display("Target locale IDs")]
+        [JsonProperty("target_locale_ids")]
+        [DataSource(typeof(LocaleDataHandler))]
+        public IEnumerable<string>? TargetLocaleIds { get; set; }
+
+        [Display("Target locale codes")]
+        public IEnumerable<string>? TargetLocaleCodes { get; set; }
+
         [Display("Job template ID")]
         [JsonProperty("job_template_id")]
         public IEnumerable<string>? JobTemplateId { get; set; }

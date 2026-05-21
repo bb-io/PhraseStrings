@@ -26,8 +26,13 @@ namespace Tests.PhraseStrings
         {
             var actions = new JobActions(context);
             var response = await actions.CreateJob(
-                new CreateJobRequest { Name = "Testing job from locale callb", TranslationKeyIds = ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] },
-                new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" });
+                new CreateJobRequest
+                {
+                    Name = "Testing job from locale callb",
+                    TargetLocaleIds = ["df5447505e3e7a0b688c25a79a6770a7"],
+                    TargetLocaleCodes = ["nl-NL"]
+                },
+                new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" });
 
             PrintResult(response);
             Assert.IsNotNull(response);
@@ -63,9 +68,9 @@ namespace Tests.PhraseStrings
         {
             var actions = new JobActions(context);
             var response = await actions.AddKeysToJob(
-                new JobRequest { JobId = "cae41b76eb9cdd623518f4d5effb2554" },
-                new ProjectRequest { ProjectId = "a53022230e25f47a7273c029a92de746" },
-                new AddkeysToJobRequest { Keys = ["0c331ec27e910a1ed8c6af6cf2ba0c26", "7baf04c2118530edd7c024bc65f2f859"] });
+                new JobRequest { JobId = "88bb8462fc7936b2b45a612c50866174" },
+                new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
+                new AddkeysToJobRequest { KeyNames = ["dashboard_welcome_message"] });
 
             PrintResult(response);
             Assert.IsNotNull(response);

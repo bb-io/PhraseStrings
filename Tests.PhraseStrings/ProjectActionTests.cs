@@ -13,7 +13,7 @@ public class ProjectActionTests : TestBaseMultipleConnections
     {
         var actions = new ProjectActions(context, FileManager);
 
-        var response = await actions.SearchProjects(new SearchProjectsRequest { });
+        var response = await actions.SearchProjects(new SearchProjectsRequest { ProjectNameContains = "demo" });
 
         PrintResult(response);
         Assert.IsNotNull(response);
