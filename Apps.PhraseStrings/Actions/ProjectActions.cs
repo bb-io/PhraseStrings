@@ -29,6 +29,14 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
         }
 
         var projects = await Client.Paginate<ProjectResponse>(request);
+
+        if (!string.IsNullOrWhiteSpace(input.ProjectNameContains))
+        {
+            projects = projects
+                .Where(project => project.Name.Contains(input.ProjectNameContains, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+
         return new ListProjectsResponse { Projects = projects };
     }
 
