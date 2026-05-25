@@ -1,4 +1,5 @@
-﻿using Apps.PhraseStrings.Actions;
+using Apps.PhraseStrings.Actions;
+using Apps.PhraseStrings.Model.Locale;
 using Apps.PhraseStrings.Model.Project;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Tests.PhraseStrings.Base;
@@ -55,7 +56,7 @@ public class ProjectActionTests : TestBaseMultipleConnections
     {
         var actions = new ProjectActions(context, FileManager);
         var result = await actions.CreateProject(new CreateProjectRequest { Name = "My New Project2", },
-            new FileRequest { File=null });
+            new FileRequest { File = null });
 
         PrintResult(result);
         Assert.IsNotNull(result);
@@ -80,7 +81,7 @@ public class ProjectActionTests : TestBaseMultipleConnections
         var result = await actions.GetProjectLocales(
             new ProjectRequest { ProjectId = "d562a2ad202e4ab626b0764576660917" },
             new GetProjectLocalesRequest { ReturnTargetLocalesOnly = true });
-        
+
         PrintResult(result);
         Assert.IsNotNull(result);
     }
@@ -95,5 +96,21 @@ public class ProjectActionTests : TestBaseMultipleConnections
 
         PrintResult(result);
         Assert.IsNotNull(result);
+    }
+
+    [TestMethod]
+    public void ListLocaleResponse_ExposesFlattenedIdsAndCodes()
+    {
+        var response = new ListLocaleResponse
+        {
+            Locales =
+            [
+                new LocaleResponse { Id = "locale-1", Code = "en" },
+                new LocaleResponse { Id = "locale-2", Code = "nl-NL" }
+            ]
+        };
+
+        CollectionAssert.AreEqual(new[] { "locale-1", "locale-2" }, response.LocaleIds.ToArray());
+        CollectionAssert.AreEqual(new[] { "en", "nl-NL" }, response.LocaleCodes.ToArray());
     }
 }
