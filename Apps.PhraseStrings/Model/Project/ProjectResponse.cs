@@ -34,11 +34,11 @@ namespace Apps.PhraseStrings.Model.Project
         public Account Account { get; set; } = new();
 
         [JsonProperty("space")]
-        public object Space { get; set; } = new();
+        public ProjectSpace? Space { get; set; }
 
         [JsonProperty("point_of_contact")]
         [Display("Point of contact")]
-        public object PointOfContact { get; set; } = new();
+        public ProjectUser? PointOfContact { get; set; }
 
         [JsonProperty("created_at")]
         [Display("Project created at")]
@@ -47,6 +47,52 @@ namespace Apps.PhraseStrings.Model.Project
         [JsonProperty("updated_at")]
         [Display("Project last updated at")]
         public DateTime UpdatedAt { get; set; }
+    }
+
+    public class ProjectSpace
+    {
+        [Display("Space ID")]
+        [JsonProperty("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [Display("Space name")]
+        [JsonProperty("name")]
+        public string Name { get; set; } = string.Empty;
+
+        [Display("Space created at")]
+        [JsonProperty("created_at")]
+        public DateTime? CreatedAt { get; set; }
+
+        [Display("Space updated at")]
+        [JsonProperty("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
+
+        [Display("Projects count")]
+        [JsonProperty("projects_count")]
+        public int? ProjectsCount { get; set; }
+    }
+
+    public class ProjectUser
+    {
+        [Display("User ID")]
+        [JsonProperty("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [Display("Username")]
+        [JsonProperty("username")]
+        public string Username { get; set; } = string.Empty;
+
+        [Display("Name")]
+        [JsonProperty("name")]
+        public string Name { get; set; } = string.Empty;
+
+        [Display("Gravatar UID")]
+        [JsonProperty("gravatar_uid")]
+        public string GravatarUid { get; set; } = string.Empty;
+
+        [Display("Email")]
+        [JsonProperty("email")]
+        public string Email { get; set; } = string.Empty;
     }
 
     public class Account
