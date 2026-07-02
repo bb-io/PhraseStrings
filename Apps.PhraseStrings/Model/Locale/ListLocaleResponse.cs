@@ -4,6 +4,7 @@ namespace Apps.PhraseStrings.Model.Locale;
 
 public class ListLocaleResponse
 {
+    [Display("Locales")]
     public IEnumerable<LocaleResponse> Locales { get; set; } = [];
 
     [Display("Locale IDs")]

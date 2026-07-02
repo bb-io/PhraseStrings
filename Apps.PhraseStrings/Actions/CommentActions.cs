@@ -12,7 +12,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Comments")]
 public class CommentActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Add comment to a key", Description = "Adds comment to a key")]
+    [Action("Add comment to a key", Description = "Add a comment to a key.")]
     public async Task<AddCommentToKeyResponse> AddCommentToKey([ActionParameter] ProjectRequest project,
         [ActionParameter] CreateCommentRequest input,
         [ActionParameter] KeyRequest key)
@@ -37,7 +37,7 @@ public class CommentActions(InvocationContext invocationContext) : PhraseStrings
         return await Client.ExecuteWithErrorHandling<AddCommentToKeyResponse>(request);           
     }
 
-    [Action("Add comment to a job", Description = "Adds comment to a job")]
+    [Action("Add comment to a job", Description = "Add a comment to a job.")]
     public async Task<AddCommentToKeyResponse> AddCommentToJob([ActionParameter] ProjectRequest project,
         [ActionParameter] CreateCommentRequest input,
         [ActionParameter] JobRequest job)

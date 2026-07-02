@@ -14,7 +14,7 @@ public class ScreenshotActions(InvocationContext invocationContext, IFileManagem
     : PhraseStringsInvocable(invocationContext)
 {
     [Action("Upload screenshot", 
-        Description = "Uploads screenshot. Use a 'Mark screenshot' action to connect keys to the uploaded screenshot")]
+        Description = "Upload a screenshot. Use 'Mark screenshot (link to key)' to connect keys to the uploaded screenshot.")]
     public async Task<ScreenshotResponse> UploadScreenshot(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] UploadScreenshotRequest screenShot)
@@ -41,7 +41,7 @@ public class ScreenshotActions(InvocationContext invocationContext, IFileManagem
     }
 
     [Action("Mark screenshot (link to key)", 
-        Description = "Creates a connection between a key and a screenshot, so screenshot will be shown in the editor")]
+        Description = "Connect a key to a screenshot so the screenshot appears in the editor.")]
     public async Task<ScreenshotResponse> CreateScreenshotMarker(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] CreateScreenshotMarkerRequest screenshot)
@@ -60,7 +60,7 @@ public class ScreenshotActions(InvocationContext invocationContext, IFileManagem
         return new(response);
     }
 
-    [Action("Get uploaded screenshot", Description = "Gets a screenshot by its ID or name")]
+    [Action("Get uploaded screenshot", Description = "Get a screenshot by its ID or name.")]
     public async Task<ScreenshotResponse> GetScreenshotByIdOrName(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] GetScreenshotRequest screenshotInput)

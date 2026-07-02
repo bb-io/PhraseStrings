@@ -13,6 +13,6 @@ public class GetTeamByNameRequest
     [Display("Team name")]
     public string TeamName { get; set; } = string.Empty;
 
-    [Display("Check is name contains (default exact match)")]
+    [Display("Use partial name match")]
     public bool? UseContains { get; set; } = false;
 }

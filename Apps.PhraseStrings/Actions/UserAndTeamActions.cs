@@ -11,7 +11,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Users and teams")]
 public class UserAndTeamActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Get user by email", Description = "Returns user details")]
+    [Action("Get user by email", Description = "Get user details by email address.")]
     public async Task<UserResponse> GetUserByEmail([ActionParameter] GetUserByEmailRequest input)
     {
         var usersRequest = new RestRequest($"/v2/accounts/{input.AccountId}/members", Method.Get);
@@ -27,7 +27,7 @@ public class UserAndTeamActions(InvocationContext invocationContext) : PhraseStr
         return userFound;
     }
 
-    [Action("Get team by name", Description = "Returns team details")]
+    [Action("Get team by name", Description = "Get team details by team name.")]
     public async Task<TeamResponse> GetTeamByName([ActionParameter] GetTeamByNameRequest input)
     {
         var teamsRequest = new RestRequest($"/v2/accounts/{input.AccountId}/teams", Method.Get);

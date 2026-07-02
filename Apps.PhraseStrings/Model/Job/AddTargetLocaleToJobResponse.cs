@@ -11,20 +11,22 @@ public class AddTargetLocaleToJobResponse
     public string Id { get; set; } = string.Empty;
 
     [JsonProperty("job")]
+    [Display("Job")]
     public JobInfo Job { get; set; } = new();
 
     [Display("Users assigned")]
     [JsonProperty("users")]
     public IEnumerable<UserInfo> Users { get; set; } = [];
 
-    [Display("Users teams")]
+    [Display("User teams")]
     [JsonProperty("teams")]
     public IEnumerable<TeamInfo> Teams { get; set; } = [];
 
     [JsonProperty("locale")]
+    [Display("Locale")]
     public LocaleInfo Locale { get; set; } = new();
 
-    [Display("Is this locale completed for a job?")]
+    [Display("Completed")]
     [JsonProperty("completed")]
     public bool Completed { get; set; }
 
@@ -66,4 +68,3 @@ public class TeamInfo
     [JsonProperty("role")]
     public string Role { get; set; } = string.Empty;
 }
-

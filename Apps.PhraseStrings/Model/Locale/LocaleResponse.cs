@@ -18,15 +18,15 @@ namespace Apps.PhraseStrings.Model.Locale
         public string Code { get; set; } = string.Empty;
 
         [JsonProperty("default")]
-        [Display("Is locale default?")]
+        [Display("Default locale")]
         public bool IsDefault { get; set; }
 
         [JsonProperty("main")]
-        [Display("Is locale main?")]
+        [Display("Main locale")]
         public bool IsMain { get; set; }
 
         [JsonProperty("rtl")]
-        [Display("Is locale right-to-Left?")]
+        [Display("Right-to-left locale")]
         public bool IsRtl { get; set; }
 
         [JsonProperty("plural_forms")]

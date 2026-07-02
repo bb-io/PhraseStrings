@@ -5,6 +5,7 @@ namespace Apps.PhraseStrings.Model.Project
 {
     public class ListProjectsResponse
     {
+        [Display("Projects")]
         public List<ProjectResponse> Projects { get; set; } = [];
     }
 
@@ -31,9 +32,11 @@ namespace Apps.PhraseStrings.Model.Project
         public string ProjectImageUrl { get; set; } = string.Empty;
 
         [JsonProperty("account")]
+        [Display("Account")]
         public Account Account { get; set; } = new();
 
         [JsonProperty("space")]
+        [Display("Space")]
         public ProjectSpace? Space { get; set; }
 
         [JsonProperty("point_of_contact")]
@@ -110,6 +113,7 @@ namespace Apps.PhraseStrings.Model.Project
         public string Slug { get; set; } = string.Empty;
 
         [JsonProperty("company")]
+        [Display("Company")]
         public string Company { get; set; } = string.Empty;
 
         [JsonProperty("created_at")]

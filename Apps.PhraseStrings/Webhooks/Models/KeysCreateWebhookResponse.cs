@@ -6,33 +6,42 @@ namespace Apps.PhraseStrings.Webhooks.Models
     public class KeysCreateWebhookResponse
     {
         [JsonProperty("event")]
+        [Display("Event")]
         public string? Event { get; set; }
 
         [JsonProperty("message")]
+        [Display("Message")]
         public string? Message { get; set; }
 
         [JsonProperty("user")]
+        [Display("User")]
         public WebhookUser? User { get; set; }
 
         [JsonProperty("project")]
+        [Display("Project")]
         public WebhookProject? Project { get; set; }
 
         [JsonProperty("branch")]
+        [Display("Branch")]
         public WebhookBranch? Branch { get; set; }
 
         [JsonProperty("key")]
+        [Display("Key")]
         public WebhookKey? Key { get; set; }
     }
 
     public class WebhookKey
     {
         [JsonProperty("id")]
+        [Display("Key ID")]
         public string? Id { get; set; }
 
         [JsonProperty("name")]
+        [Display("Key name")]
         public string? Name { get; set; }
 
         [JsonProperty("description")]
+        [Display("Description")]
         public string? Description { get; set; }
 
         [JsonProperty("name_hash")]
@@ -40,6 +49,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public string? NameHash { get; set; }
 
         [JsonProperty("plural")]
+        [Display("Plural")]
         public bool? Plural { get; set; }
 
         [JsonProperty("max_characters_allowed")]
@@ -47,6 +57,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
         public int? MaxCharactersAllowed { get; set; }
 
         [JsonProperty("tags")]
+        [Display("Tags")]
         public List<string>? Tags { get; set; }
 
         [JsonProperty("created_at")]

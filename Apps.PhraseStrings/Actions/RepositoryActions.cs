@@ -11,7 +11,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Repositories")]
 public class RepositoryActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Search repositories", Description = "Retrieves all repositories for the account")]
+    [Action("Search repositories", Description = "Search repository syncs for an account.")]
     public async Task<List<RepositoryResponse>> SearchRepositories(
         [ActionParameter] AccountRequest account,
         [ActionParameter] SearchRepositoriesRequest input)
@@ -19,7 +19,7 @@ public class RepositoryActions(InvocationContext invocationContext) : PhraseStri
         return await GetRepositories(account.AccountId, input.IgnoreInactiveRepos == true);
     }
 
-    [Action("Find repository", Description = "Finds the first repository sync by project ID or repository name")]
+    [Action("Find repository", Description = "Find the first repository sync by project ID or repository name.")]
     public async Task<RepositoryResponse> FindRepository(
         [ActionParameter] AccountRequest account,
         [ActionParameter] FindRepositoryRequest input)
@@ -38,7 +38,7 @@ public class RepositoryActions(InvocationContext invocationContext) : PhraseStri
         return repository;
     }
 
-    [Action("Export to code repository", Description = "Exports to code repository")]
+    [Action("Export to code repository", Description = "Export project content to a code repository.")]
     public async Task<ImportResponse> ExportToCodeRepository([ActionParameter] AccountRequest account,
         [ActionParameter] RepositoryRequest repository)
     {
@@ -47,7 +47,7 @@ public class RepositoryActions(InvocationContext invocationContext) : PhraseStri
         return await Client.ExecuteWithErrorHandling<ImportResponse>(request);
     }
 
-    [Action("Import from code repository", Description = "Imports from code repository")]
+    [Action("Import from code repository", Description = "Import project content from a code repository.")]
     public async Task<ImportResponse> ImportFromCodeRepository([ActionParameter] AccountRequest account,
         [ActionParameter] RepositoryRequest repository)
     {
