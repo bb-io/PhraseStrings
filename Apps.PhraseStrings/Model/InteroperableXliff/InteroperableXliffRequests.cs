@@ -32,9 +32,10 @@ public class DownloadKeysRequest
 
 public class UploadKeysRequest
 {
+    [Display("Content")]
     public FileReference Content { get; set; } = new();
 
-    [Display("XLIFF states to apply to target translations")]
+    [Display("Target states to apply")]
     [StaticDataSource(typeof(XliffStateDataHandler))]
     public IEnumerable<string>? StatesToApplyToTargetTranslations { get; set; }
 

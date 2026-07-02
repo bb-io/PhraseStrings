@@ -6,6 +6,7 @@ namespace Apps.PhraseStrings.Model.Project
     public class CreateProjectRequest
     {
         [JsonProperty("name")]
+        [Display("Project name")]
         public string Name { get; set; } = string.Empty;
 
         [JsonProperty("main_format")]
@@ -13,6 +14,7 @@ namespace Apps.PhraseStrings.Model.Project
         public string? MainFormat { get; set; }
 
         [JsonProperty("media")]
+        [Display("Media")]
         public string? Media { get; set; }
 
         [JsonProperty("shares_translation_memory")]

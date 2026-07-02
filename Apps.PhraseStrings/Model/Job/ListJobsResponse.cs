@@ -5,18 +5,22 @@ namespace Apps.PhraseStrings.Model.Job
 {
     public class ListJobsResponse
     {
+        [Display("Jobs")]
         public List<JobResponse>? Jobs { get; set; }
     }
 
     public class JobResponse
     {
         [JsonProperty("id")]
+        [Display("Job ID")]
         public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
+        [Display("Job name")]
         public string Name { get; set; } = string.Empty;
 
         [JsonProperty("briefing")]
+        [Display("Briefing")]
         public string? Briefing { get; set; }
 
         [JsonProperty("due_date")]
@@ -24,6 +28,7 @@ namespace Apps.PhraseStrings.Model.Job
         public DateTime? DueDate { get; set; }
 
         [JsonProperty("state")]
+        [Display("State")]
         public string? State { get; set; }
 
         [JsonProperty("ticket_url")]
@@ -39,6 +44,7 @@ namespace Apps.PhraseStrings.Model.Job
         public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("project")]
+        [Display("Project")]
         public ProjectInfo? Project { get; set; }
     }
 

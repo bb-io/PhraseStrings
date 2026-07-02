@@ -6,6 +6,7 @@ namespace Apps.PhraseStrings.Model.Comment
 {
     public class CreateCommentRequest
     {
+        [Display("Message")]
         public string? Message { get; set; }
 
         [Display("Branch")]

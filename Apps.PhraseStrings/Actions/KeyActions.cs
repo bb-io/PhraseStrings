@@ -11,7 +11,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Keys")]
 public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Search keys", Description = "Searches keys")]
+    [Action("Search keys", Description = "Search keys that match selected filters.")]
     public async Task<ListKeysResponse> SearchKeys([ActionParameter] ProjectRequest project,
         [ActionParameter] SearchKeysRequest input)
     {
@@ -53,7 +53,7 @@ public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvo
     }
 
 
-    [Action("Get key by name", Description = "Gets detailed key information from a key name")]
+    [Action("Get key by name", Description = "Get key details by key name.")]
     public async Task<KeyResponse> GetKeyByName(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] BranchRequest branch,
@@ -75,7 +75,7 @@ public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvo
         return keyFound ?? new KeyResponse();
     }
 
-    [Action("Create a key", Description = "Creates a key")]
+    [Action("Create a key", Description = "Create a key.")]
     public async Task<KeyResponse> CreateKey([ActionParameter] ProjectRequest project,
         [ActionParameter] CreateKeyRequest input)
     {
@@ -136,7 +136,7 @@ public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvo
 
     }
 
-    [Action("Update a key", Description = "Updates a key")]
+    [Action("Update a key", Description = "Update a key.")]
     public async Task<KeyResponse> UpdateKey([ActionParameter] ProjectRequest project,
         [ActionParameter] CreateKeyRequest input, [ActionParameter] KeyRequest keyinput)
     {
@@ -198,7 +198,7 @@ public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvo
     }
 
 
-    [Action("Add tags to keys", Description ="Adds tags to specified keys")]
+    [Action("Add tags to keys", Description = "Add tags to matching keys.")]
     public async Task<ResordAffectedResponse> AddtagsToKeys([ActionParameter] ProjectRequest project,
         [ActionParameter] AddTagsToKeysRequest tags)
     {
@@ -223,7 +223,7 @@ public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvo
         return await Client.ExecuteWithErrorHandling<ResordAffectedResponse>(request);
     }
 
-    [Action("Remove tags from keys", Description = "Removes tags from keys")]
+    [Action("Remove tags from keys", Description = "Remove tags from matching keys.")]
     public async Task<ResordAffectedResponse> RemovetagsToKeys([ActionParameter] ProjectRequest project,
         [ActionParameter] AddTagsToKeysRequest tags)
     {
@@ -248,7 +248,7 @@ public class KeyActions(InvocationContext invocationContext) : PhraseStringsInvo
         return await Client.ExecuteWithErrorHandling<ResordAffectedResponse>(request);
     }
 
-    [Action("Link keys to parent key", Description = "Links one or more child keys to a parent key and returns number of keys linked")]
+    [Action("Link keys to parent key", Description = "Link one or more child keys to a parent key and output linked key IDs.")]
     public async Task<KeyIdsResponse> LinkChildKeys(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] KeyRequest parentKey,

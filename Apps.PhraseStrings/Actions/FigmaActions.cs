@@ -11,7 +11,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Figma")]
 public class FigmaActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Add Figma link to key", Description = "Adds Figma link to a specified key")]
+    [Action("Add Figma link to key", Description = "Add a Figma link to a key.")]
     public async Task<FigmaAttachmentResponse> AddFigmaLink([ActionParameter] ProjectRequest project,
         [ActionParameter] UploadFigmaLinkRequest figmaAttachment)
     {

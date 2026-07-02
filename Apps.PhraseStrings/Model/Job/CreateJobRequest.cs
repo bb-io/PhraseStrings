@@ -8,6 +8,7 @@ namespace Apps.PhraseStrings.Model.Job
     public class CreateJobRequest
     {
         [JsonProperty("name")]
+        [Display("Job name")]
         public string Name { get; set; } = string.Empty;
 
         [Display("Branch")]

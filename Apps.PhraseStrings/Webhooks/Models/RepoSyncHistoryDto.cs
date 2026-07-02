@@ -29,6 +29,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
 
     public class RepoSyncErrorBatch
     {
+        [Display("Errors")]
         public List<RepoSyncError> Errors { get; }
 
         public RepoSyncErrorBatch(List<RepoSyncError> errors)
@@ -52,6 +53,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
         [Display("Project name")]
         public string ProjectName { get; set; } = string.Empty;
 
+        [Display("Provider")]
         public string Provider { get; set; } = string.Empty;
 
         [Display("Event type")]
@@ -60,6 +62,7 @@ namespace Apps.PhraseStrings.Webhooks.Models
         [Display("Date")]
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
+        [Display("Message")]
         public string Message { get; set; } = string.Empty;
 
         [Display("Last import at")]

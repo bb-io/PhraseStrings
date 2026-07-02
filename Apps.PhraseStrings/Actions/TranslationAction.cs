@@ -16,7 +16,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Translations")]
 public class TranslationAction(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Create translation", Description = "Creates translation")]
+    [Action("Create translation", Description = "Create a translation.")]
     public async Task<TranslationResponse> CreateTranslation([ActionParameter] ProjectRequest project,
         [ActionParameter] CreateTranslationRequest options)
     {
@@ -31,7 +31,7 @@ public class TranslationAction(InvocationContext invocationContext, IFileManagem
         return await Client.ExecuteWithErrorHandling<TranslationResponse>(request);
     }
 
-    [Action("Update translation", Description = "Updates translation")]
+    [Action("Update translation", Description = "Update a translation.")]
     public async Task<TranslationResponse> UpdateTranslation([ActionParameter] ProjectRequest project,
         [ActionParameter] UpdateTranslationRequest options,
         [ActionParameter] TranslationRequest translation)
@@ -48,7 +48,7 @@ public class TranslationAction(InvocationContext invocationContext, IFileManagem
     }
 
 
-    [Action("Get translations for key", Description = "Gets translations for a key")]
+    [Action("Get translations for key", Description = "Get translations for a key.")]
     public async Task<ListTranslationsResponse> GetTranslationForKey([ActionParameter] ProjectRequest project,
         [ActionParameter] KeyRequest key, [ActionParameter] GetTranslationsForKeyRequest options)
     {
@@ -65,7 +65,7 @@ public class TranslationAction(InvocationContext invocationContext, IFileManagem
         return new ListTranslationsResponse { Translations = response };
     }
 
-    [Action("Get translations for locale", Description = "Gets translations for a locale")]
+    [Action("Get translations for locale", Description = "Get translations for a locale.")]
     public async Task<ListTranslationsResponse> GetTranslationForLocale([ActionParameter] ProjectRequest project,
         [ActionParameter] LocaleRequest locale, [ActionParameter] GetTranslationsForLocaleRequest option)
     {
@@ -83,7 +83,7 @@ public class TranslationAction(InvocationContext invocationContext, IFileManagem
     }
 
 
-    [Action("Download locale", Description = "Downloads locale")]
+    [Action("Download locale", Description = "Download locale content.")]
     public async Task<FileResponse> DownloadLocale([ActionParameter] ProjectRequest project,
         [ActionParameter] LocaleRequest locale, [ActionParameter] DownloadLocaleRequest options)
     {
@@ -170,7 +170,7 @@ public class TranslationAction(InvocationContext invocationContext, IFileManagem
         };
     }
 
-    [Action("Upload  file", Description = "Uploads a file into specified project")]
+    [Action("Upload file", Description = "Upload a localization file into a project.")]
     public async Task<ImportResponse> UploadFile([ActionParameter] ProjectRequest project,
         [ActionParameter] UploadFileRequest input)
     {

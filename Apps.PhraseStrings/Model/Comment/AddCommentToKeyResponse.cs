@@ -12,6 +12,7 @@ namespace Apps.PhraseStrings.Model.Comment
         public string Id { get; set; } = string.Empty;
 
         [JsonProperty("message")]
+        [Display("Message")]
         public string Message { get; set; } = string.Empty;
 
         [JsonProperty("has_replies")]
@@ -19,6 +20,7 @@ namespace Apps.PhraseStrings.Model.Comment
         public bool HasReplies { get; set; }
 
         [JsonProperty("user")]
+        [Display("User")]
         public UserInfo User { get; set; } = new();
 
         [JsonProperty("created_at")]
@@ -30,6 +32,7 @@ namespace Apps.PhraseStrings.Model.Comment
         public DateTime UpdatedAt { get; set; }
 
         [JsonProperty("locales")]
+        [Display("Locales")]
         public List<LocaleInfo> Locales { get; set; } = [];
     }
 

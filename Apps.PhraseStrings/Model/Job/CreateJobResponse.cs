@@ -10,9 +10,11 @@ namespace Apps.PhraseStrings.Model.Job
         public string Id { get; set; } = string.Empty;
 
         [JsonProperty("name")]
+        [Display("Job name")]
         public string Name { get; set; } = string.Empty;
 
         [JsonProperty("briefing")]
+        [Display("Briefing")]
         public string? Briefing { get; set; }
 
         [JsonProperty("due_date")]
@@ -20,6 +22,7 @@ namespace Apps.PhraseStrings.Model.Job
         public DateTime? DueDate { get; set; }
 
         [JsonProperty("state")]
+        [Display("State")]
         public string? State { get; set; }
 
         [JsonProperty("ticket_url")]
@@ -27,7 +30,7 @@ namespace Apps.PhraseStrings.Model.Job
         public string? TicketUrl { get; set; }
 
         [JsonProperty("created_at")]
-        [Display("Created at")    ]
+        [Display("Created at")]
         public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
@@ -35,12 +38,15 @@ namespace Apps.PhraseStrings.Model.Job
         public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("project")]
+        [Display("Project")]
         public ProjectInfo? Project { get; set; }
 
         [JsonProperty("branch")]
+        [Display("Branch")]
         public JobBranchInfo? Branch { get; set; }
 
         [JsonProperty("owner")]
+        [Display("Owner")]
         public OwnerInfo? Owner { get; set; }
 
         [JsonProperty("job_tag_name")]
@@ -56,15 +62,18 @@ namespace Apps.PhraseStrings.Model.Job
         public LocaleInfo? SourceLocale { get; set; }
 
         [JsonProperty("locales")]
+        [Display("Locales")]
         public List<LocaleInfo>? Locales { get; set; }
 
         [JsonProperty("keys")]
+        [Display("Keys")]
         public List<KeyInfo>? Keys { get; set; }
     }
 
     public class OwnerInfo
     {
         [JsonProperty("id")]
+        [Display("Owner ID")]
         public string? Id { get; set; }
 
         [JsonProperty("username")]
@@ -72,6 +81,7 @@ namespace Apps.PhraseStrings.Model.Job
         public string? Username { get; set; }
 
         [JsonProperty("name")]
+        [Display("Owner name")]
         public string? Name { get; set; }
     }
 
@@ -93,15 +103,18 @@ namespace Apps.PhraseStrings.Model.Job
     public class KeyInfo
     {
         [JsonProperty("id")]
+        [Display("Key ID")]
         public string? Id { get; set; }
 
         [JsonProperty("name")]
+        [Display("Key name")]
         public string? Name { get; set; }
     }
 
     public class JobBranchInfo
     {
         [JsonProperty("name")]
+        [Display("Branch name")]
         public string? Name { get; set; }
     }
 }

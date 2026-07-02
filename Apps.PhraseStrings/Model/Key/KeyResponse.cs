@@ -7,9 +7,10 @@ namespace Apps.PhraseStrings.Model.Key
 {
     public class ListKeysResponse
     {
+        [Display("Keys")]
         public List<KeyResponse>? Keys { get; set; }
 
-        [Display("Key IDs array")]
+        [Display("Key IDs")]
         public List<string>? KeyIds { get; set; }
     }
 
@@ -28,14 +29,15 @@ namespace Apps.PhraseStrings.Model.Key
         public string? Description { get; set; }
 
         [JsonProperty("name_hash")]
-        [Display("Hash of a key name")]
+        [Display("Key name hash")]
         public string? NameHash { get; set; }
 
         [JsonProperty("plural")]
-        [Display("Is key plural?")]
+        [Display("Plural")]
         public bool? Plural { get; set; }
 
         [JsonProperty("tags")]
+        [Display("Tags")]
         public List<string>? Tags { get; set; }
 
         [JsonProperty("data_type")]
@@ -67,6 +69,7 @@ namespace Apps.PhraseStrings.Model.Key
         public string? ScreenshotUrl { get; set; }
 
         [JsonProperty("unformatted")]
+        [Display("Unformatted")]
         public bool? Unformatted { get; set; }
 
         [JsonProperty("xml_space_preserve")]
@@ -82,6 +85,7 @@ namespace Apps.PhraseStrings.Model.Key
         public string? FormatValueType { get; set; }
 
         [JsonProperty("creator")]
+        [Display("Creator")]
         public UserInfo? Creator { get; set; }
 
         [JsonProperty("custom_metadata")]

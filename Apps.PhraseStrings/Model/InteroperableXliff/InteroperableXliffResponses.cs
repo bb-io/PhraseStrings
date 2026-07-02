@@ -5,21 +5,22 @@ namespace Apps.PhraseStrings.Model.InteroperableXliff;
 
 public class DownloadKeysResponse
 {
+    [Display("Content")]
     public FileReference Content { get; set; } = new();
 
     [Display("Total keys downloaded")]
     public int TotalKeysDownloaded { get; set; }
 
-    [Display("Total keys without target translations")]
+    [Display("Keys without target translations")]
     public int TotalKeysWithoutTargetTranslations { get; set; }
 
-    [Display("Total keys with unverified target translations")]
+    [Display("Keys requiring review")]
     public int TotalKeysWithUnverifiedTargetTranslations { get; set; }
 
-    [Display("Total keys with verified target translations")]
+    [Display("Verified target keys")]
     public int TotalKeysWithVerifiedTargetTranslations { get; set; }
 
-    [Display("Total keys with reviewed target translations")]
+    [Display("Reviewed target keys")]
     public int TotalKeysWithReviewedTargetTranslations { get; set; }
 
     [Display("Source locale ID")]

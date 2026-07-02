@@ -3,7 +3,6 @@ using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
-using Newtonsoft.Json;
 using RestSharp;
 
 namespace Apps.PhraseStrings.Webhooks.Handler;
@@ -48,8 +47,7 @@ public class PhraseJobStatusChangedHandler(
             var listRequest = new RestRequest($"/v2/projects/{projectId}/webhooks", Method.Get)
                 .AddHeader("accept", "application/json");
 
-            var response = await Client.ExecuteAsync(listRequest);
-            var webhooks = JsonConvert.DeserializeObject<List<WebhookResponse>>(response.Content ?? string.Empty) ?? [];
+            var webhooks = await Client.ExecuteWithErrorHandling<List<WebhookResponse>>(listRequest);
             var matchingWebhooks = webhooks.Where(webhook => webhook.CallbackUrl == values["payloadUrl"]);
 
             foreach (var webhook in matchingWebhooks)

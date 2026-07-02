@@ -6,6 +6,7 @@ namespace Apps.PhraseStrings.Model.Repository
     public class ImportResponse
     {
         [JsonProperty("type")]
+        [Display("Type")]
         public string? Type { get; set; }
 
         [JsonProperty("created_at")]
@@ -13,6 +14,7 @@ namespace Apps.PhraseStrings.Model.Repository
         public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("status")]
+        [Display("Status")]
         public string? Status { get; set; }
 
         [JsonProperty("auto_import")]
@@ -20,6 +22,7 @@ namespace Apps.PhraseStrings.Model.Repository
         public bool? AutoImport { get; set; }
 
         [JsonProperty("errors")]
+        [Display("Errors")]
         public List<string>? Errors { get; set; }
     }
 }

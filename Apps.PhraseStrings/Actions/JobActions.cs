@@ -18,7 +18,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Jobs")]
 public class JobActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Search jobs", Description ="Searches jobs")]
+    [Action("Search jobs", Description = "Search jobs that match selected filters.")]
     public async Task<ListJobsResponse> SearchJobs([ActionParameter] SearchJobsRequest input,
         [ActionParameter] ProjectRequest project)
     {
@@ -56,7 +56,7 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
 
     }
 
-    [Action("Create job", Description ="Creates job")]
+    [Action("Create job", Description = "Create a job.")]
     public async Task<CreateJobResponse> CreateJob([ActionParameter] CreateJobRequest input,
         [ActionParameter] ProjectRequest project)
     {
@@ -102,7 +102,7 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
 
     }
 
-    [Action("Get job", Description ="Gets job info")]
+    [Action("Get job", Description = "Get a job by its ID.")]
     public async Task<CreateJobResponse> GetJob([ActionParameter] JobRequest input,
         [ActionParameter] ProjectRequest project)
     {
@@ -112,7 +112,7 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
         return job;
     }
 
-    [Action("Start job", Description = "Starts job and returns info")]
+    [Action("Start job", Description = "Start a job and output job details.")]
     public async Task<CreateJobResponse> StartJob([ActionParameter] JobRequest input,
        [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")][DataSource(typeof(BranchDataHandler))] string? branch)
     {
@@ -126,7 +126,7 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
         return job;
     }
 
-    [Action("Update job", Description = "Updates job's information")]
+    [Action("Update job", Description = "Update job details.")]
     public async Task<CreateJobResponse> UpdateJob(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] JobRequest job,
@@ -157,7 +157,7 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
         return await Client.ExecuteWithErrorHandling<CreateJobResponse>(request);
     }
 
-    [Action("Add keys to job", Description = "Adds keys to job")]
+    [Action("Add keys to job", Description = "Add keys to a job.")]
     public async Task<CreateJobResponse> AddKeysToJob([ActionParameter] JobRequest input,
        [ActionParameter] ProjectRequest project, [ActionParameter] AddkeysToJobRequest keys)
     {
@@ -185,7 +185,7 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
         return job;
     }
 
-    [Action("Add target locales to a job", Description = "Adds target locales to a job. Use 'Get project locales' action to obtain locale ID from ISO codes.")]
+    [Action("Add target locales to a job", Description = "Add target locales to a job. Use 'Get project locales' to obtain locale IDs from locale codes.")]
     public async Task<AddTargetLocaleToJobResponse> AddTargetLocaleToJob(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] JobRequest job,
@@ -198,7 +198,7 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
     }
 
 
-    [Action("Complete a job", Description = "Completes job and returns info")]
+    [Action("Complete a job", Description = "Complete a job and output job details.")]
     public async Task<CreateJobResponse> CompleteJob([ActionParameter] JobRequest input,
        [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")][DataSource(typeof(BranchDataHandler))] string? branch)
     {
@@ -212,7 +212,7 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
         return job;
     }
 
-    [Action("Reopen a job", Description = "Reopens job and returns info")]
+    [Action("Reopen a job", Description = "Reopen a job and output job details.")]
     public async Task<CreateJobResponse> ReopenJob([ActionParameter] JobRequest input,
       [ActionParameter] ProjectRequest project, [ActionParameter][Display("Branch")][DataSource(typeof(BranchDataHandler))] string? branch)
     {

@@ -36,7 +36,7 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
     private const string JobIdMeta = "job-id";
     private const string KeyIdMeta = "key-id";
 
-    [Action("Download keys", Description = "Download Phrase Strings keys as Blackbird interoperable XLIFF.")]
+    [Action("Download keys", Description = "Download selected keys for downstream translation or review.")]
     public async Task<DownloadKeysResponse> DownloadKeys(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] DownloadKeysRequest input)
@@ -115,7 +115,7 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         return response;
     }
 
-    [Action("Upload keys", Description = "Upload a Blackbird interoperable XLIFF file and update Phrase Strings keys.")]
+    [Action("Upload keys", Description = "Upload translated key content and update target translations.")]
     public async Task<UploadKeysResponse> UploadKeys([ActionParameter] UploadKeysRequest input)
     {
         if (input.Content is null)
@@ -160,8 +160,7 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
 
             if (string.IsNullOrWhiteSpace(translationId))
             {
-                var created = await CreateTranslation(projectId, targetLocaleId, keyId, target, branch, state, statesToApply);
-                SetSegmentId(segment, created.Id);
+                await CreateTranslation(projectId, targetLocaleId, keyId, target, branch, state, statesToApply);
             }
             else
             {
@@ -224,6 +223,14 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             request.AddQueryParameter("branch", branch);
 
         var keys = await Client.Paginate<KeyResponse>(request);
+
+        if (requestedIds.Count > 0)
+        {
+            var availableIds = keys.Select(key => key.Id).Where(id => !string.IsNullOrWhiteSpace(id)).ToHashSet(StringComparer.Ordinal);
+            var missingIds = requestedIds.Where(id => !availableIds.Contains(id)).ToList();
+            if (missingIds.Count > 0)
+                throw new PluginMisconfigurationException($"Key IDs not found: {string.Join(", ", missingIds)}.");
+        }
 
         if (requestedNames.Count > 0)
         {
@@ -380,10 +387,21 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         if (string.IsNullOrWhiteSpace(id))
             return;
 
-        typeof(Segment)
-            .GetProperty(nameof(Segment.Id), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?
-            .GetSetMethod(true)?
-            .Invoke(segment, new object?[] { id });
+        var setter = typeof(Segment)
+            .GetProperty(nameof(Segment.Id), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            ?.GetSetMethod(true);
+
+        if (setter is null)
+            throw new PluginApplicationException("Could not set XLIFF segment ID: Segment.Id setter was not found.");
+
+        try
+        {
+            setter.Invoke(segment, new object?[] { id });
+        }
+        catch (Exception ex)
+        {
+            throw new PluginApplicationException($"Could not set XLIFF segment ID '{id}'.", ex);
+        }
     }
 
     private async Task<TranslationResponse> CreateTranslation(
@@ -395,14 +413,15 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         SegmentState state,
         HashSet<SegmentState> statesToApply)
     {
+        var shouldApplyState = statesToApply.Contains(state);
         var body = new Dictionary<string, object?>
         {
             ["locale_id"] = targetLocaleId,
             ["key_id"] = keyId,
             ["content"] = content,
             ["branch"] = branch,
-            ["reviewed"] = statesToApply.Contains(state) && state == SegmentState.Final ? true : null,
-            ["unverified"] = statesToApply.Contains(state) && state == SegmentState.Reviewed ? false : null
+            ["reviewed"] = shouldApplyState && state == SegmentState.Final ? true : null,
+            ["unverified"] = shouldApplyState && state is SegmentState.Reviewed or SegmentState.Final ? false : null
         };
 
         var request = new RestRequest($"/v2/projects/{projectId}/translations", Method.Post)
@@ -419,12 +438,13 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         SegmentState state,
         HashSet<SegmentState> statesToApply)
     {
+        var shouldApplyState = statesToApply.Contains(state);
         var body = new Dictionary<string, object?>
         {
             ["content"] = content,
             ["branch"] = branch,
-            ["reviewed"] = statesToApply.Contains(state) && state == SegmentState.Final ? true : null,
-            ["unverified"] = statesToApply.Contains(state) && state == SegmentState.Reviewed ? false : null
+            ["reviewed"] = shouldApplyState && state == SegmentState.Final ? true : null,
+            ["unverified"] = shouldApplyState && state is SegmentState.Reviewed or SegmentState.Final ? false : null
         };
 
         var request = new RestRequest($"/v2/projects/{projectId}/translations/{translationId}", Method.Patch)
@@ -479,7 +499,7 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
 
     private static string CreateDownloadFileName(ProjectResponse project, LocaleResponse targetLocale, CreateJobResponse? job)
     {
-        var projectName = SanitizeFileName(FirstNotEmpty(project.Name, project.Id) ?? "project");
+        var projectName = SanitizeFileName(project.Name);
         var targetLocaleCode = SanitizeFileName(targetLocale.Code);
         var jobSuffix = job is null ? null : "job";
         var timestamp = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-'Z'");

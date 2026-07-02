@@ -8,6 +8,7 @@ namespace Apps.PhraseStrings.Model.Key
     public class AddTagsToKeysRequest
     {
         [JsonProperty("branch")]
+        [Display("Branch")]
         [DataSource(typeof(BranchDataHandler))]
         public string? Branch { get; set; }
 
@@ -19,7 +20,7 @@ namespace Apps.PhraseStrings.Model.Key
         [Display("Tags (comma-separated)")]
         public string? Tags { get; set; }
 
-
+        [Display("Query")]
         public string? Query { get; set; }
     }
 }

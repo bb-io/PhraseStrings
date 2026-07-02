@@ -12,7 +12,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Orders")]
 public class OrdersActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Search orders", Description = "Searches orders")]
+    [Action("Search orders", Description = "Search orders that match selected filters.")]
     public async Task<ListOrdersResponse> SearchOrders([ActionParameter] SearchOrdersRequest input,
         [ActionParameter] ProjectRequest project)
     {
@@ -29,7 +29,7 @@ public class OrdersActions(InvocationContext invocationContext) : PhraseStringsI
     }
 
 
-    [Action("Create order", Description = "Creates order")]
+    [Action("Create order", Description = "Create a translation order.")]
     public async Task<CreateOrderResponse> CreateOrder([ActionParameter] CreateOrderRequest input,
         [ActionParameter] ProjectRequest project)
     {
@@ -87,7 +87,7 @@ public class OrdersActions(InvocationContext invocationContext) : PhraseStringsI
     }
 
 
-    [Action("Get order", Description = "Gets order")]
+    [Action("Get order", Description = "Get an order by its ID.")]
     public async Task<OrderResponse> GetOrder([ActionParameter] OrdersRequest input,
        [ActionParameter] ProjectRequest project,
        [ActionParameter]  [Display("Branch")]
@@ -104,7 +104,7 @@ public class OrdersActions(InvocationContext invocationContext) : PhraseStringsI
 
     }
 
-    [Action("Confirm order", Description = "Confirms order")]
+    [Action("Confirm order", Description = "Confirm an order.")]
     public async Task<OrderResponse> ConfirmOrder([ActionParameter] OrdersRequest order,
        [ActionParameter] ProjectRequest project)
     {

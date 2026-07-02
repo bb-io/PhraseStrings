@@ -6,15 +6,18 @@ namespace Apps.PhraseStrings.Model.Order
 {
     public class ListOrdersResponse
     {
+        [Display("Orders")]
         public List<OrderResponse> Orders { get; set; } = new List<OrderResponse>();
     }
 
     public class OrderResponse
     {
         [JsonProperty("id")]
+        [Display("Order ID")]
         public string Id { get; set; } = string.Empty;
 
         [JsonProperty("lsp")]
+        [Display("LSP")]
         public string? Lsp { get; set; }
 
         [JsonProperty("amount_in_cents")]
@@ -22,12 +25,15 @@ namespace Apps.PhraseStrings.Model.Order
         public int? AmountInCents { get; set; }
 
         [JsonProperty("currency")]
+        [Display("Currency")]
         public string? Currency { get; set; }
 
         [JsonProperty("message")]
+        [Display("Message")]
         public string? Message { get; set; }
 
         [JsonProperty("state")]
+        [Display("State")]
         public string? State { get; set; }
 
         [JsonProperty("translation_type")]
@@ -47,9 +53,11 @@ namespace Apps.PhraseStrings.Model.Order
         public List<LocaleInfo>? TargetLocales { get; set; }
 
         [JsonProperty("tag")]
+        [Display("Tag")]
         public string? Tag { get; set; }
 
         [JsonProperty("styleguide")]
+        [Display("Styleguide")]
         public StyleguideInfo Styleguide { get; set; } = new();
 
         [JsonProperty("unverify_translations_upon_delivery")]
@@ -57,9 +65,11 @@ namespace Apps.PhraseStrings.Model.Order
         public bool? UnverifyTranslationsUponDelivery { get; set; }
 
         [JsonProperty("quality")]
+        [Display("Quality")]
         public bool? Quality { get; set; }
 
         [JsonProperty("priority")]
+        [Display("Priority")]
         public bool? Priority { get; set; }
 
         [JsonProperty("created_at")]
@@ -73,9 +83,11 @@ namespace Apps.PhraseStrings.Model.Order
     public class StyleguideInfo
     {
         [JsonProperty("id")]
+        [Display("Styleguide ID")]
         public string Id { get; set; } = string.Empty;
 
         [JsonProperty("title")]
+        [Display("Styleguide title")]
         public string Title { get; set; } = string.Empty;
     }
 

@@ -13,7 +13,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Projects")]
 public class ProjectActions(InvocationContext invocationContext,IFileManagementClient fileManagementClient) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Search projects", Description = "Returns list of projects")]
+    [Action("Search projects", Description = "Search projects that match selected filters.")]
     public async Task<ListProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
     {
         var request = new RestRequest("/v2/projects", Method.Get);
@@ -40,7 +40,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
         return new ListProjectsResponse { Projects = projects };
     }
 
-    [Action("Get project", Description = "Gets a project")]
+    [Action("Get project", Description = "Get a project by its ID.")]
     public async Task<ProjectResponse> GetProject([ActionParameter] ProjectRequest input)
     {
         var request = new RestRequest($"/v2/projects/{input.ProjectId}", Method.Get);
@@ -48,7 +48,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
         return project;
     }
 
-    [Action("Get project from link", Description = "Gets a project from a link")]
+    [Action("Get project from link", Description = "Get a project from its web link.")]
     public async Task<ProjectResponse> GetProjectBySlug(
         [ActionParameter, Display("Link")] string urlWithProject)
     {
@@ -66,7 +66,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
         return projects.FirstOrDefault(p => p.Slug == slug) ?? new();
     }
 
-    [Action("Delete project", Description = "Deletes a project")]
+    [Action("Delete project", Description = "Delete a project by its ID.")]
     public async Task DeleteProject([ActionParameter] ProjectRequest input)
     {
         var request = new RestRequest($"/v2/projects/{input.ProjectId}", Method.Delete);
@@ -74,7 +74,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
     }
 
 
-    [Action("Create project", Description = "Create a new project")]
+    [Action("Create project", Description = "Create a project.")]
     public async Task<ProjectResponse> CreateProject([ActionParameter] CreateProjectRequest input,
         [ActionParameter] FileRequest file)
     {
@@ -176,7 +176,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
     }
 
 
-    [Action("Update project", Description = "Updates a project")]
+    [Action("Update project", Description = "Update a project.")]
     public async Task<ProjectResponse> UpdateProject([ActionParameter] CreateProjectRequest input,
         [ActionParameter] FileRequest file, [ActionParameter] ProjectRequest project)
     {
@@ -277,7 +277,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
         return response;
     }
 
-    [Action("Get project locales", Description = "Gets project locales")]
+    [Action("Get project locales", Description = "Get locales for a project.")]
     public async Task<ListLocaleResponse> GetProjectLocales(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] GetProjectLocalesRequest input )
@@ -293,7 +293,7 @@ public class ProjectActions(InvocationContext invocationContext,IFileManagementC
         return new ListLocaleResponse { Locales = locales };
     }
 
-    [Action("Get project locale from code", Description = "Gets a project locale")]
+    [Action("Get project locale from code", Description = "Get a project locale by locale code.")]
     public async Task<LocaleResponse> GetProjectLocaleFromCode(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] GetProjectLocaleFromCodeRequest input)
