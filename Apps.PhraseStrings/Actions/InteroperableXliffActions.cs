@@ -374,7 +374,6 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         var unit = new Unit(coder)
         {
             Name = key.Name,
-            SizeRestrictions = { MaximumSize = key.MaxCharactersAllowed },
             Provenance =
             {
                 Translation =
@@ -384,6 +383,9 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
                 }
             }
         };
+
+        if (key.MaxCharactersAllowed.GetValueOrDefault() > 0)
+            unit.SizeRestrictions.MaximumSize = key.MaxCharactersAllowed;
 
         var state = GetSegmentState(targetTranslation);
         if (state is SegmentState.Final)

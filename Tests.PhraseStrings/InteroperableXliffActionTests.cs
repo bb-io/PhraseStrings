@@ -207,7 +207,10 @@ public class InteroperableXliffActionTests : TestBaseMultipleConnections
             Assert.AreEqual(keyState.Name, unit.Name);
             Assert.AreEqual(0, unitPhraseMetadata.Length);
             Assert.AreEqual(keyState.Description, unit.Notes.Single().Text);
-            Assert.AreEqual(keyState.MaxCharactersAllowed, unit.SizeRestrictions.MaximumSize);
+            if (keyState.MaxCharactersAllowed > 0)
+                Assert.AreEqual(keyState.MaxCharactersAllowed, unit.SizeRestrictions.MaximumSize);
+            else
+                Assert.IsNull(unit.SizeRestrictions.MaximumSize);
             Assert.AreEqual(keyState.SourceContent, segment.GetSource());
             Assert.AreEqual(keyState.TargetContent ?? string.Empty, segment.GetTarget());
             Assert.AreEqual(keyState.DownloadState.ToSegmentState(), segment.State);

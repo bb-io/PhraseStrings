@@ -32,6 +32,14 @@
       "isTargetVerified": true,
       "isTargetReviewed": false,
       "mustKeepExistingTranslationId": true
+    },
+    {
+      "name": "blackbird.roundtrip.no-character-limit",
+      "targetContent": "No limit new target",
+      "uploadState": "reviewed",
+      "isTargetVerified": true,
+      "isTargetReviewed": false,
+      "mustKeepExistingTranslationId": true
     }
   ]
 }
