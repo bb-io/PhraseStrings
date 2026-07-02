@@ -34,7 +34,6 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
     private const string TargetLocaleIdMeta = "target-locale-id";
     private const string TargetLocaleCodeMeta = "target-locale-code";
     private const string JobIdMeta = "job-id";
-    private const string KeyIdMeta = "key-id";
 
     [Action("Download keys", Description = "Download selected keys for downstream translation or review.")]
     public async Task<DownloadKeysResponse> DownloadKeys(
@@ -73,6 +72,7 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
 
         var transformation = CreateTransformation(project.ProjectId, sourceLocale, targetLocale, branch, job);
         var coder = new PlaintextCoder();
+        var keyIdsByUnit = new Dictionary<UnitGrouping, string>();
         var response = new DownloadKeysResponse
         {
             SourceLocaleId = sourceLocale.Id,
@@ -86,6 +86,7 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
 
             var unit = CreateUnit(coder, key, sourceTranslation, targetTranslation);
             transformation.Children.Add(unit);
+            keyIdsByUnit[unit] = key.Id;
 
             response.TotalKeysDownloaded++;
             switch (unit.Segments.First().State ?? SegmentState.Initial)
@@ -106,7 +107,7 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             }
         }
 
-        var xliff = transformation.Serialize(unit => GetMetadata(unit, KeyIdMeta));
+        var xliff = transformation.Serialize(unit => keyIdsByUnit.GetValueOrDefault(unit));
         response.Content = await fileManagementClient.UploadAsync(
             xliff.ToStream(),
             MediaTypes.Xliff2,
@@ -153,8 +154,8 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             if (string.IsNullOrEmpty(target))
                 continue;
 
-            var keyId = FirstNotEmpty(unit.Id, GetMetadata(unit, KeyIdMeta))
-                ?? throw new PluginMisconfigurationException("A unit is missing Phrase key ID metadata.");
+            var keyId = unit.Id
+                ?? throw new PluginMisconfigurationException("A unit is missing Phrase key ID in unit ID.");
             var translationId = segment.Id;
             var state = segment.State ?? SegmentState.Initial;
 
@@ -347,8 +348,6 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         var state = GetSegmentState(targetTranslation);
         if (state is SegmentState.Final)
             unit.Provenance.Review.Person = FirstNotEmpty(targetTranslation?.User?.Name, targetTranslation?.User?.Username);
-
-        AddOrUpdateMetadata(unit, KeyIdMeta, key.Id);
 
         if (!string.IsNullOrWhiteSpace(key.Description))
             unit.Notes.Add(new Note(key.Description!));

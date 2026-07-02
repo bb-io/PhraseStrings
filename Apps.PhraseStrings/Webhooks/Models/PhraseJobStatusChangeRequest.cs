@@ -10,11 +10,11 @@ public class PhraseJobStatusChangeRequest
 {
     [Display("Events to react to")]
     [StaticDataSource(typeof(JobStatusChangeEventDataHandler))]
-    public IEnumerable<string>? EventsToReactTo { get; set; }
+    public IEnumerable<string> EventsToReactTo { get; set; } = [];
 
     [Display("Project IDs")]
     [DataSource(typeof(ProjectDataHandler))]
-    public IEnumerable<string>? ProjectIds { get; set; }
+    public IEnumerable<string> ProjectIds { get; set; } = [];
 
     [Display("Job IDs")]
     public IEnumerable<string>? JobIds { get; set; }

@@ -88,7 +88,8 @@ namespace Apps.PhraseStrings.Webhooks
             if (!TryGetPayload(webhookRequest, nameof(OnPhraseJobStatusChange), out PhraseJobStatusChangedWebhookResponse? root))
                 return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
 
-            var selectedEvents = (input.EventsToReactTo?.Where(value => !string.IsNullOrWhiteSpace(value)) ?? [])
+            var selectedEvents = input.EventsToReactTo
+                .Where(value => !string.IsNullOrWhiteSpace(value))
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
             if (selectedEvents.Count == 0)
                 return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
@@ -96,8 +97,10 @@ namespace Apps.PhraseStrings.Webhooks
             if (string.IsNullOrWhiteSpace(root.Event) || !selectedEvents.Contains(root.Event))
                 return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
 
-            var selectedProjects = input.ProjectIds?.Where(value => !string.IsNullOrWhiteSpace(value)).ToHashSet(StringComparer.Ordinal);
-            if (selectedProjects is not { Count: > 0 })
+            var selectedProjects = input.ProjectIds
+                .Where(value => !string.IsNullOrWhiteSpace(value))
+                .ToHashSet(StringComparer.Ordinal);
+            if (selectedProjects.Count == 0)
                 return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
 
             if (root.Project?.Id == null || !selectedProjects.Contains(root.Project.Id))

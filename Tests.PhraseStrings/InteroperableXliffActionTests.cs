@@ -161,13 +161,12 @@ public class InteroperableXliffActionTests : TestBaseMultipleConnections
             var key = project.KeysByName[keyState.Name];
             var unit = unitsByKeyId[key.Id];
             var segment = unit.Segments.Single();
-            var unitMetadataTypes = unit.MetaData
+            var unitPhraseMetadata = unit.MetaData
                 .Where(metadata => metadata.Category.Contains("phrase-strings"))
-                .Select(metadata => metadata.Type)
                 .ToArray();
 
             Assert.AreEqual(keyState.Name, unit.Name);
-            CollectionAssert.AreEquivalent(new[] { "key-id" }, unitMetadataTypes);
+            Assert.AreEqual(0, unitPhraseMetadata.Length);
             Assert.AreEqual(keyState.Description, unit.Notes.Single().Text);
             Assert.AreEqual(keyState.MaxCharactersAllowed, unit.SizeRestrictions.MaximumSize);
             Assert.AreEqual(keyState.SourceContent, segment.GetSource());
