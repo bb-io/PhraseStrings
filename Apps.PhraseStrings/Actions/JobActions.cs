@@ -52,6 +52,14 @@ public class JobActions(InvocationContext invocationContext) : PhraseStringsInvo
             request.AddQueryParameter("updated_since", updatedSinceValue);
         }
         var jobs = await Client.Paginate<JobResponse>(request);
+
+        if (!string.IsNullOrWhiteSpace(input.JobNameContains))
+        {
+            jobs = jobs
+                .Where(job => job.Name.Contains(input.JobNameContains, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+
         return new ListJobsResponse { Jobs = jobs };
 
     }

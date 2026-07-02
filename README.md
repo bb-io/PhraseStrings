@@ -38,6 +38,7 @@ Before you can connect, make sure that:
     - **Branch**: Limit the search to a branch.
     - **Owned by**: Limit results to jobs owned by a user.
     - **Assigned to**: Limit results to jobs assigned to a user.
+    - **Job name contains**: Search jobs by partial name.
     - **State**: Limit results to a job state.
     - **Updated since**: Limit results to jobs updated after this date.
 - **Create job** Create a job. Target locales can be provided as locale IDs or locale codes.
