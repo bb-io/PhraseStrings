@@ -150,15 +150,15 @@ The XLIFF stores one Phrase key per unit and one segment per unit. The file keep
 
 Downloaded segments use these review statuses:
 
-- No target text means the segment is still empty.
-- Target text that still needs checking requires review.
-- Verified target text is ready for normal use.
-- Reviewed target text has passed the Phrase review step and is also verified.
+- No target text means the segment is still empty (state `initial`).
+- Target text that still needs checking is translated (state `translated`).
+- Verified target text is ready for normal use (state `reviewed`).
+- Reviewed target text is finalized and is also verified (state `final`).
 
 On upload, selected segment statuses update Phrase review status:
 
-- Verified segments become verified in Phrase.
-- Reviewed segments become reviewed and verified in Phrase. This requires Phrase review workflow.
+- `Reviwed` segments become verified in Phrase.
+- `Final` segments become reviewed and verified in Phrase.
 
 ### Orders
 
