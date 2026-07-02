@@ -34,7 +34,6 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
     private const string TargetLocaleIdMeta = "target-locale-id";
     private const string TargetLocaleCodeMeta = "target-locale-code";
     private const string JobIdMeta = "job-id";
-    private const string KeyIdMeta = "key-id";
 
     [Action("Download keys", Description = "Download selected keys for downstream translation or review.")]
     public async Task<DownloadKeysResponse> DownloadKeys(
@@ -70,9 +69,17 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             .Where(translation => !string.IsNullOrWhiteSpace(translation.Key?.Id))
             .GroupBy(translation => translation.Key!.Id)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
+        var qualityByTranslationId = await GetTranslationQualityScores(
+            project.ProjectId,
+            selectedKeys
+                .Select(key => targetByKeyId.GetValueOrDefault(key.Id)?.Id)
+                .Where(id => !string.IsNullOrWhiteSpace(id))
+                .Select(id => id!)
+                .Distinct(StringComparer.Ordinal));
 
         var transformation = CreateTransformation(project.ProjectId, sourceLocale, targetLocale, branch, job);
         var coder = new PlaintextCoder();
+        var keyIdsByUnit = new Dictionary<UnitGrouping, string>();
         var response = new DownloadKeysResponse
         {
             SourceLocaleId = sourceLocale.Id,
@@ -85,7 +92,17 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             targetByKeyId.TryGetValue(key.Id, out var targetTranslation);
 
             var unit = CreateUnit(coder, key, sourceTranslation, targetTranslation);
+            if (!string.IsNullOrWhiteSpace(targetTranslation?.Id) &&
+                qualityByTranslationId.TryGetValue(targetTranslation.Id, out var quality))
+            {
+                unit.Quality.Score = quality.Score;
+                unit.Quality.ProfileReference = string.IsNullOrWhiteSpace(quality.Engine)
+                    ? "Phrase Strings"
+                    : $"Phrase Strings ({quality.Engine})";
+            }
+
             transformation.Children.Add(unit);
+            keyIdsByUnit[unit] = key.Id;
 
             response.TotalKeysDownloaded++;
             switch (unit.Segments.First().State ?? SegmentState.Initial)
@@ -106,7 +123,7 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             }
         }
 
-        var xliff = transformation.Serialize(unit => GetMetadata(unit, KeyIdMeta));
+        var xliff = transformation.Serialize(unit => keyIdsByUnit.GetValueOrDefault(unit));
         response.Content = await fileManagementClient.UploadAsync(
             xliff.ToStream(),
             MediaTypes.Xliff2,
@@ -153,8 +170,8 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             if (string.IsNullOrEmpty(target))
                 continue;
 
-            var keyId = FirstNotEmpty(unit.Id, GetMetadata(unit, KeyIdMeta))
-                ?? throw new PluginMisconfigurationException("A unit is missing Phrase key ID metadata.");
+            var keyId = unit.Id
+                ?? throw new PluginMisconfigurationException("A unit is missing Phrase key ID in unit ID.");
             var translationId = segment.Id;
             var state = segment.State ?? SegmentState.Initial;
 
@@ -263,6 +280,30 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         return await Client.Paginate<TranslationResponse>(request);
     }
 
+    private async Task<Dictionary<string, QualityScoreResponse>> GetTranslationQualityScores(
+        string projectId,
+        IEnumerable<string> translationIds)
+    {
+        var qualityScores = new Dictionary<string, QualityScoreResponse>(StringComparer.Ordinal);
+
+        foreach (var batch in translationIds.Chunk(500))
+        {
+            var request = new RestRequest($"/v2/projects/{projectId}/quality_performance_score", Method.Post)
+                .AddJsonBody(new { translation_ids = batch });
+            var response = await Client.ExecuteWithErrorHandling<QualityScoreListResponse>(request);
+
+            foreach (var qualityScore in response.Data?.Translations ?? [])
+            {
+                if (string.IsNullOrWhiteSpace(qualityScore.Id) || !qualityScore.Score.HasValue)
+                    continue;
+
+                qualityScores[qualityScore.Id] = qualityScore;
+            }
+        }
+
+        return qualityScores;
+    }
+
     private static LocaleResponse ResolveLocale(IEnumerable<LocaleResponse> locales, string value, string label)
     {
         var locale = locales.FirstOrDefault(locale =>
@@ -333,7 +374,6 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         var unit = new Unit(coder)
         {
             Name = key.Name,
-            SizeRestrictions = { MaximumSize = key.MaxCharactersAllowed },
             Provenance =
             {
                 Translation =
@@ -344,11 +384,12 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             }
         };
 
+        if (key.MaxCharactersAllowed.GetValueOrDefault() > 0)
+            unit.SizeRestrictions.MaximumSize = key.MaxCharactersAllowed;
+
         var state = GetSegmentState(targetTranslation);
         if (state is SegmentState.Final)
             unit.Provenance.Review.Person = FirstNotEmpty(targetTranslation?.User?.Name, targetTranslation?.User?.Username);
-
-        AddOrUpdateMetadata(unit, KeyIdMeta, key.Id);
 
         if (!string.IsNullOrWhiteSpace(key.Description))
             unit.Notes.Add(new Note(key.Description!));

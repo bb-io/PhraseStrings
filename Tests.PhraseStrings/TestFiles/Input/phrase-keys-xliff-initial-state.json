@@ -50,6 +50,16 @@
       "isTargetVerified": true,
       "isTargetReviewed": false,
       "downloadState": "reviewed"
+    },
+    {
+      "name": "blackbird.roundtrip.no-character-limit",
+      "description": "No character limit key description",
+      "maxCharactersAllowed": 0,
+      "sourceContent": "No limit source",
+      "targetContent": "No limit old target",
+      "isTargetVerified": false,
+      "isTargetReviewed": false,
+      "downloadState": "translated"
     }
   ]
 }

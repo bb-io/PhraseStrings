@@ -64,10 +64,8 @@ public class PhraseJobStatusChangedHandler(
     }
 
     private IEnumerable<string> GetSelectedEvents()
-        => input.EventsToReactTo?.Where(value => !string.IsNullOrWhiteSpace(value)).Distinct()
-           ?? [];
+        => input.EventsToReactTo.Where(value => !string.IsNullOrWhiteSpace(value)).Distinct();
 
     private IEnumerable<string> GetProjectIds()
-        => input.ProjectIds?.Where(value => !string.IsNullOrWhiteSpace(value)).Distinct()
-           ?? [];
+        => input.ProjectIds.Where(value => !string.IsNullOrWhiteSpace(value)).Distinct();
 }
