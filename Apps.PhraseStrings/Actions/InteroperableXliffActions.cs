@@ -69,6 +69,13 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             .Where(translation => !string.IsNullOrWhiteSpace(translation.Key?.Id))
             .GroupBy(translation => translation.Key!.Id)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
+        var qualityByTranslationId = await GetTranslationQualityScores(
+            project.ProjectId,
+            selectedKeys
+                .Select(key => targetByKeyId.GetValueOrDefault(key.Id)?.Id)
+                .Where(id => !string.IsNullOrWhiteSpace(id))
+                .Select(id => id!)
+                .Distinct(StringComparer.Ordinal));
 
         var transformation = CreateTransformation(project.ProjectId, sourceLocale, targetLocale, branch, job);
         var coder = new PlaintextCoder();
@@ -85,6 +92,15 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             targetByKeyId.TryGetValue(key.Id, out var targetTranslation);
 
             var unit = CreateUnit(coder, key, sourceTranslation, targetTranslation);
+            if (!string.IsNullOrWhiteSpace(targetTranslation?.Id) &&
+                qualityByTranslationId.TryGetValue(targetTranslation.Id, out var quality))
+            {
+                unit.Quality.Score = quality.Score;
+                unit.Quality.ProfileReference = string.IsNullOrWhiteSpace(quality.Engine)
+                    ? "Phrase Strings"
+                    : $"Phrase Strings ({quality.Engine})";
+            }
+
             transformation.Children.Add(unit);
             keyIdsByUnit[unit] = key.Id;
 
@@ -262,6 +278,30 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
             request.AddQueryParameter("branch", branch);
 
         return await Client.Paginate<TranslationResponse>(request);
+    }
+
+    private async Task<Dictionary<string, QualityScoreResponse>> GetTranslationQualityScores(
+        string projectId,
+        IEnumerable<string> translationIds)
+    {
+        var qualityScores = new Dictionary<string, QualityScoreResponse>(StringComparer.Ordinal);
+
+        foreach (var batch in translationIds.Chunk(500))
+        {
+            var request = new RestRequest($"/v2/projects/{projectId}/quality_performance_score", Method.Post)
+                .AddJsonBody(new { translation_ids = batch });
+            var response = await Client.ExecuteWithErrorHandling<QualityScoreListResponse>(request);
+
+            foreach (var qualityScore in response.Data?.Translations ?? [])
+            {
+                if (string.IsNullOrWhiteSpace(qualityScore.Id) || !qualityScore.Score.HasValue)
+                    continue;
+
+                qualityScores[qualityScore.Id] = qualityScore;
+            }
+        }
+
+        return qualityScores;
     }
 
     private static LocaleResponse ResolveLocale(IEnumerable<LocaleResponse> locales, string value, string label)

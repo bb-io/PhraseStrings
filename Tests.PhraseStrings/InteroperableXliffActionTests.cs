@@ -75,6 +75,45 @@ public class InteroperableXliffActionTests : TestBaseMultipleConnections
         }
     }
 
+    [TestMethod]
+    public async Task DownloadKeys_WithQualityPerformanceScores_AddsUnitQuality()
+    {
+        const string projectId = "c8f4df95eb1eff7346b5d50e53e4918e";
+        var context = GetInvocationContext("Access token");
+        await AssertApiHostReachable(context);
+
+        var xliffActions = new InteroperableXliffActions(context, FileManager);
+
+        var download = await xliffActions.DownloadKeys(
+            new ProjectRequest { ProjectId = projectId },
+            new DownloadKeysRequest
+            {
+                TargetLocale = "es"
+            });
+
+        Assert.AreEqual(3, download.TotalKeysDownloaded);
+
+        var xliff = FileManager.ReadOutputAsString(download.Content);
+        var transformation = Transformation.Load(xliff.ToStream(), download.Content.Name, MediaTypes.Xliff2).Value!;
+        var units = transformation.GetUnits().ToArray();
+        var scoredUnits = units.Where(unit => unit.Quality.Score.HasValue).ToArray();
+
+        Assert.AreEqual(3, units.Length);
+        Assert.AreEqual(2, scoredUnits.Length);
+        Assert.AreEqual(1, units.Count(unit => !unit.Quality.Score.HasValue));
+
+        foreach (var unit in scoredUnits)
+        {
+            var score = unit.Quality.Score!.Value;
+            Assert.IsTrue(score is >= 0 and <= 1, score.ToString());
+            StringAssert.StartsWith(unit.Quality.ProfileReference, "Phrase Strings (");
+            StringAssert.EndsWith(unit.Quality.ProfileReference, ")");
+        }
+
+        var unscoredUnit = units.Single(unit => !unit.Quality.Score.HasValue);
+        Assert.IsNull(unscoredUnit.Quality.ProfileReference);
+    }
+
     private RoundTripState LoadState(string fileName)
     {
         using var stream = FileManager.DownloadAsync(new() { Name = fileName }).GetAwaiter().GetResult();
@@ -172,6 +211,17 @@ public class InteroperableXliffActionTests : TestBaseMultipleConnections
             Assert.AreEqual(keyState.SourceContent, segment.GetSource());
             Assert.AreEqual(keyState.TargetContent ?? string.Empty, segment.GetTarget());
             Assert.AreEqual(keyState.DownloadState.ToSegmentState(), segment.State);
+
+            if (!project.InitialTargetTranslationIds.ContainsKey(keyState.Name))
+            {
+                Assert.IsNull(unit.Quality.Score);
+                Assert.IsNull(unit.Quality.ProfileReference);
+            }
+            else if (unit.Quality.Score.HasValue)
+            {
+                StringAssert.StartsWith(unit.Quality.ProfileReference, "Phrase Strings (");
+                StringAssert.EndsWith(unit.Quality.ProfileReference, ")");
+            }
 
             if (project.InitialTargetTranslationIds.TryGetValue(keyState.Name, out var translationId))
                 Assert.AreEqual(translationId, segment.Id);
