@@ -1,0 +1,38 @@
+{
+  "event": "jobs:create",
+  "message": "phrase.test.user@example.com created job Codex Case Test Real Payload in project Codex webhook payload capture 2026-07-02",
+  "sent_at": "2026-07-02T18:37:46Z",
+  "user": {
+    "id": "c2a615e07a01d010df347b9e54cd7e77",
+    "username": "phrase.test.user@example.com",
+    "name": "Phrase Test User",
+    "gravatar_uid": "00000000000000000000000000000000"
+  },
+  "project": {
+    "id": "64cae7ffb0422d31121bba7238c6eff8",
+    "name": "Codex webhook payload capture 2026-07-02",
+    "slug": "codex-webhook-payload-capture-2026-07-02",
+    "main_format": "simple_json",
+    "project_image_url": null,
+    "created_at": "2026-07-02T18:37:43Z",
+    "updated_at": "2026-07-02T18:37:46Z",
+    "point_of_contact": null
+  },
+  "branch": null,
+  "job": {
+    "id": "c96190109750150c786811cf12bcdab3",
+    "name": "Codex Case Test Real Payload",
+    "owner": {
+      "id": "c2a615e07a01d010df347b9e54cd7e77",
+      "username": "phrase.test.user@example.com",
+      "name": "Phrase Test User"
+    },
+    "briefing": "Captured by Codex for webhook fixtures",
+    "due_date": null,
+    "state": "draft",
+    "ticket_url": null,
+    "created_at": "2026-07-02T18:37:46Z",
+    "updated_at": "2026-07-02T18:37:46Z",
+    "review_due_date": null
+  }
+}

@@ -1,5 +1,4 @@
-﻿using Apps.PhraseStrings.Model.Job;
-using Apps.PhraseStrings.Model.Project;
+﻿using Apps.PhraseStrings.Model.Project;
 using Apps.PhraseStrings.Webhooks.Handler;
 using Apps.PhraseStrings.Webhooks.Models;
 using Blackbird.Applications.Sdk.Common;
@@ -7,8 +6,6 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using Newtonsoft.Json;
 using System.Net;
-using System.Reflection;
-using System.Text;
 
 namespace Apps.PhraseStrings.Webhooks
 {
@@ -76,6 +73,48 @@ namespace Apps.PhraseStrings.Webhooks
             }
 
             return Task.FromResult(new WebhookResponse<JobCompleteWebhookResponse>
+            {
+                Result = root,
+                ReceivedWebhookRequestType = WebhookRequestType.Default
+            });
+        }
+
+        [Webhook("On phrase job status change", typeof(PhraseJobStatusChangedHandler), Description = "Triggers when a Phrase job is created, activated, or completed")]
+        public Task<WebhookResponse<PhraseJobStatusChangedWebhookResponse>> OnPhraseJobStatusChange(
+            WebhookRequest webhookRequest,
+            [WebhookParameter(true)] PhraseJobStatusChangeRequest input)
+        {
+            var root = GetPayload<PhraseJobStatusChangedWebhookResponse>(webhookRequest);
+
+            var selectedEvents = (input.EventsToReactTo?.Where(value => !string.IsNullOrWhiteSpace(value)) ?? [])
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            if (selectedEvents.Count == 0)
+                return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
+
+            if (string.IsNullOrWhiteSpace(root.Event) || !selectedEvents.Contains(root.Event))
+                return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
+
+            var selectedProjects = input.ProjectIds?.Where(value => !string.IsNullOrWhiteSpace(value)).ToHashSet(StringComparer.Ordinal);
+            if (selectedProjects is not { Count: > 0 })
+                return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
+
+            if (root.Project?.Id == null || !selectedProjects.Contains(root.Project.Id))
+                return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
+
+            var selectedJobs = input.JobIds?.Where(value => !string.IsNullOrWhiteSpace(value)).ToHashSet(StringComparer.Ordinal);
+            if (selectedJobs?.Count > 0 && (root.Job?.Id == null || !selectedJobs.Contains(root.Job.Id)))
+                return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
+
+            var jobName = root.Job?.Name ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(input.JobNameContains)
+                && !jobName.Contains(input.JobNameContains, StringComparison.OrdinalIgnoreCase))
+                return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
+
+            if (!string.IsNullOrWhiteSpace(input.JobNameDoesntContain)
+                && jobName.Contains(input.JobNameDoesntContain, StringComparison.OrdinalIgnoreCase))
+                return Task.FromResult(GetPreflightResponse<PhraseJobStatusChangedWebhookResponse>());
+
+            return Task.FromResult(new WebhookResponse<PhraseJobStatusChangedWebhookResponse>
             {
                 Result = root,
                 ReceivedWebhookRequestType = WebhookRequestType.Default

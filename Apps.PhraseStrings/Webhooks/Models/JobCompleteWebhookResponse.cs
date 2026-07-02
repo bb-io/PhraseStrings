@@ -93,8 +93,15 @@ namespace Apps.PhraseStrings.Webhooks.Models
         [Display("Due date")]
         public DateTime? DueDate { get; set; }
 
+        [JsonProperty("review_due_date")]
+        [Display("Review due date")]
+        public DateTime? ReviewDueDate { get; set; }
+
         [JsonProperty("state")]
         public string? State { get; set; }
+
+        [JsonProperty("owner")]
+        public WebhookUser? Owner { get; set; }
 
         [JsonProperty("ticket_url")]
         [Display("Ticket URL")]
