@@ -37,6 +37,9 @@ namespace Apps.PhraseStrings.Model.Job
         [JsonProperty("project")]
         public ProjectInfo? Project { get; set; }
 
+        [JsonProperty("branch")]
+        public JobBranchInfo? Branch { get; set; }
+
         [JsonProperty("owner")]
         public OwnerInfo? Owner { get; set; }
 
@@ -92,6 +95,12 @@ namespace Apps.PhraseStrings.Model.Job
         [JsonProperty("id")]
         public string? Id { get; set; }
 
+        [JsonProperty("name")]
+        public string? Name { get; set; }
+    }
+
+    public class JobBranchInfo
+    {
         [JsonProperty("name")]
         public string? Name { get; set; }
     }

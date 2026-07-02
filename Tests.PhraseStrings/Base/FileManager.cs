@@ -20,7 +20,9 @@ public class FileManager : IFileManagementClient
 
     public Task<Stream> DownloadAsync(FileReference reference)
     {
-        var path = Path.Combine(inputFolder, reference.Name);
+        var path = File.Exists(Path.Combine(inputFolder, reference.Name))
+            ? Path.Combine(inputFolder, reference.Name)
+            : Path.Combine(outputFolder, reference.Name);
         Assert.IsTrue(File.Exists(path), $"File not found at: {path}");
         var bytes = File.ReadAllBytes(path);
 
@@ -39,5 +41,19 @@ public class FileManager : IFileManagementClient
 
         return Task.FromResult(new FileReference() { Name = fileName, ContentType = contentType });
     }
-}
 
+    public string ReadOutputAsString(FileReference reference)
+    {
+        var path = Path.Combine(outputFolder, reference.Name);
+        Assert.IsTrue(File.Exists(path), $"File not found at: {path}");
+        return File.ReadAllText(path);
+    }
+
+    public FileReference CreateFileReferenceFromString(string content, string contentType, string fileName)
+    {
+        var path = Path.Combine(inputFolder, fileName);
+        new FileInfo(path)?.Directory?.Create();
+        File.WriteAllText(path, content);
+        return new FileReference { Name = fileName, ContentType = contentType };
+    }
+}

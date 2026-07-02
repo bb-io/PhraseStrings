@@ -67,6 +67,33 @@ Before you can connect, you need to make sure that:
 - **Remove tags from a key** Removes tags from a key.
 - **Link keys to parent key** Links one or more child keys to a parent key and returns number of keys linked.
 
+### Interoperable XLIFF
+
+- **Download keys** Downloads selected Phrase Strings keys into a Blackbird interoperable XLIFF file.
+- **Upload keys** Uploads a Blackbird interoperable XLIFF file and updates or creates target translations in Phrase Strings.
+
+**Download keys** returns the XLIFF file, source and target locale IDs, total downloaded keys, keys without target translations, keys with unverified target translations, keys with verified target translations, and keys with reviewed target translations.
+
+Round trip flow:
+
+1. Use **Download keys** with a project, target locale, and optional source locale, job, key IDs, or key names.
+2. Send the returned XLIFF file through downstream translation or review steps.
+3. Use **Upload keys** with the same XLIFF file. Project ID, source locale ID, target locale ID, branch, and job ID are read from file metadata. Key IDs are read from unit IDs, and translation IDs are read from segment IDs. Optional upload inputs can override project ID, target locale ID, and branch.
+
+The XLIFF stores one Phrase key per unit and one segment per unit. Unit IDs are Phrase key IDs, unit names are Phrase key names, segment IDs are Phrase target translation IDs when available, source and target language codes are written to the XLIFF language attributes, key descriptions are written as notes, and key character limits are written as XLIFF size restrictions. The file also captures Phrase project, branch, job, source locale, target locale, and provenance metadata when available.
+
+Segment states are derived from target locale translation properties, not from key properties, and are normalized on download:
+
+- No target translation, or an empty target translation, becomes `initial`.
+- A target translation with content and `unverified=true` becomes `translated`.
+- A target translation with `unverified=false` and without reviewed state becomes `reviewed`.
+- A target translation with `state=reviewed` becomes `final`. In Phrase, reviewed translations are also verified.
+
+Upload applies selected state transformations:
+
+- `reviewed` sends `unverified=false`, making the translation verified.
+- `final` sends `reviewed=true` and requires Phrase review workflow.
+
 ### Orders
 
 - **Search orders** Searches orders according to the filters you specify.

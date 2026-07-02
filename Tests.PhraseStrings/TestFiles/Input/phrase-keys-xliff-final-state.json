@@ -1,0 +1,37 @@
+{
+  "uploadTags": "blackbird-xliff-roundtrip",
+  "keys": [
+    {
+      "name": "blackbird.roundtrip.first",
+      "targetContent": "First new target",
+      "uploadState": "translated",
+      "isTargetVerified": true,
+      "isTargetReviewed": false,
+      "mustKeepExistingTranslationId": false
+    },
+    {
+      "name": "blackbird.roundtrip.second",
+      "targetContent": "Second new target",
+      "uploadState": "reviewed",
+      "isTargetVerified": true,
+      "isTargetReviewed": false,
+      "mustKeepExistingTranslationId": true
+    },
+    {
+      "name": "blackbird.roundtrip.third",
+      "targetContent": "Third new target",
+      "uploadState": "final",
+      "isTargetVerified": true,
+      "isTargetReviewed": true,
+      "mustKeepExistingTranslationId": true
+    },
+    {
+      "name": "blackbird.roundtrip.fourth",
+      "targetContent": "Fourth stable target",
+      "uploadState": "reviewed",
+      "isTargetVerified": true,
+      "isTargetReviewed": false,
+      "mustKeepExistingTranslationId": true
+    }
+  ]
+}

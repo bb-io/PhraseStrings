@@ -1,0 +1,55 @@
+{
+  "projectNamePrefix": "Blackbird XLIFF round trip",
+  "mainFormat": "json",
+  "workflow": "review",
+  "sourceLocale": {
+    "name": "English",
+    "code": "en"
+  },
+  "targetLocale": {
+    "name": "Dutch",
+    "code": "nl-NL"
+  },
+  "keys": [
+    {
+      "name": "blackbird.roundtrip.first",
+      "description": "First key description",
+      "maxCharactersAllowed": 25,
+      "sourceContent": "First source",
+      "targetContent": null,
+      "isTargetVerified": false,
+      "isTargetReviewed": false,
+      "downloadState": "initial"
+    },
+    {
+      "name": "blackbird.roundtrip.second",
+      "description": "Second key description",
+      "maxCharactersAllowed": 35,
+      "sourceContent": "Second source",
+      "targetContent": "Second old target",
+      "isTargetVerified": false,
+      "isTargetReviewed": false,
+      "downloadState": "translated"
+    },
+    {
+      "name": "blackbird.roundtrip.third",
+      "description": "Third key description",
+      "maxCharactersAllowed": 45,
+      "sourceContent": "Third source",
+      "targetContent": "Third old target",
+      "isTargetVerified": true,
+      "isTargetReviewed": true,
+      "downloadState": "final"
+    },
+    {
+      "name": "blackbird.roundtrip.fourth",
+      "description": "Fourth key description",
+      "maxCharactersAllowed": 55,
+      "sourceContent": "Fourth source",
+      "targetContent": "Fourth stable target",
+      "isTargetVerified": true,
+      "isTargetReviewed": false,
+      "downloadState": "reviewed"
+    }
+  ]
+}
