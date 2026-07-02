@@ -18,6 +18,9 @@ namespace Apps.PhraseStrings.Model.Job
         [Display("Assigned to")]
         public string? AssignedTo { get; set; }
 
+        [Display("Job name contains")]
+        public string? JobNameContains { get; set; }
+
         [Display("State")]
         [StaticDataSource(typeof(StateDataHandler))]
         public string? State { get; set; }
