@@ -6,12 +6,12 @@
         <Nullable>enable</Nullable>
         <Product>Phrase Strings</Product>
         <Description>Translation management platform for software projects</Description>
-        <Version>1.0.32</Version>
+        <Version>1.0.33</Version>
         <AssemblyName>Apps.PhraseStrings</AssemblyName>
     </PropertyGroup>
 	<ItemGroup>
 		<EmbeddedResource CopyToOutputDirectory="Always" Include="image\icon.png" />
-		<EmbeddedResource CopyToOutputDirectory="Always" Include="..\README.md" Link="README.md" />
+		<EmbeddedResource CopyToOutputDirectory="Always" Include="..\readme.md" Link="readme.md" />
 	</ItemGroup>
 
     <ItemGroup>
