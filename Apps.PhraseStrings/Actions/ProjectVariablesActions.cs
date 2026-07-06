@@ -13,7 +13,7 @@ namespace Apps.PhraseStrings.Actions;
 [ActionList("Project variables")]
 public class ProjectVariablesActions(InvocationContext invocationContext) : PhraseStringsInvocable(invocationContext)
 {
-    [Action("Get variable value", Description = "Get a project variable value.")]
+    [Action("Get variable", Description = "Get a project variable.")]
     public async Task<VariableResponse> GetVariableValue(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] VariableRequest variable)

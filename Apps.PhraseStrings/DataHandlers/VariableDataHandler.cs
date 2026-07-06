@@ -14,8 +14,23 @@ public class VariableDataHandler(
 {
     public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context, CancellationToken cancellationToken)
     {
-        var request = new RestRequest($"/v2/projects/{project.ProjectId}/variables", Method.Get);
-        var variables = await Client.Paginate<VariableResponse>(request);
+        var variables = new List<VariableResponse>();
+        var page = 1;
+
+        while (true)
+        {
+            var request = new RestRequest("/v2/projects/{projectId}/variables", Method.Get)
+                .AddUrlSegment("projectId", project.ProjectId)
+                .AddQueryParameter("page", page)
+                .AddQueryParameter("per_page", 50);
+
+            var pageVariables = await Client.ExecuteWithErrorHandling<List<VariableResponse>>(request);
+            if (pageVariables.Count == 0)
+                break;
+
+            variables.AddRange(pageVariables);
+            page++;
+        }
 
         return variables.Select(variable => new DataSourceItem(variable.Name, variable.Name));
     }
