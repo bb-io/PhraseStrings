@@ -214,6 +214,13 @@ On upload, selected segment statuses update Phrase review status:
 - **Get project locales** Get locales for a project, useful for obtaining locale IDs.
 - **Get project locale from code** Get a project locale by ISO code, useful for obtaining locale IDs.
 
+### Project variables
+
+- **Get variable value** Get a project variable value.
+- **Set variable** Create or update a project variable. If the variable exists, it is updated; if it does not exist, it is created.
+
+Both actions output the variable value, creation time, and last update time.
+
 ### Repositories
 
 - **Search repositories** Search repository syncs for an account.

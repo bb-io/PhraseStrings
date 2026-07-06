@@ -48,6 +48,18 @@ public class DataHandlerTests : TestBaseMultipleConnections
     }
 
     [TestMethod, ContextDataSource]
+    public async Task VariableHandler_IsSuccess(InvocationContext context)
+    {
+        var handler = new VariableDataHandler(context, new ProjectRequest { ProjectId = "a734ab7241d3be583fb657709f3fed3f" });
+
+        var result = await handler.GetDataAsync(new DataSourceContext { }, CancellationToken.None);
+
+        TestContext.WriteLine($"Total: {result.Count()}");
+        PrintDataHandlerResult(result);
+        Assert.IsTrue(result.Count() > 0);
+    }
+
+    [TestMethod, ContextDataSource]
     public async Task BranchHandler_IsSuccess(InvocationContext context)
     {
         var handler = new BranchDataHandler(context, new ProjectRequest { ProjectId = "52ea432ad1debbf8e09cdf344998167d" });
