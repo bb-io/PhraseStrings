@@ -25,7 +25,7 @@ public class ProjectVariablesActions(InvocationContext invocationContext) : Phra
         return await Client.ExecuteWithErrorHandling<VariableResponse>(request);
     }
 
-    [Action("Set variable", Description = "Create or update a project variable.")]
+    [Action("Update variable", Description = "Create or update a project variable.")]
     public async Task<VariableResponse> SetVariable(
         [ActionParameter] ProjectRequest project,
         [ActionParameter] VariableRequest variable,
