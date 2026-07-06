@@ -1,0 +1,21 @@
+{
+  "uploadTags": "blackbird-xliff-empty-target-roundtrip",
+  "keys": [
+    {
+      "name": "blackbird.roundtrip.empty-target.first",
+      "targetContent": "First FR target",
+      "uploadState": "translated",
+      "isTargetVerified": true,
+      "isTargetReviewed": false,
+      "mustKeepExistingTranslationId": false
+    },
+    {
+      "name": "blackbird.roundtrip.empty-target.second",
+      "targetContent": "Second FR target",
+      "uploadState": "reviewed",
+      "isTargetVerified": true,
+      "isTargetReviewed": false,
+      "mustKeepExistingTranslationId": false
+    }
+  ]
+}

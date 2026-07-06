@@ -277,7 +277,14 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         if (!string.IsNullOrWhiteSpace(branch))
             request.AddQueryParameter("branch", branch);
 
-        return await Client.Paginate<TranslationResponse>(request);
+        try
+        {
+            return await Client.Paginate<TranslationResponse>(request);
+        }
+        catch (PluginApplicationException ex) when (ex.Message.Contains("TRANSLATIONS_NOT_FOUND", StringComparison.Ordinal))
+        {
+            return [];
+        }
     }
 
     private async Task<Dictionary<string, QualityScoreResponse>> GetTranslationQualityScores(
@@ -398,12 +405,10 @@ public class InteroperableXliffActions(InvocationContext invocationContext, IFil
         {
             Order = 0,
             Source = coder.DeserializeSegment(sourceTranslation?.Content ?? string.Empty),
+            Target = coder.DeserializeSegment(targetTranslation?.Content ?? string.Empty),
             State = state
         };
         SetSegmentId(segment, targetTranslation?.Id);
-
-        if (!string.IsNullOrEmpty(targetTranslation?.Content))
-            segment.Target = coder.DeserializeSegment(targetTranslation!.Content!);
 
         unit.Segments.Add(segment);
         return unit;

@@ -23,12 +23,16 @@ public class InteroperableXliffActionTests : TestBaseMultipleConnections
 {
     private const string InitialStateFile = "phrase-keys-xliff-initial-state.json";
     private const string FinalStateFile = "phrase-keys-xliff-final-state.json";
+    private const string EmptyTargetInitialStateFile = "phrase-keys-xliff-empty-target-initial-state.json";
+    private const string EmptyTargetFinalStateFile = "phrase-keys-xliff-empty-target-final-state.json";
 
-    [TestMethod]
-    public async Task DownloadAndUploadKeys_RoundTrip_IsSuccess()
+    [DataTestMethod]
+    [DataRow(InitialStateFile, FinalStateFile)]
+    [DataRow(EmptyTargetInitialStateFile, EmptyTargetFinalStateFile)]
+    public async Task DownloadAndUploadKeys_RoundTrip_IsSuccess(string initialStateFile, string finalStateFile)
     {
-        var initialState = LoadState(InitialStateFile);
-        var finalState = LoadState(FinalStateFile);
+        var initialState = LoadState(initialStateFile);
+        var finalState = LoadState(finalStateFile);
         var context = GetInvocationContext("Access token");
         await AssertApiHostReachable(context);
 

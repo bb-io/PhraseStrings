@@ -1,0 +1,35 @@
+{
+  "projectNamePrefix": "Blackbird XLIFF round trip",
+  "mainFormat": "json",
+  "workflow": "review",
+  "sourceLocale": {
+    "name": "English",
+    "code": "en"
+  },
+  "targetLocale": {
+    "name": "French",
+    "code": "fr-FR"
+  },
+  "keys": [
+    {
+      "name": "blackbird.roundtrip.empty-target.first",
+      "description": "Empty target first key description",
+      "maxCharactersAllowed": 25,
+      "sourceContent": "First source",
+      "targetContent": null,
+      "isTargetVerified": false,
+      "isTargetReviewed": false,
+      "downloadState": "initial"
+    },
+    {
+      "name": "blackbird.roundtrip.empty-target.second",
+      "description": "Empty target second key description",
+      "maxCharactersAllowed": 35,
+      "sourceContent": "Second source",
+      "targetContent": null,
+      "isTargetVerified": false,
+      "isTargetReviewed": false,
+      "downloadState": "initial"
+    }
+  ]
+}
