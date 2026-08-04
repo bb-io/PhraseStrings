@@ -50,7 +50,7 @@ public class ProjectVariablesActions(InvocationContext invocationContext) : Phra
         }
 
         if (updateResponse.StatusCode != HttpStatusCode.NotFound)
-            throw new PluginApplicationException(updateResponse.Content ?? updateResponse.StatusDescription ?? "Error when running a request");
+            throw Client.CreateErrorException(updateResponse);
 
         var createRequest = new RestRequest("/v2/projects/{projectId}/variables", Method.Post)
             .AddUrlSegment("projectId", project.ProjectId)
