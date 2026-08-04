@@ -1,5 +1,6 @@
 using Apps.PhraseStrings.Authenticators;
 using Apps.PhraseStrings.Constants;
+using System.Net;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
@@ -30,7 +31,7 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
             return new PluginApplicationException(ExtractHtmlErrorMessage(content));
         }
 
-        if (TryFormatErrorMessage(content, out var errorMessage))
+        if (TryFormatErrorMessage(content, response.StatusCode, out var errorMessage))
         {
             return new PluginApplicationException(errorMessage);
         }
@@ -114,46 +115,53 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
         return $"{title}: \nError Description: {body}";
     }
 
-    private static bool TryFormatErrorMessage(string content, out string message)
+    private static bool TryFormatErrorMessage(string content, HttpStatusCode statusCode, out string message)
     {
         message = string.Empty;
 
-        if (string.IsNullOrWhiteSpace(content))
+        JObject? response = null;
+
+        if (!string.IsNullOrWhiteSpace(content))
         {
-            return false;
+            try
+            {
+                response = JObject.Parse(content);
+            }
+            catch (JsonReaderException)
+            {
+                // Keep processing so status-code-specific messages can still be used.
+            }
         }
 
-        try
+        if (response?.GetValue("errors", StringComparison.OrdinalIgnoreCase) is JArray { Count: > 0 } errors)
         {
-            var response = JObject.Parse(content);
-            if (response.GetValue("errors", StringComparison.OrdinalIgnoreCase) is JArray { Count: > 0 } errors)
+            var formattedErrors = errors
+                .OfType<JObject>()
+                .Select(FormatValidationError)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList();
+
+            if (formattedErrors.Count > 0)
             {
-                var formattedErrors = errors
-                    .OfType<JObject>()
-                    .Select(FormatValidationError)
-                    .Where(x => !string.IsNullOrWhiteSpace(x))
-                    .ToList();
-
-                if (formattedErrors.Count > 0)
-                {
-                    message = string.Join(Environment.NewLine, formattedErrors);
-                    return true;
-                }
+                message = string.Join(Environment.NewLine, formattedErrors);
+                return true;
             }
+        }
 
-            var topLevelMessage = GetNonEmptyString(response, "message");
-            if (topLevelMessage is null)
-            {
-                return false;
-            }
-
-            message = FormatSentence(topLevelMessage);
+        if (statusCode == HttpStatusCode.NotFound)
+        {
+            message = "Phrase Strings could not find the requested item. Check that the supplied IDs are correct and that the connected account has access to it.";
             return true;
         }
-        catch (JsonReaderException)
+
+        var topLevelMessage = response is null ? null : GetNonEmptyString(response, "message");
+        if (topLevelMessage is null)
         {
             return false;
         }
+
+        message = FormatSentence(topLevelMessage);
+        return true;
     }
 
     private static string FormatValidationError(JObject error)
