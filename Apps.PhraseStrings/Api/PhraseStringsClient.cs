@@ -30,9 +30,9 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
             return new PluginApplicationException(ExtractHtmlErrorMessage(content));
         }
 
-        if (TryFormatValidationErrors(content, out var validationMessage))
+        if (TryFormatErrorMessage(content, out var errorMessage))
         {
-            return new PluginApplicationException(validationMessage);
+            return new PluginApplicationException(errorMessage);
         }
 
         return new PluginApplicationException(
@@ -114,7 +114,7 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
         return $"{title}: \nError Description: {body}";
     }
 
-    private static bool TryFormatValidationErrors(string content, out string message)
+    private static bool TryFormatErrorMessage(string content, out string message)
     {
         message = string.Empty;
 
@@ -126,23 +126,28 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
         try
         {
             var response = JObject.Parse(content);
-            if (response.GetValue("errors", StringComparison.OrdinalIgnoreCase) is not JArray { Count: > 0 } errors)
+            if (response.GetValue("errors", StringComparison.OrdinalIgnoreCase) is JArray { Count: > 0 } errors)
+            {
+                var formattedErrors = errors
+                    .OfType<JObject>()
+                    .Select(FormatValidationError)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .ToList();
+
+                if (formattedErrors.Count > 0)
+                {
+                    message = string.Join(Environment.NewLine, formattedErrors);
+                    return true;
+                }
+            }
+
+            var topLevelMessage = GetNonEmptyString(response, "message");
+            if (topLevelMessage is null)
             {
                 return false;
             }
 
-            var formattedErrors = errors
-                .OfType<JObject>()
-                .Select(FormatValidationError)
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .ToList();
-
-            if (formattedErrors.Count == 0)
-            {
-                return false;
-            }
-
-            message = string.Join(Environment.NewLine, formattedErrors);
+            message = FormatSentence(topLevelMessage);
             return true;
         }
         catch (JsonReaderException)
@@ -165,7 +170,12 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
             return string.Empty;
         }
 
-        result = char.ToUpperInvariant(result[0]) + result[1..];
+        return FormatSentence(result);
+    }
+
+    private static string FormatSentence(string value)
+    {
+        var result = char.ToUpperInvariant(value[0]) + value[1..];
         return result.EndsWith('.') || result.EndsWith('!') || result.EndsWith('?')
             ? result
             : $"{result}.";
