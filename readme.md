@@ -283,6 +283,9 @@ Both actions output the variable value, creation time, and last update time.
 ### Job
 
 - **On job completed** Runs when a job is completed.
+- **On job completed (temporary)** Runs at specified intervals and checks whether the specified job has reached the completed state. Use this event when webhook delivery is not available.
+    - **Project ID**: The project the job belongs to.
+    - **Job ID**: The job to watch.
 - **On phrase job status change** Runs when a job is created, activated, or completed.
     Advanced settings:
     - **Events to react to**: Select job status events.
