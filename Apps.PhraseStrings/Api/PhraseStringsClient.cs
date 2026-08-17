@@ -8,6 +8,8 @@ using Blackbird.Applications.Sdk.Utils.RestSharp;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Polly;
+using Polly.Retry;
 using RestSharp;
 
 namespace Apps.PhraseStrings.Api;
@@ -19,47 +21,13 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
     Authenticator = AuthenticatorFactory.Create(creds)
 })
 {
+    private readonly AsyncRetryPolicy<RestResponse> _retryPolicy = Policy
+        .HandleResult<RestResponse>(response => response.StatusCode == HttpStatusCode.TooManyRequests)
+        .WaitAndRetryAsync(RateLimits.RetryCount, (retryAttempt, result, _) => GetRetryDelay(retryAttempt, result.Result),
+            (_, _, _, _) => Task.CompletedTask);
+
     protected override Exception ConfigureErrorException(RestResponse response)
         => CreateErrorException(response);
-
-    internal Exception CreateErrorException(RestResponse response)
-    {
-        var content = response.Content ?? string.Empty;
-
-        if (response.ContentType?.Contains("text/html", StringComparison.OrdinalIgnoreCase) == true || content.TrimStart().StartsWith('<'))
-        {
-            return new PluginApplicationException(ExtractHtmlErrorMessage(content));
-        }
-
-        if (TryFormatErrorMessage(content, response.StatusCode, out var errorMessage))
-        {
-            return new PluginApplicationException(errorMessage);
-        }
-
-        return new PluginApplicationException(
-            string.IsNullOrWhiteSpace(content) ? "Error when running a request" : content);
-    }
-
-    public override async Task<T> ExecuteWithErrorHandling<T>(RestRequest request)
-    {
-        string content = (await ExecuteWithErrorHandling(request)).Content ?? string.Empty;
-
-        T val = JsonConvert.DeserializeObject<T>(content, JsonSettings ?? new())
-            ?? throw new Exception($"Could not parse {content} to {typeof(T)}");
-
-        return val;
-    }
-
-    public override async Task<RestResponse> ExecuteWithErrorHandling(RestRequest request)
-    {
-        RestResponse restResponse = await ExecuteAsync(request);
-        if (!restResponse.IsSuccessStatusCode)
-        {
-            throw ConfigureErrorException(restResponse);
-        }
-
-        return restResponse;
-    }
 
     public async Task<List<TItem>> Paginate<TItem>(RestRequest originalRequest, int pageSize = 50)
     {
@@ -99,6 +67,130 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
 
         return allItems;
     }
+    
+    public override async Task<T> ExecuteWithErrorHandling<T>(RestRequest request)
+    {
+        string content = (await ExecuteWithErrorHandling(request)).Content ?? string.Empty;
+
+        T val = JsonConvert.DeserializeObject<T>(content, JsonSettings ?? new())
+            ?? throw new Exception($"Could not parse {content} to {typeof(T)}");
+
+        return val;
+    }
+
+    public override async Task<RestResponse> ExecuteWithErrorHandling(RestRequest request)
+    {
+        RestResponse restResponse = await ExecuteAsync(request);
+        if (!restResponse.IsSuccessStatusCode)
+        {
+            throw ConfigureErrorException(restResponse);
+        }
+
+        return restResponse;
+    }
+    
+    public new Task<RestResponse> ExecuteAsync(RestRequest request, CancellationToken cancellationToken = default)
+        => _retryPolicy.ExecuteAsync(() => base.ExecuteAsync(request, cancellationToken));
+
+    internal Exception CreateErrorException(RestResponse response)
+    {
+        var content = response.Content ?? string.Empty;
+
+        if (response.ContentType?.Contains("text/html", StringComparison.OrdinalIgnoreCase) == true || content.TrimStart().StartsWith('<'))
+        {
+            return new PluginApplicationException(ExtractHtmlErrorMessage(content));
+        }
+
+        if (TryFormatErrorMessage(content, response.StatusCode, out var errorMessage))
+        {
+            return new PluginApplicationException(errorMessage);
+        }
+
+        return new PluginApplicationException(
+            string.IsNullOrWhiteSpace(content) ? "Error when running a request" : content);
+    }
+    
+    internal static TimeSpan GetRetryDelay(int retryAttempt, RestResponse? response)
+    {
+        var retryAfter = GetRetryAfterDelay(response);
+        if (retryAfter.HasValue)
+        {
+            return Clamp(retryAfter.Value);
+        }
+
+        var quotaReset = GetExhaustedQuotaResetDelay(response);
+        if (quotaReset.HasValue)
+        {
+            return Clamp(quotaReset.Value + GetJitter(quotaReset.Value.TotalSeconds));
+        }
+
+        var isConcurrency = IsConcurrencyLimit(response);
+        var baseSeconds = isConcurrency ? RateLimits.ConcurrencyBaseBackoffSeconds : RateLimits.QuotaBaseBackoffSeconds;
+        var maxSeconds = isConcurrency ? RateLimits.ConcurrencyMaxBackoffSeconds : RateLimits.QuotaMaxBackoffSeconds;
+
+        var backoffSeconds = Math.Min(baseSeconds * Math.Pow(2, retryAttempt - 1), maxSeconds);
+
+        return Clamp(TimeSpan.FromSeconds(backoffSeconds) + GetJitter(backoffSeconds));
+    }
+
+    private static TimeSpan? GetRetryAfterDelay(RestResponse? response)
+    {
+        var retryAfter = GetHeaderValue(response, RateLimits.RetryAfterHeader);
+        if (string.IsNullOrWhiteSpace(retryAfter))
+        {
+            return null;
+        }
+
+        if (int.TryParse(retryAfter, out var seconds))
+        {
+            return seconds > 0 ? TimeSpan.FromSeconds(seconds) : null;
+        }
+
+        if (DateTimeOffset.TryParse(retryAfter, out var retryAt))
+        {
+            var delay = retryAt - DateTimeOffset.UtcNow;
+            return delay > TimeSpan.Zero ? delay : null;
+        }
+
+        return null;
+    }
+
+    private static TimeSpan? GetExhaustedQuotaResetDelay(RestResponse? response)
+    {
+        var remaining = GetHeaderValue(response, RateLimits.RateLimitRemainingHeader)
+            ?? GetHeaderValue(response, RateLimits.TmsRateLimitRemainingHeader);
+        if (!int.TryParse(remaining, out var remainingRequests) || remainingRequests > 0)
+        {
+            return null;
+        }
+
+        var reset = GetHeaderValue(response, RateLimits.RateLimitResetHeader)
+            ?? GetHeaderValue(response, RateLimits.TmsRateLimitResetHeader);
+        if (!long.TryParse(reset, out var resetUnixSeconds))
+        {
+            return null;
+        }
+
+        var delay = DateTimeOffset.FromUnixTimeSeconds(resetUnixSeconds) - DateTimeOffset.UtcNow;
+        return delay > TimeSpan.Zero ? delay : null;
+    }
+
+    private static bool IsConcurrencyLimit(RestResponse? response)
+        => response?.Content?.Contains(RateLimits.ConcurrencyLimitMarker, StringComparison.OrdinalIgnoreCase) == true;
+
+    private static string? GetHeaderValue(RestResponse? response, string name)
+        => response?.Headers?
+            .FirstOrDefault(header => string.Equals(header.Name, name, StringComparison.OrdinalIgnoreCase))?
+            .Value?.ToString()?.Trim();
+
+    private static TimeSpan GetJitter(double delaySeconds)
+        => TimeSpan.FromMilliseconds(Random.Shared.Next(0,
+            (int)Math.Max(RateLimits.MinJitterMilliseconds, delaySeconds * 100)));
+
+    private static TimeSpan Clamp(TimeSpan delay)
+        => delay > TimeSpan.FromSeconds(RateLimits.MaxRetryDelaySeconds)
+            ? TimeSpan.FromSeconds(RateLimits.MaxRetryDelaySeconds)
+            : delay;
 
     private static string ExtractHtmlErrorMessage(string html)
     {
@@ -155,6 +247,16 @@ public class PhraseStringsClient(IEnumerable<AuthenticationCredentialsProvider> 
         }
 
         var topLevelMessage = response is null ? null : GetNonEmptyString(response, "message");
+
+        if (statusCode == HttpStatusCode.TooManyRequests)
+        {
+            var reported = string.IsNullOrWhiteSpace(topLevelMessage) ? "Too many requests." : FormatSentence(topLevelMessage);
+            message = $"Phrase Strings is rejecting requests because an API limit of the connected account was reached: {reported} " +
+                      "The request was retried with backoff and the limit was still in place. Reduce the number of Phrase Strings " +
+                      "requests running at the same time, increase the interval of polling events, or ask Phrase support to raise the account limits.";
+            return true;
+        }
+
         if (topLevelMessage is null)
         {
             return false;
